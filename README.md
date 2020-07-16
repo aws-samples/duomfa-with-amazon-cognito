@@ -1,7 +1,7 @@
 <<<<<<< HEAD
-# WebAuthn with Amazon Cognito
+# DUO MFA integration with Amazon Cognito
 
-This project is a demonestration of how to implement FIDO-based authentication with Amazon Cognito user pools. The full technical write-up on this topic is available in this [blog post].
+This project is a demonestration of how to integrate DUO Multi-Factor Authentication with Amazon Cognito user pools. The full technical write-up on this topic is available in this [blog post].
 
 # Requirements
 - AWS account and permissions to create CloudFromation stacks, Cognito resources and lambda functions
