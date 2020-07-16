@@ -26,11 +26,11 @@ app.use((req, res, next) => {
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get('/', (req, res) => {
-  res.render('webauthn.html');
+  res.render('view.html');
 });
 
 app.get('/webauthn', (req, res) => {
-  res.render('webauthn.html');
+  res.render('view.html');
 });
 
 app.use('/authn', authn);

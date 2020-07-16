@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # WebAuthn with Amazon Cognito
 
 This project is a demonestration of how to implement FIDO-based authentication with Amazon Cognito user pools. The full technical write-up on this topic is available in this [blog post].
@@ -40,3 +41,22 @@ Here is a quick demo of deploying and running this project in a fresh Cloud9 env
 
    [FIDO Alliance]: <https://fidoalliance.org/fido2/fido2-web-authentication-webauthn/>
    [blog post]: <https://aws.amazon.com/blogs/security/>
+=======
+## My Project
+
+TODO: Fill this README out!
+
+Be sure to:
+
+* Change the title in this README
+* Edit your repository description on GitHub
+
+## Security
+
+See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+
+## License
+
+This library is licensed under the MIT-0 License. See the LICENSE file.
+
+>>>>>>> ef6e691f33f1962255aab86a7e6f31f6040fe7ee

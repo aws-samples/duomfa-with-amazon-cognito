@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>WebAuthn with Cognito</title>
+    <title>Duo MFA intergation with Cognito</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,19 +10,31 @@
     <script src="https://cdn.jsdelivr.net/gh/herrjemand/Base64URL-ArrayBuffer@latest/lib/base64url-arraybuffer.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="/amazon-cognito-identity.js"></script>
-    <script src="/webauthn-client.js"></script>
+    <script src="/view-client.js"></script>
+    <script src="/Duo-Web-v2.js"></script>
     
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  
+  <style>
+
+    iframe {
+        width: 100%;
+        min-width: 304px;
+        max-width: 620px;
+        height: 330px;
+        border: none;
+    }
+  </style>
     
   </head>
   <body class="w3-container">
 
       <h2>
-        WebAuthn with Cognito
+        Duo MFA intergation with Cognito
       </h2>
       
       <div id="tabs">
@@ -35,15 +47,12 @@
           <input class="w3-input"  type="password" id="reg-password" placeholder="password"/><br>
           <input class="w3-input" type="text" id="reg-email" placeholder="email"/><br>
           <input class="w3-input" type="text" id="reg-name" placeholder="name"/><br>
-          <button class="w3-btn w3-black" onclick="createCredential()">Register with Authenticator</button> 
+          <button class="w3-btn w3-black" onclick="signUp()">Register</button> 
         </div>
         <div id="tabs-2">
           <input class="w3-input" type="text" id="login-username" placeholder="username"/><br>
           <input class="w3-input" type="password" id="login-password" placeholder="password"/><br>
-          <p>Sign-in experience:</p>
-          <input class="w3-radio" type="radio" name="authentication" value="both" checked><label> Login with Password + FIDO</label><br>
-          <input class="w3-radio" type="radio" name="authentication" value="password"><label> Login with Password Only</label><br>
-          <input  class="w3-radio" type="radio" name="authentication" value="fido"><label> Password-less (FIDO only)</label><br><br>
+          <div id="duo-mfa"></div>
           <button class="w3-btn w3-black" onclick="signIn()">Login</button> 
         </div>
       </div>
@@ -51,5 +60,6 @@
       <div class="w3-panel w3-card" id="idToken"></div>
       <div class="w3-panel w3-card" id="accessToken"></div>
       <div class="w3-panel w3-card" id="refreshToken"></div>
+      
   </body>
 </html>
