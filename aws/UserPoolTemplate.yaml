@@ -1,5 +1,18 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
+Parameters: 
+  DUOIntegrationKey: 
+    Type: String
+    Description: DUO ikey (learn more about about generating these keys in DUO Web documentation https://duo.com/docs/duoweb)
+    NoEcho: true
+  DUOSecretKey: 
+    Type: String
+    Description: DUO secret key
+    NoEcho: true
+  DUOAKey: 
+    Type: String
+    Description: DUO akey (random string that you can generate for your application)
+    NoEcho: true
 Resources:
   UserPool:
     Type: AWS::Cognito::UserPool
@@ -13,12 +26,6 @@ Resources:
         DefineAuthChallenge: !GetAtt DefineAuthChallenge.Arn
         CreateAuthChallenge: !GetAtt CreateAuthChallenge.Arn
         VerifyAuthChallengeResponse: !GetAtt VerifyAuthChallenge.Arn
-      Schema:
-        - AttributeDataType: String
-          Name: publicKeyCred
-          Mutable: true
-          StringAttributeConstraints:
-            MaxLength: 1024
         
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
@@ -31,7 +38,6 @@ Resources:
         - ALLOW_REFRESH_TOKEN_AUTH
         - ALLOW_USER_SRP_AUTH
       WriteAttributes:
-        - custom:publicKeyCred
         - email
         - name
       ReadAttributes:
@@ -42,7 +48,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub ${AWS::StackName}-DefineAuthChallenge
-      CodeUri: s3://webauthn-with-amazon-cognito/DefineAuthChallenge
+      CodeUri: s3://duomfa-with-amazon-cognito/DefineAuthChallenge
       Handler: index.handler
       Runtime: nodejs12.x
       MemorySize: 1024
@@ -60,12 +66,20 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub ${AWS::StackName}-CreateAuthChallenge
-      CodeUri: s3://webauthn-with-amazon-cognito/CreateAuthChallenge
+      CodeUri: s3://duomfa-with-amazon-cognito/CreateAuthChallenge
       Handler: index.handler
       Runtime: nodejs12.x
       MemorySize: 1024
       Timeout: 30
       Tracing: Active
+      Environment:
+        Variables:
+          DUO_IKEY: 
+            Ref: DUOIntegrationKey
+          DUO_SKEY: 
+            Ref: DUOSecretKey
+          DUO_AKEY: 
+            Ref: DUOAKey
   CreateAuthChallengePermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -78,12 +92,20 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub ${AWS::StackName}-VerifyAuthChallenge
-      CodeUri: s3://webauthn-with-amazon-cognito/VerifyAuthChallenge
+      CodeUri: s3://duomfa-with-amazon-cognito/VerifyAuthChallenge
       Handler: index.handler
       Runtime: nodejs12.x
       MemorySize: 1024
       Timeout: 30
       Tracing: Active
+      Environment:
+        Variables:
+          DUO_IKEY: 
+            Ref: DUOIntegrationKey
+          DUO_SKEY: 
+            Ref: DUOSecretKey
+          DUO_AKEY: 
+            Ref: DUOAKey
   VerifyAuthChallengePermission:
     Type: AWS::Lambda::Permission
     Properties:
