@@ -72,7 +72,7 @@ Resources:
             - xray:PutTelemetryRecords
             Resource:
             - "*"
-        
+            
   DuoKeysSecret:
     Type: 'AWS::SecretsManager::Secret'
     Properties:
