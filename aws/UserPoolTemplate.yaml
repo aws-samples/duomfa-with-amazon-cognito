@@ -44,10 +44,40 @@ Resources:
         - email
         - name
         
+  DuoKeysSecret:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Name: !Sub ${AWS::StackName}-duo-keys
+      Description: Duo keys
+      SecretString:
+        Fn::Join:
+          - ''
+          - - '{"duo-ikey":"'
+            - !Ref DUOIntegrationKey
+            - '","duo-skey":"'
+            - !Ref DUOSecretKey
+            - '","duo-akey":"'
+            - !Ref DUOAKey
+            - '"}'
+            
+  DuoKeysSecretPolicy:
+      Type: 'AWS::SecretsManager::ResourcePolicy'
+      Properties:
+          SecretId: !Ref DuoKeysSecret
+          ResourcePolicy:
+            Version: 2012-10-17
+            Statement:
+              - Resource: '*'
+                Action: 'secretsmanager:GetSecretValue'
+                Effect: Allow
+                Principal:
+                  AWS: !GetAtt LambdaExecutionRole.Arn
+        
   DefineAuthChallenge:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub ${AWS::StackName}-DefineAuthChallenge
+      Role: !GetAtt LambdaExecutionRole.Arn
       CodeUri: s3://duomfa-with-amazon-cognito/DefineAuthChallenge
       Handler: index.handler
       Runtime: nodejs12.x
@@ -66,6 +96,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub ${AWS::StackName}-CreateAuthChallenge
+      Role: !GetAtt LambdaExecutionRole.Arn
       CodeUri: s3://duomfa-with-amazon-cognito/CreateAuthChallenge
       Handler: index.handler
       Runtime: nodejs12.x
@@ -74,12 +105,8 @@ Resources:
       Tracing: Active
       Environment:
         Variables:
-          DUO_IKEY: 
-            Ref: DUOIntegrationKey
-          DUO_SKEY: 
-            Ref: DUOSecretKey
-          DUO_AKEY: 
-            Ref: DUOAKey
+          DUO_SECRET:
+            !Sub ${AWS::StackName}-duo-keys
   CreateAuthChallengePermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -92,6 +119,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub ${AWS::StackName}-VerifyAuthChallenge
+      Role: !GetAtt LambdaExecutionRole.Arn
       CodeUri: s3://duomfa-with-amazon-cognito/VerifyAuthChallenge
       Handler: index.handler
       Runtime: nodejs12.x
@@ -100,12 +128,8 @@ Resources:
       Tracing: Active
       Environment:
         Variables:
-          DUO_IKEY: 
-            Ref: DUOIntegrationKey
-          DUO_SKEY: 
-            Ref: DUOSecretKey
-          DUO_AKEY: 
-            Ref: DUOAKey
+          DUO_SECRET:
+            !Sub ${AWS::StackName}-duo-keys
   VerifyAuthChallengePermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -113,6 +137,31 @@ Resources:
       Principal: cognito-idp.amazonaws.com
       Action: lambda:InvokeFunction
       SourceArn: !GetAtt UserPool.Arn
+      
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: arn:aws:logs:*:*:*
         
 Outputs :
   UserPoolId:
