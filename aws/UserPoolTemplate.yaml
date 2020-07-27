@@ -67,9 +67,11 @@ Resources:
             Action:
             - logs:CreateLogGroup
             - logs:CreateLogStream
-            - logs:PutLogEvents
-            Resource: arn:aws:logs:*:*:*
-
+            - logs:PutLogEvents        
+            - xray:PutTraceSegments
+            - xray:PutTelemetryRecords
+            Resource:
+            - "*"
         
   DuoKeysSecret:
     Type: 'AWS::SecretsManager::Secret'
