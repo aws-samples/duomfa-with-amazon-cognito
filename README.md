@@ -1,6 +1,6 @@
 # DUO MFA integration with Amazon Cognito
 
-This project is a demonestration of how to integrate Duo Multi-Factor Authentication with Amazon Cognito user pools. The full technical write-up on this topic is available in this [blog post].
+This project is a demonestration of how to integrate Duo Multi-Factor Authentication with Amazon Cognito user pools. This demo project is developed to accompany this [blog post].
 
 # Requirements
 - AWS account and permissions to create CloudFromation stacks, Cognito resources and lambda functions
@@ -15,7 +15,9 @@ $ cd duomfa-with-amazon-cognito
 ```
 ###### Create Duo account and application
 Follow the [First steps] to create Duo account and an application to protect with Duo SDK from Duo dashboard.
-After creating the application, note the ikey and skey then [Generate akey] to use with your application. You will need these three keys in the next step.
+After creating the application, note the api_hostname, ikey and skey then [Generate akey] to use with your application. You will need these three keys in the next step.
+
+![Duo App Screenshot](img/duo-app.png?raw=true "Duo Application")
 
 ###### Create AWS resources
 Create AWS resaources by running the CLI command below (replace ikey, skey and akey with the correct values from previous steps)
@@ -35,6 +37,8 @@ Edit the file public/view-client.js to use the new user-pool that you just creat
     ClientId: 'app_client_id'
   };
 ```
+In the same file, change api_hostname to the value you optained from your Duo application.
+
 Install and run the application
 ```sh
 $ npm install
@@ -48,6 +52,13 @@ Here is a quick demo of deploying and running this project in a fresh Cloud9 env
    [First Steps]: <https://duo.com/docs/duoweb#first-steps>
    [Generate akey]: <https://duo.com/docs/duoweb#1.-generate-an-akey>
 
+## Notes about implementation
+###### User registration
+Registration is performed by collecting user data in UI and making a call to signUp() in /public/view-client.js
+This call creates a user in Cognito, an automated email will be sent to verify email address and a prompt will be displayed to collect verification pin.
+###### User authentication
+Authentication starts by collecting username and password then making a call to signIn() method in /public/view-client.js
+signIn() starts a custom authentication flow with secure remote password (SRP). Cognito then responds with a custom challenge which is then used to initialize and display Due MFA iframe.
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
