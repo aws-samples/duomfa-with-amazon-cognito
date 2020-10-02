@@ -63,14 +63,14 @@ Authentication starts by collecting username and password then making a call to 
 Notice the call to `cognitoUser.authenticateUser(authenticationDetails, authCallBack);` the custom challenge will be send to authCallBack function and this is where Duo SDK is initialized and used as below:
 
 ```javascript
-      //render Duo MFA
-      $("#duo-mfa").html('<iframe id="duo_iframe" title="Two-Factor Authentication" </iframe>');
-        
-      Duo.init({
-        'host': api_hostname,
-        'sig_request': challengeParameters.sig_request,
-        'submit_callback': mfa_callback
-      });
+  //render Duo MFA
+  $("#duo-mfa").html('<iframe id="duo_iframe" title="Two-Factor Authentication" </iframe>');
+    
+  Duo.init({
+    'host': api_hostname,
+    'sig_request': challengeParameters.sig_request,
+    'submit_callback': mfa_callback
+  });
 ```
 This will render Duo iframe to the user with instructions to either setup their MFA preferences, if this is the first sign-in attempt, or initiate MFA according to saved settings.
 
