@@ -32,6 +32,8 @@ $ aws cloudformation describe-stacks --stack-name duomfa-cognito
 ###### Update and run the application
 Edit the file public/view-client.js to use the new user-pool that you just created.
 ```javascript
+  const api_hostname = 'duo_api_hostname';
+  
   var poolData = {
     UserPoolId: 'user_pool_id',
     ClientId: 'app_client_id'
