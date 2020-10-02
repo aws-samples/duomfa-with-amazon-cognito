@@ -27,6 +27,7 @@ Wait for the stack to be created successfully and then get the user-pool-id and 
 ```sh
 $ aws cloudformation describe-stacks --stack-name duomfa-cognito 
 ```
+###### Update and run the application
 Edit the file public/view-client.js to use the new user-pool that you just created.
 ```javascript
   var poolData = {
