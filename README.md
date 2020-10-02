@@ -15,7 +15,7 @@ $ cd duomfa-with-amazon-cognito
 ```
 ###### Create Duo account and application
 Follow the [First steps] to create Duo account and an application to protect with Duo SDK from Duo dashboard.
-After creating the application, note the api_hostname, ikey and skey then [Generate akey] to use with your application. You will need these three keys in the next step.
+After creating the application, note the integration key, secret key and API hostname then [Generate akey] to use with your application. You will need these three keys in the next step.
 
 ![Duo App Screenshot](img/duo-app.png?raw=true "Duo Application")
 
@@ -54,11 +54,25 @@ Here is a quick demo of deploying and running this project in a fresh Cloud9 env
 
 ## Notes about implementation
 ###### User registration
-Registration is performed by collecting user data in UI and making a call to signUp() in /public/view-client.js
+Registration is performed by collecting user data in UI and making a call to `signUp()` in /public/view-client.js
 This call creates a user in Cognito, an automated email will be sent to verify email address and a prompt will be displayed to collect verification pin.
 ###### User authentication
-Authentication starts by collecting username and password then making a call to signIn() method in /public/view-client.js
-signIn() starts a custom authentication flow with secure remote password (SRP). Cognito then responds with a custom challenge which is then used to initialize and display Due MFA iframe.
+Authentication starts by collecting username and password then making a call to `signIn()` method in /public/view-client.js
+`signIn()` starts a custom authentication flow with secure remote password (SRP). Cognito then responds with a custom challenge which is used to initialize and display Due MFA iframe.
+
+Notice the call to `cognitoUser.authenticateUser(authenticationDetails, authCallBack);` the custom challenge will be send to authCallBack function and this is where Duo SDK is initialized and used as below:
+
+```javascript
+      //render Duo MFA
+      $("#duo-mfa").html('<iframe id="duo_iframe" title="Two-Factor Authentication" </iframe>');
+        
+      Duo.init({
+        'host': api_hostname,
+        'sig_request': challengeParameters.sig_request,
+        'submit_callback': mfa_callback
+      });
+```
+This will render Duo iframe to the user with instructions to either setup their MFA preferences, if this is the first sign-in attempt, or initiate MFA according to saved settings.
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
