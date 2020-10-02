@@ -8,15 +8,18 @@ This project is a demonestration of how to integrate Duo Multi-Factor Authentica
 - Duo account
 
 # Deployment steps
-Clone the project
+###### Clone the project
 ```sh
 $ git clone https://github.com/aws-samples/duomfa-with-amazon-cognito.git
 $ cd duomfa-with-amazon-cognito
 ```
-Follow the [First steps] to create application to protect with Duo SDK.
-[Generate akey] to use with your application
+###### Create Duo account and application
+Follow the [First steps] to create Duo account and an application to protect with Duo SDK from Duo dashboard.
+After creating the application, note the ikey and skey then [Generate akey] to use with your application. You will need these three keys in the next step.
 
-Create Cognito resaources and lambda triggers (replace ikey, skey and akey with the correct values from your previous steps)
+###### Create AWS resources
+Create AWS resaources by running the CLI command below (replace ikey, skey and akey with the correct values from previous steps)
+This command will create Cognito resources, lambda functions that will be used to drive custom authentication flow and it will also create a secret in secrets manager to store Duo keys 
 ```sh
 $ aws cloudformation create-stack --stack-name duomfa-cognito --template-body file://aws/UserPoolTemplate.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_IAM CAPABILITY_NAMED_IAM --parameters ParameterKey=DUOIntegrationKey,ParameterValue=ikey ParameterKey=DUOSecretKey,ParameterValue=skey ParameterKey=DUOAKey,ParameterValue=akey
 ```
