@@ -15,8 +15,6 @@
 
 const express = require('express');
 const router = express.Router();
-const { Fido2Lib } = require('fido2-lib');
-const { coerceToBase64Url, coerceToArrayBuffer } = require('fido2-lib/lib/utils');
 const duo_web = require('@duosecurity/duo_web');
 
 router.use(express.json());
