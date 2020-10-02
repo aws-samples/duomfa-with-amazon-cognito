@@ -73,6 +73,34 @@ Notice the call to `cognitoUser.authenticateUser(authenticationDetails, authCall
       });
 ```
 This will render Duo iframe to the user with instructions to either setup their MFA preferences, if this is the first sign-in attempt, or initiate MFA according to saved settings.
+
+###### Define Auth Challenge
+This lamda function is triggered when authentication flow is CUSTOM_AUTH to evaluate the authentication progress and decide what is the next step. For reference, the code of this lambda trigger is under aws/DefineAuthChallenge.js
+
+Define auth challenge will go through the logic below to decide next challenge:
+
+```javascript
+/**
+ * 1- if user doesn't exist, throw exception
+ * 2- if CUSTOM_CHALLENGE answer is correct, authentication successful
+ * 3- if PASSWORD_VERIFIER challenge answer is correct, return custom challenge. This is usually the 2nd step in SRP authentication
+ * 4- if challenge name is SRP_A, return PASSWORD_VERIFIER challenge. This is usually the first step in SRP authentication
+ * 5- if 5 attempts with no correct answer, fail authentication
+ * 6- default is to respond with CUSTOM_CHALLENGE --> password-less authentication
+ * */
+```
+
+###### Create Auth Challenge
+This lambda function is triggered when the next step (returned from define auth challenge) is CUSTOM_CHALLENGE. For reference, the code of this lambda trigger is under aws/CreateAuthChallenge.js
+
+This function will load Duo keys from secrets manager and store them in global variables which will make these keys availbale for the life-time of this instance of the function. this will save us a call to secrts manager everytime the function is called.
+
+A signed request will be created using Duo APIs and returned to application as custom challenge, this is achieved by making this call `var sig_request = duo_web.sign_request(ikey, skey, akey, username);`
+###### Verify Auth Challenge
+This lambda will be triggered when challenge response is passed on from client to Cognito service, this is done throug the call `cognitoUser.sendCustomChallengeAnswer(data.sig_response.value, authCallBack);` 
+challenge response includes the signed response generated from Duo MFA, this response will be validated using the stored Duo keys. For reference, the code of this lambda trigger is under aws/DefineAuthChallenge.js
+
+Verification of a valid response should return the username that was used to create the signed request. if the verification is successful and the retuned value matches the username of the user than the challenge maked as successful.
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
