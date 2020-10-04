@@ -14,8 +14,8 @@ $ git clone https://github.com/aws-samples/duomfa-with-amazon-cognito.git
 $ cd duomfa-with-amazon-cognito
 ```
 ###### Create Duo account and application
-Follow the [First steps] to create Duo account and an application to protect with Duo SDK from Duo dashboard.
-After creating the application, note the integration key, secret key and API hostname then [Generate akey] to use with your application. You will need these three keys in the next step.
+Follow the [first steps] to create Duo account and an application to protect from Duo dashboard. If you already have an account then agnore this step and move to the next one.
+After creating the application, note the integration key, secret key and API hostname then follow the steps in [generate akey] and note the generated string. You will need these three keys in the next step.
 
 ![Duo App Screenshot](img/duo-app.png?raw=true "Duo Application")
 
