@@ -14,7 +14,7 @@ $ git clone https://github.com/aws-samples/duomfa-with-amazon-cognito.git
 $ cd duomfa-with-amazon-cognito
 ```
 ###### Create Duo account and application
-Follow the [first steps] to create Duo account and an application to protect from Duo dashboard. If you already have an account then agnore this step and move to the next one.
+Follow the [first steps] to create Duo account and an application to protect from Duo dashboard. If you already have an account then agnore this step and move to the next one../running
 After creating the application, note the integration key, secret key and API hostname then follow the steps in [generate akey] and note the generated string. You will need these three keys in the next step.
 
 ![Duo App Screenshot](img/duo-app.png?raw=true "Duo Application")
@@ -48,7 +48,7 @@ $ node server.js
 
 Here is a quick demo of deploying and running this project in a fresh Cloud9 environment.
 
-[![Watch the demo](https://webauthn-with-amazon-cognito.s3-us-west-2.amazonaws.com/WebAuthn.gif)](https://webauthn-with-amazon-cognito.s3-us-west-2.amazonaws.com/WebAuthn.mp4)
+[![Watch the demo](https://duomfa-with-amazon-cognito.s3-us-west-2.amazonaws.com/Duo-MFA-with-cognito.gif)](https://duomfa-with-amazon-cognito.s3-us-west-2.amazonaws.com/Duo-MFA-with-cognito.mp4)
 
    [First Steps]: <https://duo.com/docs/duoweb#first-steps>
    [Generate akey]: <https://duo.com/docs/duoweb#1.-generate-an-akey>
