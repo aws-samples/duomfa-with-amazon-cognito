@@ -4,7 +4,6 @@ require('dotenv');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const hbs = require('hbs');
-const authn = require('./libs/authn');
 const app = express();
 
 
@@ -28,12 +27,6 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
   res.render('view.html');
 });
-
-app.get('/webauthn', (req, res) => {
-  res.render('view.html');
-});
-
-app.use('/authn', authn);
 
 // listen for req :)
 const port = 8080;
