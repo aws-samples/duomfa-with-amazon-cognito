@@ -1,8 +1,6 @@
 // init project
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
-require('dotenv');
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const hbs = require('hbs');
 const app = express();
 
@@ -10,7 +8,6 @@ const app = express();
 app.set('view engine', 'html');
 app.engine('html', hbs.__express);
 app.set('views', './views');
-app.use(cookieParser());
 app.use(express.json());
 app.use(express.static('public'));
 
