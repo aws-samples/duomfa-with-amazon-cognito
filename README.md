@@ -1,6 +1,6 @@
 # DUO MFA integration with Amazon Cognito
 
-This project is a demonestration of how to integrate Duo Multi-Factor Authentication with Amazon Cognito user pools. This demo project is developed to accompany this [blog post].
+This project is a demonestration of how to integrate Duo Multi-Factor Authentication with Amazon Cognito user pools.
 
 # Requirements
 - AWS account and permissions to create CloudFromation stacks, Cognito resources and lambda functions
@@ -14,13 +14,13 @@ $ git clone https://github.com/aws-samples/duomfa-with-amazon-cognito.git
 $ cd duomfa-with-amazon-cognito
 ```
 ###### Create Duo account and application
-Follow the [first steps] to create Duo account and an application to protect from Duo dashboard. If you already have an account then agnore this step and move to the next one../running
+Follow the [first steps] to create Duo account and an application to protect from Duo dashboard. If you already have an account then ignore this step and move to the next one.
 After creating the application, note the integration key, secret key and API hostname then follow the steps in [generate akey] and note the generated string. You will need these three keys in the next step.
 
 ![Duo App Screenshot](img/duo-app.png?raw=true "Duo Application")
 
 ###### Create AWS resources
-Create AWS resaources by running the CLI command below (replace ikey, skey and akey with the correct values from previous steps)
+Create AWS resaources by running the CLI command below, replace ikey, skey and akey with the correct values from previous steps. Note that creating these resources might incur cost in your account.
 This command will create Cognito resources, lambda functions that will be used to drive custom authentication flow and it will also create a secret in secrets manager to store Duo keys 
 ```sh
 $ aws cloudformation create-stack --stack-name duomfa-cognito --template-body file://aws/UserPoolTemplate.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_IAM CAPABILITY_NAMED_IAM --parameters ParameterKey=DUOIntegrationKey,ParameterValue=ikey ParameterKey=DUOSecretKey,ParameterValue=skey ParameterKey=DUOAKey,ParameterValue=akey
@@ -46,7 +46,7 @@ $ npm install
 $ node server.js
 ```
 
-Here is a quick demo of deploying and running this project in a fresh Cloud9 environment.
+Here is a quick demo of deploying and running this project in a fresh Cloud9 environment. If you run this application in your local machine, you need to configure SSL and access the application with HTTPS.
 
 [![Watch the demo](https://duomfa-with-amazon-cognito.s3-us-west-2.amazonaws.com/Duo-MFA-with-cognito.gif)](https://duomfa-with-amazon-cognito.s3-us-west-2.amazonaws.com/Duo-MFA-with-cognito.mp4)
 
