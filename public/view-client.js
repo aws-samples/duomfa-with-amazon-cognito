@@ -13,11 +13,11 @@
  * permissions and limitations under the License.
  */
 
-  const api_hostname = 'api-188ac6ad.duosecurity.com';
+  const api_hostname = 'DUO-API-HOSTANME';
   
   var poolData = {
-    UserPoolId: 'us-west-2_X8d8K2uzW', // Your user pool id here
-    ClientId: '7v2e2ogij19lg9cpm5euj15jpr' //Your app client id here
+    UserPoolId: 'USER-POOL-ID', // Your user pool id here
+    ClientId: 'SPPLICATION-CLIENT-ID' //Your app client id here
   };
   var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
