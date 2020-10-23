@@ -45,7 +45,6 @@ exports.handler = async (event) => {
     var username = event.userName;
     
     //-------get challenge ansower
-    //const sig_Response = JSON.parse(event.request.challengeAnswer);
     const sig_response = event.request.challengeAnswer;
     console.log(sig_response);
     const verificationResult = duo_web.verify_response(ikey, skey, akey, sig_response);

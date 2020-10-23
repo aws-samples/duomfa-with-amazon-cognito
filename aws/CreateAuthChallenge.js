@@ -12,7 +12,8 @@ let skey = null;
 let akey = null;
 
 exports.handler = async (event) => {
-    console.log(event);
+    
+    //Load Duo keys from secrets manager
     
     if(ikey == null || skey == null || akey == null){
         
@@ -42,6 +43,7 @@ exports.handler = async (event) => {
         
     }
     
+    //create sign request using duo SDK
     var username = event.userName;
     var sig_request = duo_web.sign_request(ikey, skey, akey, username);
     
