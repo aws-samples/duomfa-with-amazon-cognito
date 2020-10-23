@@ -20,7 +20,7 @@ After creating the application, note the integration key, secret key and API hos
 ![Duo App Screenshot](img/duo-app.png?raw=true "Duo Application")
 
 ###### Create AWS resources
-Create AWS resaources by running the CLI command below, replace ikey, skey and akey with the correct values from previous steps. Note that creating these resources might incur cost in your account.
+Create AWS resaources by running the CLI command below, replace ikey, skey and akey with the correct values from previous steps. **bold**Note that creating these resources might incur cost in your account.**bold**
 This command will create Cognito resources, lambda functions that will be used to drive custom authentication flow and it will also create a secret in secrets manager to store Duo keys 
 ```sh
 $ aws cloudformation create-stack --stack-name duomfa-cognito --template-body file://aws/UserPoolTemplate.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_IAM CAPABILITY_NAMED_IAM --parameters ParameterKey=DUOIntegrationKey,ParameterValue=ikey ParameterKey=DUOSecretKey,ParameterValue=skey ParameterKey=DUOAKey,ParameterValue=akey
