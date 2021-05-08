@@ -16,8 +16,8 @@
   const api_hostname = 'api-188ac6ad.duosecurity.com';
   
   var poolData = {
-    UserPoolId: 'us-west-2_X8d8K2uzW', // Your user pool id here
-    ClientId: '7v2e2ogij19lg9cpm5euj15jpr' //Your app client id here
+    UserPoolId: 'user-pool-id', // Your user pool id here
+    ClientId: 'client-id' //Your app client id here
   };
   var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
