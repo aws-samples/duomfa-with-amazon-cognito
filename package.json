@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@duosecurity/duo_web": "^1.0.5",
-    "amazon-cognito-identity-js": "^5.1.0",
+    "amazon-cognito-identity-js": "^5.2.1",
     "duo_web_sdk": "git+https://github.com/duosecurity/duo_web_sdk.git",
     "express": "^4.16.4",
     "hbs": "^4.1.2"
