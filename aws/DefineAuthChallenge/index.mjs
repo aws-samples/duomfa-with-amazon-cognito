@@ -1,4 +1,4 @@
-exports.handler = (event, context, callback) => {
+export const handler = async (event, context, callback) => {
     
     console.log(event);
     console.log(event.request.session);

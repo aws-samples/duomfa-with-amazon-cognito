@@ -1,17 +1,17 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
 Parameters: 
-  DUOIntegrationKey: 
+  DUOClientId: 
     Type: String
-    Description: DUO ikey (learn more about about generating these keys in DUO Web documentation https://duo.com/docs/duoweb)
+    Description: DUO client id (learn more about about generating these keys in DUO Web documentation https://duo.com/docs/duoweb)
     NoEcho: true
-  DUOSecretKey: 
+  DUOClientSecret: 
     Type: String
-    Description: DUO secret key
+    Description: DUO client secret
     NoEcho: true
-  DUOAKey: 
+  DUOAPIHostname: 
     Type: String
-    Description: DUO akey (random string that you can generate for your application)
+    Description: DUO API hostname
     NoEcho: true
     
 Resources:
@@ -81,12 +81,12 @@ Resources:
       SecretString:
         Fn::Join:
           - ''
-          - - '{"duo-ikey":"'
-            - !Ref DUOIntegrationKey
-            - '","duo-skey":"'
-            - !Ref DUOSecretKey
-            - '","duo-akey":"'
-            - !Ref DUOAKey
+          - - '{"duo-clientid":"'
+            - !Ref DUOClientId
+            - '","duo-clientsecret":"'
+            - !Ref DUOClientSecret
+            - '","duo-apihostname":"'
+            - !Ref DUOAPIHostname
             - '"}'
             
   DuoKeysSecretPolicy:
@@ -107,9 +107,9 @@ Resources:
     Properties:
       FunctionName: !Sub ${AWS::StackName}-DefineAuthChallenge
       Role: !GetAtt LambdaExecutionRole.Arn
-      CodeUri: s3://duomfa-with-amazon-cognito/DefineAuthChallenge
+      CodeUri: s3://duomfa-with-amazon-cognito-v2-test/DefineAuthChallenge.zip
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs18.x
       MemorySize: 1024
       Timeout: 30
       Tracing: Active
@@ -126,9 +126,9 @@ Resources:
     Properties:
       FunctionName: !Sub ${AWS::StackName}-CreateAuthChallenge
       Role: !GetAtt LambdaExecutionRole.Arn
-      CodeUri: s3://duomfa-with-amazon-cognito/CreateAuthChallenge
+      CodeUri: s3://duomfa-with-amazon-cognito-v2-test/CreateAuthChallenge.zip
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs18.x
       MemorySize: 1024
       Timeout: 30
       Tracing: Active
@@ -149,9 +149,9 @@ Resources:
     Properties:
       FunctionName: !Sub ${AWS::StackName}-VerifyAuthChallenge
       Role: !GetAtt LambdaExecutionRole.Arn
-      CodeUri: s3://duomfa-with-amazon-cognito/VerifyAuthChallenge
+      CodeUri: s3://duomfa-with-amazon-cognito-v2-test/VerifyAuthChallenge.zip
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs18.x
       MemorySize: 1024
       Timeout: 30
       Tracing: Active
