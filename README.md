@@ -20,10 +20,10 @@ After creating the application, note the client id, client secret and API hostna
 ![Duo App Screenshot](img/duo-app.png?raw=true "Duo Application")
 
 ###### Create AWS resources
-Create AWS resaources by running the CLI command below, replace ikey, skey and akey with the correct values from previous steps. **Note that creating these resources might incur cost in your account.**
+Create AWS resaources by running the CLI command below, replace clientid, clientsecret and apihostname with the correct values from previous steps. **Note that creating these resources might incur cost in your account.**
 This command will create Cognito resources, lambda functions that will be used to drive custom authentication flow and it will also create a secret in secrets manager to store Duo keys 
 ```sh
-$ aws cloudformation create-stack --stack-name duomfa-cognito --template-body file://aws/UserPoolTemplate.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_IAM CAPABILITY_NAMED_IAM --parameters ParameterKey=DUOClientId,ParameterValue=clientid ParameterKey=DUOClientSecret,ParameterValue=clientsecret ParameterKey=DUOAPIHostname,ParameterValue=apihostname
+$ aws cloudformation create-stack --stack-name duomfa-cognito --template-body file://aws/UserPoolTemplate.yaml --capabilities CAPABILITY_AUTO_EXPAND CAPABILITY_IAM CAPABILITY_NAMED_IAM --parameters ParameterKey=DUOClientId,ParameterValue=clientid ParameterKey=DUOClientSecret,ParameterValue=clientsecret ParameterKey=DUOAPIHostname,ParameterValue=apihostname ParameterKey=AppRedirectURL,ParameterValue=http://localhost:8080/
 ```
 Wait for the stack to be created successfully and then get the user-pool-id and app-client-id from outputs section. you can do this from CloudFromation console or using describe-stacks command
 ```sh
@@ -37,7 +37,6 @@ Edit the file public/view-client.js to use the new user-pool that you just creat
     ClientId: 'app_client_id'
   };
 ```
-In the same file, change api_hostname to the value you optained from your Duo application.
 
 Install and run the application
 ```sh
@@ -57,9 +56,9 @@ Registration is performed by collecting user data in UI and making a call to `si
 This call creates a user in Cognito, an automated email will be sent to verify email address and a prompt will be displayed to collect verification pin.
 ###### User authentication
 Authentication starts by collecting username and password then making a call to `signIn()` method in /public/view-client.js
-`signIn()` starts a custom authentication flow with secure remote password (SRP). Cognito then responds with a custom challenge which is used to redirect the end user to the Duo MFA login page.
+`signIn()` starts a custom authentication flow with secure remote password (SRP). Cognito then responds with a custom challenge which is used to initialize and display Due MFA iframe.
 
-Notice the call to `cognitoUser.authenticateUser(authenticationDetails, authCallBack);` the custom challenge will be send to authCallBack function and this is where the redirect happens:
+Notice the call to `cognitoUser.authenticateUser(authenticationDetails, authCallBack);` the custom challenge will be send to authCallBack function and this is where Duo SDK is initialized and used as below:
 
 ```javascript
   //redirect to Duo MFA

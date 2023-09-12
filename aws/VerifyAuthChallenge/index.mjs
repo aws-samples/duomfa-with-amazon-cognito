@@ -7,6 +7,8 @@ import {
 let secretName = process.env.DUO_SECRET,
     secret;
 
+let redirectUrl = process.env.REDIRECT_URL; //callback
+
 let smClient = new SecretsManagerClient({});
 
 let clientId = null;
@@ -21,7 +23,6 @@ export const handler = async (event) => {
         console.log("----------------Loading duo keys");
         try {
             const data = await smClient.send(new GetSecretValueCommand({ SecretId: secretName }));
-            console.log(data);
             if ('SecretString' in data) {
                 secret = JSON.parse(data.SecretString);
                 clientId = secret['duo-clientid'];
@@ -40,13 +41,12 @@ export const handler = async (event) => {
 
     //-------get challenge ansower
     const duoCode = event.request.challengeAnswer;
-    console.log(duoCode);
 
     const client = new Client({
         clientId,
         clientSecret,
         apiHost,
-        redirectUrl: 'http://localhost:8080/',
+        redirectUrl,
     });
 
     try {

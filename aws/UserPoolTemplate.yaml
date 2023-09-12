@@ -13,7 +13,10 @@ Parameters:
     Type: String
     Description: DUO API hostname
     NoEcho: true
-    
+  AppRedirectURL:
+    Type: String
+    Description: Application redirect uri where handles the DUO MFA callback
+    NoEcho: true
 Resources:
   UserPool:
     Type: AWS::Cognito::UserPool
@@ -136,6 +139,8 @@ Resources:
         Variables:
           DUO_SECRET:
             !Sub ${AWS::StackName}-duo-keys
+          REDIRECT_URL:
+            !Ref AppRedirectURL
   CreateAuthChallengePermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -159,6 +164,8 @@ Resources:
         Variables:
           DUO_SECRET:
             !Sub ${AWS::StackName}-duo-keys
+          REDIRECT_URL:
+            !Ref AppRedirectURL
   VerifyAuthChallengePermission:
     Type: AWS::Lambda::Permission
     Properties:
