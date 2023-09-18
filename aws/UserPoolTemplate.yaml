@@ -110,7 +110,7 @@ Resources:
     Properties:
       FunctionName: !Sub ${AWS::StackName}-DefineAuthChallenge
       Role: !GetAtt LambdaExecutionRole.Arn
-      CodeUri: s3://duomfa-with-amazon-cognito-v2-test/DefineAuthChallenge.zip
+      CodeUri: s3://duomfa-with-amazon-cognito/DefineAuthChallenge.zip
       Handler: index.handler
       Runtime: nodejs18.x
       MemorySize: 1024
@@ -129,7 +129,7 @@ Resources:
     Properties:
       FunctionName: !Sub ${AWS::StackName}-CreateAuthChallenge
       Role: !GetAtt LambdaExecutionRole.Arn
-      CodeUri: s3://duomfa-with-amazon-cognito-v2-test/CreateAuthChallenge.zip
+      CodeUri: s3://duomfa-with-amazon-cognito/CreateAuthChallenge.zip
       Handler: index.handler
       Runtime: nodejs18.x
       MemorySize: 1024
@@ -154,7 +154,7 @@ Resources:
     Properties:
       FunctionName: !Sub ${AWS::StackName}-VerifyAuthChallenge
       Role: !GetAtt LambdaExecutionRole.Arn
-      CodeUri: s3://duomfa-with-amazon-cognito-v2-test/VerifyAuthChallenge.zip
+      CodeUri: s3://duomfa-with-amazon-cognito/VerifyAuthChallenge.zip
       Handler: index.handler
       Runtime: nodejs18.x
       MemorySize: 1024
