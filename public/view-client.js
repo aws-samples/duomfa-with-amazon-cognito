@@ -13,8 +13,7 @@
  * permissions and limitations under the License.
  */
 
-  const api_hostname = 'api-188ac6ad.duosecurity.com';
-  
+
   var poolData = {
     UserPoolId: 'user-pool-id', // Your user pool id here
     ClientId: 'client-id' //Your app client id here
@@ -103,16 +102,14 @@
       // User authentication depends on challenge response
       
       console.log("Custom Challenge from Cognito:");console.log(challengeParameters);
-      
-      //render Duo MFA
-      $("#duo-mfa").html('<iframe id="duo_iframe" title="Two-Factor Authentication" </iframe>');
-        
-      Duo.init({
-        'host': api_hostname,
-        'sig_request': challengeParameters.sig_request,
-        'submit_callback': mfa_callback
-      });
-      
+    
+      //render Duo MFA, redirect to Duo URL
+      window.location.href = challengeParameters.authUrl;
+      localStorage.setItem('duomfa-cognito', JSON.stringify({
+        username: challengeParameters.username,
+        state: challengeParameters.state,
+        session: cognitoUser.Session
+      }));
     },
     onFailure: function(err) {
     	console.error("Error authenticateUser:"+err);
@@ -123,15 +120,56 @@
   mfa_callback = async (data) =>{
     $("#duo-mfa").html('');
     
-    console.log("submit_callback:");
-    cognitoUser.sendCustomChallengeAnswer(data.sig_response.value, authCallBack);
-      
-   }
+    console.log("submit_callback:", data);
+
+    const object = localStorage.getItem('duomfa-cognito');
+    const obj = JSON.parse(object);
+
+    if (obj.state === data.state) {
+
+      const userPool = new AmazonCognitoIdentity.CognitoUserPool(
+        poolData
+      );
+      const userData = {
+        Username: obj.username,
+        Pool: userPool,
+      };
+      const cognitoUser = new AmazonCognitoIdentity.CognitoUser(
+        userData
+      );
+      // After this set the session to the previously stored user session
+      cognitoUser.Session = obj.session;
+      cognitoUser.setAuthenticationFlowType("CUSTOM_AUTH");
+
+      cognitoUser.sendCustomChallengeAnswer(data.duo_code, authCallBack);
+      localStorage.setItem('duomfa-cognito', null);
+    }
+    else {
+      console.log("State mismatch");
+    }
+
+  }
 
   //tabs UI
   $( function() {
     $( "#tabs" ).tabs();
-  } );
+    
+    var queryParam = window.location.search;
+
+    var queryParams = {};
+    if (queryParam.length > 1) {
+      queryParam.substr(1).split("&").forEach(function (item) {
+        var pair = item.split("=");
+        queryParams[pair[0]] = decodeURIComponent(pair[1]);
+      });
+    }
+
+    if (queryParams) {
+      mfa_callback(queryParams)
+    }
+
+
+  });
 
   //helper function
   _fetch = async (path, payload = '') => {

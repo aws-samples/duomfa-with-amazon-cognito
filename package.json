@@ -7,13 +7,11 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "@duosecurity/duo_web": "^1.0.6",
-    "amazon-cognito-identity-js": "^6.3.6",
-    "duo_web_sdk": "git+https://github.com/duosecurity/duo_web_sdk.git",
+    "amazon-cognito-identity-js": "^5.2.12",
     "express": "^4.18.2",
     "hbs": "^4.2.0"
   },
   "engines": {
-    "node": "8.x"
+    "node": "16.x"
   }
 }

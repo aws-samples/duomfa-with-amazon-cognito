@@ -1,883 +1,731 @@
 /*!
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- * 
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- * 
- *     http://aws.amazon.com/asl/
- * 
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License. 
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
+		module.exports = factory((function webpackLoadOptionalExternalModule() { try { return require("crypto"); } catch(e) {} }()));
 	else if(typeof define === 'function' && define.amd)
-		define([], factory);
+		define(["crypto"], factory);
 	else if(typeof exports === 'object')
-		exports["AmazonCognitoIdentity"] = factory();
+		exports["AmazonCognitoIdentity"] = factory((function webpackLoadOptionalExternalModule() { try { return require("crypto"); } catch(e) {} }()));
 	else
-		root["AmazonCognitoIdentity"] = factory();
-})(typeof self !== 'undefined' ? self : this, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-;(function (root, factory) {
-	if (true) {
-		// CommonJS
-		module.exports = exports = factory();
-	}
-	else if (typeof define === "function" && define.amd) {
-		// AMD
-		define([], factory);
-	}
-	else {
-		// Global (browser)
-		root.CryptoJS = factory();
-	}
-}(this, function () {
-
-	/**
-	 * CryptoJS core components.
-	 */
-	var CryptoJS = CryptoJS || (function (Math, undefined) {
-	    /*
-	     * Local polyfil of Object.create
-	     */
-	    var create = Object.create || (function () {
-	        function F() {};
-
-	        return function (obj) {
-	            var subtype;
-
-	            F.prototype = obj;
-
-	            subtype = new F();
-
-	            F.prototype = null;
-
-	            return subtype;
-	        };
-	    }())
-
-	    /**
-	     * CryptoJS namespace.
-	     */
-	    var C = {};
-
-	    /**
-	     * Library namespace.
-	     */
-	    var C_lib = C.lib = {};
-
-	    /**
-	     * Base object for prototypal inheritance.
-	     */
-	    var Base = C_lib.Base = (function () {
-
-
-	        return {
-	            /**
-	             * Creates a new object that inherits from this object.
-	             *
-	             * @param {Object} overrides Properties to copy into the new object.
-	             *
-	             * @return {Object} The new object.
-	             *
-	             * @static
-	             *
-	             * @example
-	             *
-	             *     var MyType = CryptoJS.lib.Base.extend({
-	             *         field: 'value',
-	             *
-	             *         method: function () {
-	             *         }
-	             *     });
-	             */
-	            extend: function (overrides) {
-	                // Spawn
-	                var subtype = create(this);
-
-	                // Augment
-	                if (overrides) {
-	                    subtype.mixIn(overrides);
-	                }
-
-	                // Create default initializer
-	                if (!subtype.hasOwnProperty('init') || this.init === subtype.init) {
-	                    subtype.init = function () {
-	                        subtype.$super.init.apply(this, arguments);
-	                    };
-	                }
-
-	                // Initializer's prototype is the subtype object
-	                subtype.init.prototype = subtype;
-
-	                // Reference supertype
-	                subtype.$super = this;
-
-	                return subtype;
-	            },
-
-	            /**
-	             * Extends this object and runs the init method.
-	             * Arguments to create() will be passed to init().
-	             *
-	             * @return {Object} The new object.
-	             *
-	             * @static
-	             *
-	             * @example
-	             *
-	             *     var instance = MyType.create();
-	             */
-	            create: function () {
-	                var instance = this.extend();
-	                instance.init.apply(instance, arguments);
-
-	                return instance;
-	            },
-
-	            /**
-	             * Initializes a newly created object.
-	             * Override this method to add some logic when your objects are created.
-	             *
-	             * @example
-	             *
-	             *     var MyType = CryptoJS.lib.Base.extend({
-	             *         init: function () {
-	             *             // ...
-	             *         }
-	             *     });
-	             */
-	            init: function () {
-	            },
-
-	            /**
-	             * Copies properties into this object.
-	             *
-	             * @param {Object} properties The properties to mix in.
-	             *
-	             * @example
-	             *
-	             *     MyType.mixIn({
-	             *         field: 'value'
-	             *     });
-	             */
-	            mixIn: function (properties) {
-	                for (var propertyName in properties) {
-	                    if (properties.hasOwnProperty(propertyName)) {
-	                        this[propertyName] = properties[propertyName];
-	                    }
-	                }
-
-	                // IE won't copy toString using the loop above
-	                if (properties.hasOwnProperty('toString')) {
-	                    this.toString = properties.toString;
-	                }
-	            },
-
-	            /**
-	             * Creates a copy of this object.
-	             *
-	             * @return {Object} The clone.
-	             *
-	             * @example
-	             *
-	             *     var clone = instance.clone();
-	             */
-	            clone: function () {
-	                return this.init.prototype.extend(this);
-	            }
-	        };
-	    }());
-
-	    /**
-	     * An array of 32-bit words.
-	     *
-	     * @property {Array} words The array of 32-bit words.
-	     * @property {number} sigBytes The number of significant bytes in this word array.
-	     */
-	    var WordArray = C_lib.WordArray = Base.extend({
-	        /**
-	         * Initializes a newly created word array.
-	         *
-	         * @param {Array} words (Optional) An array of 32-bit words.
-	         * @param {number} sigBytes (Optional) The number of significant bytes in the words.
-	         *
-	         * @example
-	         *
-	         *     var wordArray = CryptoJS.lib.WordArray.create();
-	         *     var wordArray = CryptoJS.lib.WordArray.create([0x00010203, 0x04050607]);
-	         *     var wordArray = CryptoJS.lib.WordArray.create([0x00010203, 0x04050607], 6);
-	         */
-	        init: function (words, sigBytes) {
-	            words = this.words = words || [];
-
-	            if (sigBytes != undefined) {
-	                this.sigBytes = sigBytes;
-	            } else {
-	                this.sigBytes = words.length * 4;
-	            }
-	        },
-
-	        /**
-	         * Converts this word array to a string.
-	         *
-	         * @param {Encoder} encoder (Optional) The encoding strategy to use. Default: CryptoJS.enc.Hex
-	         *
-	         * @return {string} The stringified word array.
-	         *
-	         * @example
-	         *
-	         *     var string = wordArray + '';
-	         *     var string = wordArray.toString();
-	         *     var string = wordArray.toString(CryptoJS.enc.Utf8);
-	         */
-	        toString: function (encoder) {
-	            return (encoder || Hex).stringify(this);
-	        },
-
-	        /**
-	         * Concatenates a word array to this word array.
-	         *
-	         * @param {WordArray} wordArray The word array to append.
-	         *
-	         * @return {WordArray} This word array.
-	         *
-	         * @example
-	         *
-	         *     wordArray1.concat(wordArray2);
-	         */
-	        concat: function (wordArray) {
-	            // Shortcuts
-	            var thisWords = this.words;
-	            var thatWords = wordArray.words;
-	            var thisSigBytes = this.sigBytes;
-	            var thatSigBytes = wordArray.sigBytes;
-
-	            // Clamp excess bits
-	            this.clamp();
-
-	            // Concat
-	            if (thisSigBytes % 4) {
-	                // Copy one byte at a time
-	                for (var i = 0; i < thatSigBytes; i++) {
-	                    var thatByte = (thatWords[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
-	                    thisWords[(thisSigBytes + i) >>> 2] |= thatByte << (24 - ((thisSigBytes + i) % 4) * 8);
-	                }
-	            } else {
-	                // Copy one word at a time
-	                for (var i = 0; i < thatSigBytes; i += 4) {
-	                    thisWords[(thisSigBytes + i) >>> 2] = thatWords[i >>> 2];
-	                }
-	            }
-	            this.sigBytes += thatSigBytes;
-
-	            // Chainable
-	            return this;
-	        },
-
-	        /**
-	         * Removes insignificant bits.
-	         *
-	         * @example
-	         *
-	         *     wordArray.clamp();
-	         */
-	        clamp: function () {
-	            // Shortcuts
-	            var words = this.words;
-	            var sigBytes = this.sigBytes;
-
-	            // Clamp
-	            words[sigBytes >>> 2] &= 0xffffffff << (32 - (sigBytes % 4) * 8);
-	            words.length = Math.ceil(sigBytes / 4);
-	        },
-
-	        /**
-	         * Creates a copy of this word array.
-	         *
-	         * @return {WordArray} The clone.
-	         *
-	         * @example
-	         *
-	         *     var clone = wordArray.clone();
-	         */
-	        clone: function () {
-	            var clone = Base.clone.call(this);
-	            clone.words = this.words.slice(0);
-
-	            return clone;
-	        },
-
-	        /**
-	         * Creates a word array filled with random bytes.
-	         *
-	         * @param {number} nBytes The number of random bytes to generate.
-	         *
-	         * @return {WordArray} The random word array.
-	         *
-	         * @static
-	         *
-	         * @example
-	         *
-	         *     var wordArray = CryptoJS.lib.WordArray.random(16);
-	         */
-	        random: function (nBytes) {
-	            var words = [];
-
-	            var r = (function (m_w) {
-	                var m_w = m_w;
-	                var m_z = 0x3ade68b1;
-	                var mask = 0xffffffff;
-
-	                return function () {
-	                    m_z = (0x9069 * (m_z & 0xFFFF) + (m_z >> 0x10)) & mask;
-	                    m_w = (0x4650 * (m_w & 0xFFFF) + (m_w >> 0x10)) & mask;
-	                    var result = ((m_z << 0x10) + m_w) & mask;
-	                    result /= 0x100000000;
-	                    result += 0.5;
-	                    return result * (Math.random() > .5 ? 1 : -1);
-	                }
-	            });
-
-	            for (var i = 0, rcache; i < nBytes; i += 4) {
-	                var _r = r((rcache || Math.random()) * 0x100000000);
-
-	                rcache = _r() * 0x3ade67b7;
-	                words.push((_r() * 0x100000000) | 0);
-	            }
-
-	            return new WordArray.init(words, nBytes);
-	        }
-	    });
-
-	    /**
-	     * Encoder namespace.
-	     */
-	    var C_enc = C.enc = {};
-
-	    /**
-	     * Hex encoding strategy.
-	     */
-	    var Hex = C_enc.Hex = {
-	        /**
-	         * Converts a word array to a hex string.
-	         *
-	         * @param {WordArray} wordArray The word array.
-	         *
-	         * @return {string} The hex string.
-	         *
-	         * @static
-	         *
-	         * @example
-	         *
-	         *     var hexString = CryptoJS.enc.Hex.stringify(wordArray);
-	         */
-	        stringify: function (wordArray) {
-	            // Shortcuts
-	            var words = wordArray.words;
-	            var sigBytes = wordArray.sigBytes;
-
-	            // Convert
-	            var hexChars = [];
-	            for (var i = 0; i < sigBytes; i++) {
-	                var bite = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
-	                hexChars.push((bite >>> 4).toString(16));
-	                hexChars.push((bite & 0x0f).toString(16));
-	            }
-
-	            return hexChars.join('');
-	        },
-
-	        /**
-	         * Converts a hex string to a word array.
-	         *
-	         * @param {string} hexStr The hex string.
-	         *
-	         * @return {WordArray} The word array.
-	         *
-	         * @static
-	         *
-	         * @example
-	         *
-	         *     var wordArray = CryptoJS.enc.Hex.parse(hexString);
-	         */
-	        parse: function (hexStr) {
-	            // Shortcut
-	            var hexStrLength = hexStr.length;
-
-	            // Convert
-	            var words = [];
-	            for (var i = 0; i < hexStrLength; i += 2) {
-	                words[i >>> 3] |= parseInt(hexStr.substr(i, 2), 16) << (24 - (i % 8) * 4);
-	            }
-
-	            return new WordArray.init(words, hexStrLength / 2);
-	        }
-	    };
-
-	    /**
-	     * Latin1 encoding strategy.
-	     */
-	    var Latin1 = C_enc.Latin1 = {
-	        /**
-	         * Converts a word array to a Latin1 string.
-	         *
-	         * @param {WordArray} wordArray The word array.
-	         *
-	         * @return {string} The Latin1 string.
-	         *
-	         * @static
-	         *
-	         * @example
-	         *
-	         *     var latin1String = CryptoJS.enc.Latin1.stringify(wordArray);
-	         */
-	        stringify: function (wordArray) {
-	            // Shortcuts
-	            var words = wordArray.words;
-	            var sigBytes = wordArray.sigBytes;
-
-	            // Convert
-	            var latin1Chars = [];
-	            for (var i = 0; i < sigBytes; i++) {
-	                var bite = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
-	                latin1Chars.push(String.fromCharCode(bite));
-	            }
-
-	            return latin1Chars.join('');
-	        },
-
-	        /**
-	         * Converts a Latin1 string to a word array.
-	         *
-	         * @param {string} latin1Str The Latin1 string.
-	         *
-	         * @return {WordArray} The word array.
-	         *
-	         * @static
-	         *
-	         * @example
-	         *
-	         *     var wordArray = CryptoJS.enc.Latin1.parse(latin1String);
-	         */
-	        parse: function (latin1Str) {
-	            // Shortcut
-	            var latin1StrLength = latin1Str.length;
-
-	            // Convert
-	            var words = [];
-	            for (var i = 0; i < latin1StrLength; i++) {
-	                words[i >>> 2] |= (latin1Str.charCodeAt(i) & 0xff) << (24 - (i % 4) * 8);
-	            }
-
-	            return new WordArray.init(words, latin1StrLength);
-	        }
-	    };
-
-	    /**
-	     * UTF-8 encoding strategy.
-	     */
-	    var Utf8 = C_enc.Utf8 = {
-	        /**
-	         * Converts a word array to a UTF-8 string.
-	         *
-	         * @param {WordArray} wordArray The word array.
-	         *
-	         * @return {string} The UTF-8 string.
-	         *
-	         * @static
-	         *
-	         * @example
-	         *
-	         *     var utf8String = CryptoJS.enc.Utf8.stringify(wordArray);
-	         */
-	        stringify: function (wordArray) {
-	            try {
-	                return decodeURIComponent(escape(Latin1.stringify(wordArray)));
-	            } catch (e) {
-	                throw new Error('Malformed UTF-8 data');
-	            }
-	        },
-
-	        /**
-	         * Converts a UTF-8 string to a word array.
-	         *
-	         * @param {string} utf8Str The UTF-8 string.
-	         *
-	         * @return {WordArray} The word array.
-	         *
-	         * @static
-	         *
-	         * @example
-	         *
-	         *     var wordArray = CryptoJS.enc.Utf8.parse(utf8String);
-	         */
-	        parse: function (utf8Str) {
-	            return Latin1.parse(unescape(encodeURIComponent(utf8Str)));
-	        }
-	    };
-
-	    /**
-	     * Abstract buffered block algorithm template.
-	     *
-	     * The property blockSize must be implemented in a concrete subtype.
-	     *
-	     * @property {number} _minBufferSize The number of blocks that should be kept unprocessed in the buffer. Default: 0
-	     */
-	    var BufferedBlockAlgorithm = C_lib.BufferedBlockAlgorithm = Base.extend({
-	        /**
-	         * Resets this block algorithm's data buffer to its initial state.
-	         *
-	         * @example
-	         *
-	         *     bufferedBlockAlgorithm.reset();
-	         */
-	        reset: function () {
-	            // Initial values
-	            this._data = new WordArray.init();
-	            this._nDataBytes = 0;
-	        },
-
-	        /**
-	         * Adds new data to this block algorithm's buffer.
-	         *
-	         * @param {WordArray|string} data The data to append. Strings are converted to a WordArray using UTF-8.
-	         *
-	         * @example
-	         *
-	         *     bufferedBlockAlgorithm._append('data');
-	         *     bufferedBlockAlgorithm._append(wordArray);
-	         */
-	        _append: function (data) {
-	            // Convert string to WordArray, else assume WordArray already
-	            if (typeof data == 'string') {
-	                data = Utf8.parse(data);
-	            }
-
-	            // Append
-	            this._data.concat(data);
-	            this._nDataBytes += data.sigBytes;
-	        },
-
-	        /**
-	         * Processes available data blocks.
-	         *
-	         * This method invokes _doProcessBlock(offset), which must be implemented by a concrete subtype.
-	         *
-	         * @param {boolean} doFlush Whether all blocks and partial blocks should be processed.
-	         *
-	         * @return {WordArray} The processed data.
-	         *
-	         * @example
-	         *
-	         *     var processedData = bufferedBlockAlgorithm._process();
-	         *     var processedData = bufferedBlockAlgorithm._process(!!'flush');
-	         */
-	        _process: function (doFlush) {
-	            // Shortcuts
-	            var data = this._data;
-	            var dataWords = data.words;
-	            var dataSigBytes = data.sigBytes;
-	            var blockSize = this.blockSize;
-	            var blockSizeBytes = blockSize * 4;
-
-	            // Count blocks ready
-	            var nBlocksReady = dataSigBytes / blockSizeBytes;
-	            if (doFlush) {
-	                // Round up to include partial blocks
-	                nBlocksReady = Math.ceil(nBlocksReady);
-	            } else {
-	                // Round down to include only full blocks,
-	                // less the number of blocks that must remain in the buffer
-	                nBlocksReady = Math.max((nBlocksReady | 0) - this._minBufferSize, 0);
-	            }
-
-	            // Count words ready
-	            var nWordsReady = nBlocksReady * blockSize;
-
-	            // Count bytes ready
-	            var nBytesReady = Math.min(nWordsReady * 4, dataSigBytes);
-
-	            // Process blocks
-	            if (nWordsReady) {
-	                for (var offset = 0; offset < nWordsReady; offset += blockSize) {
-	                    // Perform concrete-algorithm logic
-	                    this._doProcessBlock(dataWords, offset);
-	                }
-
-	                // Remove processed words
-	                var processedWords = dataWords.splice(0, nWordsReady);
-	                data.sigBytes -= nBytesReady;
-	            }
-
-	            // Return processed words
-	            return new WordArray.init(processedWords, nBytesReady);
-	        },
-
-	        /**
-	         * Creates a copy of this object.
-	         *
-	         * @return {Object} The clone.
-	         *
-	         * @example
-	         *
-	         *     var clone = bufferedBlockAlgorithm.clone();
-	         */
-	        clone: function () {
-	            var clone = Base.clone.call(this);
-	            clone._data = this._data.clone();
-
-	            return clone;
-	        },
-
-	        _minBufferSize: 0
-	    });
-
-	    /**
-	     * Abstract hasher template.
-	     *
-	     * @property {number} blockSize The number of 32-bit words this hasher operates on. Default: 16 (512 bits)
-	     */
-	    var Hasher = C_lib.Hasher = BufferedBlockAlgorithm.extend({
-	        /**
-	         * Configuration options.
-	         */
-	        cfg: Base.extend(),
-
-	        /**
-	         * Initializes a newly created hasher.
-	         *
-	         * @param {Object} cfg (Optional) The configuration options to use for this hash computation.
-	         *
-	         * @example
-	         *
-	         *     var hasher = CryptoJS.algo.SHA256.create();
-	         */
-	        init: function (cfg) {
-	            // Apply config defaults
-	            this.cfg = this.cfg.extend(cfg);
-
-	            // Set initial values
-	            this.reset();
-	        },
-
-	        /**
-	         * Resets this hasher to its initial state.
-	         *
-	         * @example
-	         *
-	         *     hasher.reset();
-	         */
-	        reset: function () {
-	            // Reset data buffer
-	            BufferedBlockAlgorithm.reset.call(this);
-
-	            // Perform concrete-hasher logic
-	            this._doReset();
-	        },
-
-	        /**
-	         * Updates this hasher with a message.
-	         *
-	         * @param {WordArray|string} messageUpdate The message to append.
-	         *
-	         * @return {Hasher} This hasher.
-	         *
-	         * @example
-	         *
-	         *     hasher.update('message');
-	         *     hasher.update(wordArray);
-	         */
-	        update: function (messageUpdate) {
-	            // Append
-	            this._append(messageUpdate);
-
-	            // Update the hash
-	            this._process();
-
-	            // Chainable
-	            return this;
-	        },
-
-	        /**
-	         * Finalizes the hash computation.
-	         * Note that the finalize operation is effectively a destructive, read-once operation.
-	         *
-	         * @param {WordArray|string} messageUpdate (Optional) A final message update.
-	         *
-	         * @return {WordArray} The hash.
-	         *
-	         * @example
-	         *
-	         *     var hash = hasher.finalize();
-	         *     var hash = hasher.finalize('message');
-	         *     var hash = hasher.finalize(wordArray);
-	         */
-	        finalize: function (messageUpdate) {
-	            // Final message update
-	            if (messageUpdate) {
-	                this._append(messageUpdate);
-	            }
-
-	            // Perform concrete-hasher logic
-	            var hash = this._doFinalize();
-
-	            return hash;
-	        },
-
-	        blockSize: 512/32,
-
-	        /**
-	         * Creates a shortcut function to a hasher's object interface.
-	         *
-	         * @param {Hasher} hasher The hasher to create a helper for.
-	         *
-	         * @return {Function} The shortcut function.
-	         *
-	         * @static
-	         *
-	         * @example
-	         *
-	         *     var SHA256 = CryptoJS.lib.Hasher._createHelper(CryptoJS.algo.SHA256);
-	         */
-	        _createHelper: function (hasher) {
-	            return function (message, cfg) {
-	                return new hasher.init(cfg).finalize(message);
-	            };
-	        },
-
-	        /**
-	         * Creates a shortcut function to the HMAC's object interface.
-	         *
-	         * @param {Hasher} hasher The hasher to use in this HMAC helper.
-	         *
-	         * @return {Function} The shortcut function.
-	         *
-	         * @static
-	         *
-	         * @example
-	         *
-	         *     var HmacSHA256 = CryptoJS.lib.Hasher._createHmacHelper(CryptoJS.algo.SHA256);
-	         */
-	        _createHmacHelper: function (hasher) {
-	            return function (message, key) {
-	                return new C_algo.HMAC.init(hasher, key).finalize(message);
-	            };
-	        }
-	    });
-
-	    /**
-	     * Algorithm namespace.
-	     */
-	    var C_algo = C.algo = {};
-
-	    return C;
-	}(Math));
-
-
-	return CryptoJS;
-
-}));
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+		root["AmazonCognitoIdentity"] = factory(root["crypto"]);
+})(self, (__WEBPACK_EXTERNAL_MODULE__100__) => {
+return /******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 2:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global) {/*!
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RawSha256 = void 0;
+var constants_1 = __webpack_require__(149);
+/**
+ * @internal
+ */
+var RawSha256 = /** @class */ (function () {
+    function RawSha256() {
+        this.state = Int32Array.from(constants_1.INIT);
+        this.temp = new Int32Array(64);
+        this.buffer = new Uint8Array(64);
+        this.bufferLength = 0;
+        this.bytesHashed = 0;
+        /**
+         * @internal
+         */
+        this.finished = false;
+    }
+    RawSha256.prototype.update = function (data) {
+        if (this.finished) {
+            throw new Error("Attempted to update an already finished hash.");
+        }
+        var position = 0;
+        var byteLength = data.byteLength;
+        this.bytesHashed += byteLength;
+        if (this.bytesHashed * 8 > constants_1.MAX_HASHABLE_LENGTH) {
+            throw new Error("Cannot hash more than 2^53 - 1 bits");
+        }
+        while (byteLength > 0) {
+            this.buffer[this.bufferLength++] = data[position++];
+            byteLength--;
+            if (this.bufferLength === constants_1.BLOCK_SIZE) {
+                this.hashBuffer();
+                this.bufferLength = 0;
+            }
+        }
+    };
+    RawSha256.prototype.digest = function () {
+        if (!this.finished) {
+            var bitsHashed = this.bytesHashed * 8;
+            var bufferView = new DataView(this.buffer.buffer, this.buffer.byteOffset, this.buffer.byteLength);
+            var undecoratedLength = this.bufferLength;
+            bufferView.setUint8(this.bufferLength++, 0x80);
+            // Ensure the final block has enough room for the hashed length
+            if (undecoratedLength % constants_1.BLOCK_SIZE >= constants_1.BLOCK_SIZE - 8) {
+                for (var i = this.bufferLength; i < constants_1.BLOCK_SIZE; i++) {
+                    bufferView.setUint8(i, 0);
+                }
+                this.hashBuffer();
+                this.bufferLength = 0;
+            }
+            for (var i = this.bufferLength; i < constants_1.BLOCK_SIZE - 8; i++) {
+                bufferView.setUint8(i, 0);
+            }
+            bufferView.setUint32(constants_1.BLOCK_SIZE - 8, Math.floor(bitsHashed / 0x100000000), true);
+            bufferView.setUint32(constants_1.BLOCK_SIZE - 4, bitsHashed);
+            this.hashBuffer();
+            this.finished = true;
+        }
+        // The value in state is little-endian rather than big-endian, so flip
+        // each word into a new Uint8Array
+        var out = new Uint8Array(constants_1.DIGEST_LENGTH);
+        for (var i = 0; i < 8; i++) {
+            out[i * 4] = (this.state[i] >>> 24) & 0xff;
+            out[i * 4 + 1] = (this.state[i] >>> 16) & 0xff;
+            out[i * 4 + 2] = (this.state[i] >>> 8) & 0xff;
+            out[i * 4 + 3] = (this.state[i] >>> 0) & 0xff;
+        }
+        return out;
+    };
+    RawSha256.prototype.hashBuffer = function () {
+        var _a = this, buffer = _a.buffer, state = _a.state;
+        var state0 = state[0], state1 = state[1], state2 = state[2], state3 = state[3], state4 = state[4], state5 = state[5], state6 = state[6], state7 = state[7];
+        for (var i = 0; i < constants_1.BLOCK_SIZE; i++) {
+            if (i < 16) {
+                this.temp[i] =
+                    ((buffer[i * 4] & 0xff) << 24) |
+                        ((buffer[i * 4 + 1] & 0xff) << 16) |
+                        ((buffer[i * 4 + 2] & 0xff) << 8) |
+                        (buffer[i * 4 + 3] & 0xff);
+            }
+            else {
+                var u = this.temp[i - 2];
+                var t1_1 = ((u >>> 17) | (u << 15)) ^ ((u >>> 19) | (u << 13)) ^ (u >>> 10);
+                u = this.temp[i - 15];
+                var t2_1 = ((u >>> 7) | (u << 25)) ^ ((u >>> 18) | (u << 14)) ^ (u >>> 3);
+                this.temp[i] =
+                    ((t1_1 + this.temp[i - 7]) | 0) + ((t2_1 + this.temp[i - 16]) | 0);
+            }
+            var t1 = ((((((state4 >>> 6) | (state4 << 26)) ^
+                ((state4 >>> 11) | (state4 << 21)) ^
+                ((state4 >>> 25) | (state4 << 7))) +
+                ((state4 & state5) ^ (~state4 & state6))) |
+                0) +
+                ((state7 + ((constants_1.KEY[i] + this.temp[i]) | 0)) | 0)) |
+                0;
+            var t2 = ((((state0 >>> 2) | (state0 << 30)) ^
+                ((state0 >>> 13) | (state0 << 19)) ^
+                ((state0 >>> 22) | (state0 << 10))) +
+                ((state0 & state1) ^ (state0 & state2) ^ (state1 & state2))) |
+                0;
+            state7 = state6;
+            state6 = state5;
+            state5 = state4;
+            state4 = (state3 + t1) | 0;
+            state3 = state2;
+            state2 = state1;
+            state1 = state0;
+            state0 = (t1 + t2) | 0;
+        }
+        state[0] += state0;
+        state[1] += state1;
+        state[2] += state2;
+        state[3] += state3;
+        state[4] += state4;
+        state[5] += state5;
+        state[6] += state6;
+        state[7] += state7;
+    };
+    return RawSha256;
+}());
+exports.RawSha256 = RawSha256;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUmF3U2hhMjU2LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL1Jhd1NoYTI1Ni50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSx5Q0FNcUI7QUFFckI7O0dBRUc7QUFDSDtJQUFBO1FBQ1UsVUFBSyxHQUFlLFVBQVUsQ0FBQyxJQUFJLENBQUMsZ0JBQUksQ0FBQyxDQUFDO1FBQzFDLFNBQUksR0FBZSxJQUFJLFVBQVUsQ0FBQyxFQUFFLENBQUMsQ0FBQztRQUN0QyxXQUFNLEdBQWUsSUFBSSxVQUFVLENBQUMsRUFBRSxDQUFDLENBQUM7UUFDeEMsaUJBQVksR0FBVyxDQUFDLENBQUM7UUFDekIsZ0JBQVcsR0FBVyxDQUFDLENBQUM7UUFFaEM7O1dBRUc7UUFDSCxhQUFRLEdBQVksS0FBSyxDQUFDO0lBOEk1QixDQUFDO0lBNUlDLDBCQUFNLEdBQU4sVUFBTyxJQUFnQjtRQUNyQixJQUFJLElBQUksQ0FBQyxRQUFRLEVBQUU7WUFDakIsTUFBTSxJQUFJLEtBQUssQ0FBQywrQ0FBK0MsQ0FBQyxDQUFDO1NBQ2xFO1FBRUQsSUFBSSxRQUFRLEdBQUcsQ0FBQyxDQUFDO1FBQ1gsSUFBQSxVQUFVLEdBQUssSUFBSSxXQUFULENBQVU7UUFDMUIsSUFBSSxDQUFDLFdBQVcsSUFBSSxVQUFVLENBQUM7UUFFL0IsSUFBSSxJQUFJLENBQUMsV0FBVyxHQUFHLENBQUMsR0FBRywrQkFBbUIsRUFBRTtZQUM5QyxNQUFNLElBQUksS0FBSyxDQUFDLHFDQUFxQyxDQUFDLENBQUM7U0FDeEQ7UUFFRCxPQUFPLFVBQVUsR0FBRyxDQUFDLEVBQUU7WUFDckIsSUFBSSxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUMsWUFBWSxFQUFFLENBQUMsR0FBRyxJQUFJLENBQUMsUUFBUSxFQUFFLENBQUMsQ0FBQztZQUNwRCxVQUFVLEVBQUUsQ0FBQztZQUViLElBQUksSUFBSSxDQUFDLFlBQVksS0FBSyxzQkFBVSxFQUFFO2dCQUNwQyxJQUFJLENBQUMsVUFBVSxFQUFFLENBQUM7Z0JBQ2xCLElBQUksQ0FBQyxZQUFZLEdBQUcsQ0FBQyxDQUFDO2FBQ3ZCO1NBQ0Y7SUFDSCxDQUFDO0lBRUQsMEJBQU0sR0FBTjtRQUNFLElBQUksQ0FBQyxJQUFJLENBQUMsUUFBUSxFQUFFO1lBQ2xCLElBQU0sVUFBVSxHQUFHLElBQUksQ0FBQyxXQUFXLEdBQUcsQ0FBQyxDQUFDO1lBQ3hDLElBQU0sVUFBVSxHQUFHLElBQUksUUFBUSxDQUM3QixJQUFJLENBQUMsTUFBTSxDQUFDLE1BQU0sRUFDbEIsSUFBSSxDQUFDLE1BQU0sQ0FBQyxVQUFVLEVBQ3RCLElBQUksQ0FBQyxNQUFNLENBQUMsVUFBVSxDQUN2QixDQUFDO1lBRUYsSUFBTSxpQkFBaUIsR0FBRyxJQUFJLENBQUMsWUFBWSxDQUFDO1lBQzVDLFVBQVUsQ0FBQyxRQUFRLENBQUMsSUFBSSxDQUFDLFlBQVksRUFBRSxFQUFFLElBQUksQ0FBQyxDQUFDO1lBRS9DLCtEQUErRDtZQUMvRCxJQUFJLGlCQUFpQixHQUFHLHNCQUFVLElBQUksc0JBQVUsR0FBRyxDQUFDLEVBQUU7Z0JBQ3BELEtBQUssSUFBSSxDQUFDLEdBQUcsSUFBSSxDQUFDLFlBQVksRUFBRSxDQUFDLEdBQUcsc0JBQVUsRUFBRSxDQUFDLEVBQUUsRUFBRTtvQkFDbkQsVUFBVSxDQUFDLFFBQVEsQ0FBQyxDQUFDLEVBQUUsQ0FBQyxDQUFDLENBQUM7aUJBQzNCO2dCQUNELElBQUksQ0FBQyxVQUFVLEVBQUUsQ0FBQztnQkFDbEIsSUFBSSxDQUFDLFlBQVksR0FBRyxDQUFDLENBQUM7YUFDdkI7WUFFRCxLQUFLLElBQUksQ0FBQyxHQUFHLElBQUksQ0FBQyxZQUFZLEVBQUUsQ0FBQyxHQUFHLHNCQUFVLEdBQUcsQ0FBQyxFQUFFLENBQUMsRUFBRSxFQUFFO2dCQUN2RCxVQUFVLENBQUMsUUFBUSxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsQ0FBQzthQUMzQjtZQUNELFVBQVUsQ0FBQyxTQUFTLENBQ2xCLHNCQUFVLEdBQUcsQ0FBQyxFQUNkLElBQUksQ0FBQyxLQUFLLENBQUMsVUFBVSxHQUFHLFdBQVcsQ0FBQyxFQUNwQyxJQUFJLENBQ0wsQ0FBQztZQUNGLFVBQVUsQ0FBQyxTQUFTLENBQUMsc0JBQVUsR0FBRyxDQUFDLEVBQUUsVUFBVSxDQUFDLENBQUM7WUFFakQsSUFBSSxDQUFDLFVBQVUsRUFBRSxDQUFDO1lBRWxCLElBQUksQ0FBQyxRQUFRLEdBQUcsSUFBSSxDQUFDO1NBQ3RCO1FBRUQsc0VBQXNFO1FBQ3RFLGtDQUFrQztRQUNsQyxJQUFNLEdBQUcsR0FBRyxJQUFJLFVBQVUsQ0FBQyx5QkFBYSxDQUFDLENBQUM7UUFDMUMsS0FBSyxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxHQUFHLENBQUMsRUFBRSxDQUFDLEVBQUUsRUFBRTtZQUMxQixHQUFHLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUMsS0FBSyxFQUFFLENBQUMsR0FBRyxJQUFJLENBQUM7WUFDM0MsR0FBRyxDQUFDLENBQUMsR0FBRyxDQUFDLEdBQUcsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQyxLQUFLLEVBQUUsQ0FBQyxHQUFHLElBQUksQ0FBQztZQUMvQyxHQUFHLENBQUMsQ0FBQyxHQUFHLENBQUMsR0FBRyxDQUFDLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDLEtBQUssQ0FBQyxDQUFDLEdBQUcsSUFBSSxDQUFDO1lBQzlDLEdBQUcsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxHQUFHLENBQUMsQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUMsS0FBSyxDQUFDLENBQUMsR0FBRyxJQUFJLENBQUM7U0FDL0M7UUFFRCxPQUFPLEdBQUcsQ0FBQztJQUNiLENBQUM7SUFFTyw4QkFBVSxHQUFsQjtRQUNRLElBQUEsS0FBb0IsSUFBSSxFQUF0QixNQUFNLFlBQUEsRUFBRSxLQUFLLFdBQVMsQ0FBQztRQUUvQixJQUFJLE1BQU0sR0FBRyxLQUFLLENBQUMsQ0FBQyxDQUFDLEVBQ25CLE1BQU0sR0FBRyxLQUFLLENBQUMsQ0FBQyxDQUFDLEVBQ2pCLE1BQU0sR0FBRyxLQUFLLENBQUMsQ0FBQyxDQUFDLEVBQ2pCLE1BQU0sR0FBRyxLQUFLLENBQUMsQ0FBQyxDQUFDLEVBQ2pCLE1BQU0sR0FBRyxLQUFLLENBQUMsQ0FBQyxDQUFDLEVBQ2pCLE1BQU0sR0FBRyxLQUFLLENBQUMsQ0FBQyxDQUFDLEVBQ2pCLE1BQU0sR0FBRyxLQUFLLENBQUMsQ0FBQyxDQUFDLEVBQ2pCLE1BQU0sR0FBRyxLQUFLLENBQUMsQ0FBQyxDQUFDLENBQUM7UUFFcEIsS0FBSyxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxHQUFHLHNCQUFVLEVBQUUsQ0FBQyxFQUFFLEVBQUU7WUFDbkMsSUFBSSxDQUFDLEdBQUcsRUFBRSxFQUFFO2dCQUNWLElBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDO29CQUNWLENBQUMsQ0FBQyxNQUFNLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxHQUFHLElBQUksQ0FBQyxJQUFJLEVBQUUsQ0FBQzt3QkFDOUIsQ0FBQyxDQUFDLE1BQU0sQ0FBQyxDQUFDLEdBQUcsQ0FBQyxHQUFHLENBQUMsQ0FBQyxHQUFHLElBQUksQ0FBQyxJQUFJLEVBQUUsQ0FBQzt3QkFDbEMsQ0FBQyxDQUFDLE1BQU0sQ0FBQyxDQUFDLEdBQUcsQ0FBQyxHQUFHLENBQUMsQ0FBQyxHQUFHLElBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQzt3QkFDakMsQ0FBQyxNQUFNLENBQUMsQ0FBQyxHQUFHLENBQUMsR0FBRyxDQUFDLENBQUMsR0FBRyxJQUFJLENBQUMsQ0FBQzthQUM5QjtpQkFBTTtnQkFDTCxJQUFJLENBQUMsR0FBRyxJQUFJLENBQUMsSUFBSSxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQztnQkFDekIsSUFBTSxJQUFFLEdBQ04sQ0FBQyxDQUFDLENBQUMsS0FBSyxFQUFFLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxFQUFFLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLEtBQUssRUFBRSxDQUFDLEdBQUcsQ0FBQyxDQUFDLElBQUksRUFBRSxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsS0FBSyxFQUFFLENBQUMsQ0FBQztnQkFFbkUsQ0FBQyxHQUFHLElBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQyxHQUFHLEVBQUUsQ0FBQyxDQUFDO2dCQUN0QixJQUFNLElBQUUsR0FDTixDQUFDLENBQUMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxJQUFJLEVBQUUsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsS0FBSyxFQUFFLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxFQUFFLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDO2dCQUVqRSxJQUFJLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQztvQkFDVixDQUFDLENBQUMsSUFBRSxHQUFHLElBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDLElBQUUsR0FBRyxJQUFJLENBQUMsSUFBSSxDQUFDLENBQUMsR0FBRyxFQUFFLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDO2FBQ2xFO1lBRUQsSUFBTSxFQUFFLEdBQ04sQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsTUFBTSxLQUFLLENBQUMsQ0FBQyxHQUFHLENBQUMsTUFBTSxJQUFJLEVBQUUsQ0FBQyxDQUFDO2dCQUNuQyxDQUFDLENBQUMsTUFBTSxLQUFLLEVBQUUsQ0FBQyxHQUFHLENBQUMsTUFBTSxJQUFJLEVBQUUsQ0FBQyxDQUFDO2dCQUNsQyxDQUFDLENBQUMsTUFBTSxLQUFLLEVBQUUsQ0FBQyxHQUFHLENBQUMsTUFBTSxJQUFJLENBQUMsQ0FBQyxDQUFDLENBQUM7Z0JBQ2xDLENBQUMsQ0FBQyxNQUFNLEdBQUcsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLE1BQU0sR0FBRyxNQUFNLENBQUMsQ0FBQyxDQUFDO2dCQUN6QyxDQUFDLENBQUM7Z0JBQ0YsQ0FBQyxDQUFDLE1BQU0sR0FBRyxDQUFDLENBQUMsZUFBRyxDQUFDLENBQUMsQ0FBQyxHQUFHLElBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDO2dCQUNqRCxDQUFDLENBQUM7WUFFSixJQUFNLEVBQUUsR0FDTixDQUFDLENBQUMsQ0FBQyxDQUFDLE1BQU0sS0FBSyxDQUFDLENBQUMsR0FBRyxDQUFDLE1BQU0sSUFBSSxFQUFFLENBQUMsQ0FBQztnQkFDakMsQ0FBQyxDQUFDLE1BQU0sS0FBSyxFQUFFLENBQUMsR0FBRyxDQUFDLE1BQU0sSUFBSSxFQUFFLENBQUMsQ0FBQztnQkFDbEMsQ0FBQyxDQUFDLE1BQU0sS0FBSyxFQUFFLENBQUMsR0FBRyxDQUFDLE1BQU0sSUFBSSxFQUFFLENBQUMsQ0FBQyxDQUFDO2dCQUNuQyxDQUFDLENBQUMsTUFBTSxHQUFHLE1BQU0sQ0FBQyxHQUFHLENBQUMsTUFBTSxHQUFHLE1BQU0sQ0FBQyxHQUFHLENBQUMsTUFBTSxHQUFHLE1BQU0sQ0FBQyxDQUFDLENBQUM7Z0JBQzlELENBQUMsQ0FBQztZQUVKLE1BQU0sR0FBRyxNQUFNLENBQUM7WUFDaEIsTUFBTSxHQUFHLE1BQU0sQ0FBQztZQUNoQixNQUFNLEdBQUcsTUFBTSxDQUFDO1lBQ2hCLE1BQU0sR0FBRyxDQUFDLE1BQU0sR0FBRyxFQUFFLENBQUMsR0FBRyxDQUFDLENBQUM7WUFDM0IsTUFBTSxHQUFHLE1BQU0sQ0FBQztZQUNoQixNQUFNLEdBQUcsTUFBTSxDQUFDO1lBQ2hCLE1BQU0sR0FBRyxNQUFNLENBQUM7WUFDaEIsTUFBTSxHQUFHLENBQUMsRUFBRSxHQUFHLEVBQUUsQ0FBQyxHQUFHLENBQUMsQ0FBQztTQUN4QjtRQUVELEtBQUssQ0FBQyxDQUFDLENBQUMsSUFBSSxNQUFNLENBQUM7UUFDbkIsS0FBSyxDQUFDLENBQUMsQ0FBQyxJQUFJLE1BQU0sQ0FBQztRQUNuQixLQUFLLENBQUMsQ0FBQyxDQUFDLElBQUksTUFBTSxDQUFDO1FBQ25CLEtBQUssQ0FBQyxDQUFDLENBQUMsSUFBSSxNQUFNLENBQUM7UUFDbkIsS0FBSyxDQUFDLENBQUMsQ0FBQyxJQUFJLE1BQU0sQ0FBQztRQUNuQixLQUFLLENBQUMsQ0FBQyxDQUFDLElBQUksTUFBTSxDQUFDO1FBQ25CLEtBQUssQ0FBQyxDQUFDLENBQUMsSUFBSSxNQUFNLENBQUM7UUFDbkIsS0FBSyxDQUFDLENBQUMsQ0FBQyxJQUFJLE1BQU0sQ0FBQztJQUNyQixDQUFDO0lBQ0gsZ0JBQUM7QUFBRCxDQUFDLEFBeEpELElBd0pDO0FBeEpZLDhCQUFTIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHtcbiAgQkxPQ0tfU0laRSxcbiAgRElHRVNUX0xFTkdUSCxcbiAgSU5JVCxcbiAgS0VZLFxuICBNQVhfSEFTSEFCTEVfTEVOR1RIXG59IGZyb20gXCIuL2NvbnN0YW50c1wiO1xuXG4vKipcbiAqIEBpbnRlcm5hbFxuICovXG5leHBvcnQgY2xhc3MgUmF3U2hhMjU2IHtcbiAgcHJpdmF0ZSBzdGF0ZTogSW50MzJBcnJheSA9IEludDMyQXJyYXkuZnJvbShJTklUKTtcbiAgcHJpdmF0ZSB0ZW1wOiBJbnQzMkFycmF5ID0gbmV3IEludDMyQXJyYXkoNjQpO1xuICBwcml2YXRlIGJ1ZmZlcjogVWludDhBcnJheSA9IG5ldyBVaW50OEFycmF5KDY0KTtcbiAgcHJpdmF0ZSBidWZmZXJMZW5ndGg6IG51bWJlciA9IDA7XG4gIHByaXZhdGUgYnl0ZXNIYXNoZWQ6IG51bWJlciA9IDA7XG5cbiAgLyoqXG4gICAqIEBpbnRlcm5hbFxuICAgKi9cbiAgZmluaXNoZWQ6IGJvb2xlYW4gPSBmYWxzZTtcblxuICB1cGRhdGUoZGF0YTogVWludDhBcnJheSk6IHZvaWQge1xuICAgIGlmICh0aGlzLmZpbmlzaGVkKSB7XG4gICAgICB0aHJvdyBuZXcgRXJyb3IoXCJBdHRlbXB0ZWQgdG8gdXBkYXRlIGFuIGFscmVhZHkgZmluaXNoZWQgaGFzaC5cIik7XG4gICAgfVxuXG4gICAgbGV0IHBvc2l0aW9uID0gMDtcbiAgICBsZXQgeyBieXRlTGVuZ3RoIH0gPSBkYXRhO1xuICAgIHRoaXMuYnl0ZXNIYXNoZWQgKz0gYnl0ZUxlbmd0aDtcblxuICAgIGlmICh0aGlzLmJ5dGVzSGFzaGVkICogOCA+IE1BWF9IQVNIQUJMRV9MRU5HVEgpIHtcbiAgICAgIHRocm93IG5ldyBFcnJvcihcIkNhbm5vdCBoYXNoIG1vcmUgdGhhbiAyXjUzIC0gMSBiaXRzXCIpO1xuICAgIH1cblxuICAgIHdoaWxlIChieXRlTGVuZ3RoID4gMCkge1xuICAgICAgdGhpcy5idWZmZXJbdGhpcy5idWZmZXJMZW5ndGgrK10gPSBkYXRhW3Bvc2l0aW9uKytdO1xuICAgICAgYnl0ZUxlbmd0aC0tO1xuXG4gICAgICBpZiAodGhpcy5idWZmZXJMZW5ndGggPT09IEJMT0NLX1NJWkUpIHtcbiAgICAgICAgdGhpcy5oYXNoQnVmZmVyKCk7XG4gICAgICAgIHRoaXMuYnVmZmVyTGVuZ3RoID0gMDtcbiAgICAgIH1cbiAgICB9XG4gIH1cblxuICBkaWdlc3QoKTogVWludDhBcnJheSB7XG4gICAgaWYgKCF0aGlzLmZpbmlzaGVkKSB7XG4gICAgICBjb25zdCBiaXRzSGFzaGVkID0gdGhpcy5ieXRlc0hhc2hlZCAqIDg7XG4gICAgICBjb25zdCBidWZmZXJWaWV3ID0gbmV3IERhdGFWaWV3KFxuICAgICAgICB0aGlzLmJ1ZmZlci5idWZmZXIsXG4gICAgICAgIHRoaXMuYnVmZmVyLmJ5dGVPZmZzZXQsXG4gICAgICAgIHRoaXMuYnVmZmVyLmJ5dGVMZW5ndGhcbiAgICAgICk7XG5cbiAgICAgIGNvbnN0IHVuZGVjb3JhdGVkTGVuZ3RoID0gdGhpcy5idWZmZXJMZW5ndGg7XG4gICAgICBidWZmZXJWaWV3LnNldFVpbnQ4KHRoaXMuYnVmZmVyTGVuZ3RoKyssIDB4ODApO1xuXG4gICAgICAvLyBFbnN1cmUgdGhlIGZpbmFsIGJsb2NrIGhhcyBlbm91Z2ggcm9vbSBmb3IgdGhlIGhhc2hlZCBsZW5ndGhcbiAgICAgIGlmICh1bmRlY29yYXRlZExlbmd0aCAlIEJMT0NLX1NJWkUgPj0gQkxPQ0tfU0laRSAtIDgpIHtcbiAgICAgICAgZm9yIChsZXQgaSA9IHRoaXMuYnVmZmVyTGVuZ3RoOyBpIDwgQkxPQ0tfU0laRTsgaSsrKSB7XG4gICAgICAgICAgYnVmZmVyVmlldy5zZXRVaW50OChpLCAwKTtcbiAgICAgICAgfVxuICAgICAgICB0aGlzLmhhc2hCdWZmZXIoKTtcbiAgICAgICAgdGhpcy5idWZmZXJMZW5ndGggPSAwO1xuICAgICAgfVxuXG4gICAgICBmb3IgKGxldCBpID0gdGhpcy5idWZmZXJMZW5ndGg7IGkgPCBCTE9DS19TSVpFIC0gODsgaSsrKSB7XG4gICAgICAgIGJ1ZmZlclZpZXcuc2V0VWludDgoaSwgMCk7XG4gICAgICB9XG4gICAgICBidWZmZXJWaWV3LnNldFVpbnQzMihcbiAgICAgICAgQkxPQ0tfU0laRSAtIDgsXG4gICAgICAgIE1hdGguZmxvb3IoYml0c0hhc2hlZCAvIDB4MTAwMDAwMDAwKSxcbiAgICAgICAgdHJ1ZVxuICAgICAgKTtcbiAgICAgIGJ1ZmZlclZpZXcuc2V0VWludDMyKEJMT0NLX1NJWkUgLSA0LCBiaXRzSGFzaGVkKTtcblxuICAgICAgdGhpcy5oYXNoQnVmZmVyKCk7XG5cbiAgICAgIHRoaXMuZmluaXNoZWQgPSB0cnVlO1xuICAgIH1cblxuICAgIC8vIFRoZSB2YWx1ZSBpbiBzdGF0ZSBpcyBsaXR0bGUtZW5kaWFuIHJhdGhlciB0aGFuIGJpZy1lbmRpYW4sIHNvIGZsaXBcbiAgICAvLyBlYWNoIHdvcmQgaW50byBhIG5ldyBVaW50OEFycmF5XG4gICAgY29uc3Qgb3V0ID0gbmV3IFVpbnQ4QXJyYXkoRElHRVNUX0xFTkdUSCk7XG4gICAgZm9yIChsZXQgaSA9IDA7IGkgPCA4OyBpKyspIHtcbiAgICAgIG91dFtpICogNF0gPSAodGhpcy5zdGF0ZVtpXSA+Pj4gMjQpICYgMHhmZjtcbiAgICAgIG91dFtpICogNCArIDFdID0gKHRoaXMuc3RhdGVbaV0gPj4+IDE2KSAmIDB4ZmY7XG4gICAgICBvdXRbaSAqIDQgKyAyXSA9ICh0aGlzLnN0YXRlW2ldID4+PiA4KSAmIDB4ZmY7XG4gICAgICBvdXRbaSAqIDQgKyAzXSA9ICh0aGlzLnN0YXRlW2ldID4+PiAwKSAmIDB4ZmY7XG4gICAgfVxuXG4gICAgcmV0dXJuIG91dDtcbiAgfVxuXG4gIHByaXZhdGUgaGFzaEJ1ZmZlcigpOiB2b2lkIHtcbiAgICBjb25zdCB7IGJ1ZmZlciwgc3RhdGUgfSA9IHRoaXM7XG5cbiAgICBsZXQgc3RhdGUwID0gc3RhdGVbMF0sXG4gICAgICBzdGF0ZTEgPSBzdGF0ZVsxXSxcbiAgICAgIHN0YXRlMiA9IHN0YXRlWzJdLFxuICAgICAgc3RhdGUzID0gc3RhdGVbM10sXG4gICAgICBzdGF0ZTQgPSBzdGF0ZVs0XSxcbiAgICAgIHN0YXRlNSA9IHN0YXRlWzVdLFxuICAgICAgc3RhdGU2ID0gc3RhdGVbNl0sXG4gICAgICBzdGF0ZTcgPSBzdGF0ZVs3XTtcblxuICAgIGZvciAobGV0IGkgPSAwOyBpIDwgQkxPQ0tfU0laRTsgaSsrKSB7XG4gICAgICBpZiAoaSA8IDE2KSB7XG4gICAgICAgIHRoaXMudGVtcFtpXSA9XG4gICAgICAgICAgKChidWZmZXJbaSAqIDRdICYgMHhmZikgPDwgMjQpIHxcbiAgICAgICAgICAoKGJ1ZmZlcltpICogNCArIDFdICYgMHhmZikgPDwgMTYpIHxcbiAgICAgICAgICAoKGJ1ZmZlcltpICogNCArIDJdICYgMHhmZikgPDwgOCkgfFxuICAgICAgICAgIChidWZmZXJbaSAqIDQgKyAzXSAmIDB4ZmYpO1xuICAgICAgfSBlbHNlIHtcbiAgICAgICAgbGV0IHUgPSB0aGlzLnRlbXBbaSAtIDJdO1xuICAgICAgICBjb25zdCB0MSA9XG4gICAgICAgICAgKCh1ID4+PiAxNykgfCAodSA8PCAxNSkpIF4gKCh1ID4+PiAxOSkgfCAodSA8PCAxMykpIF4gKHUgPj4+IDEwKTtcblxuICAgICAgICB1ID0gdGhpcy50ZW1wW2kgLSAxNV07XG4gICAgICAgIGNvbnN0IHQyID1cbiAgICAgICAgICAoKHUgPj4+IDcpIHwgKHUgPDwgMjUpKSBeICgodSA+Pj4gMTgpIHwgKHUgPDwgMTQpKSBeICh1ID4+PiAzKTtcblxuICAgICAgICB0aGlzLnRlbXBbaV0gPVxuICAgICAgICAgICgodDEgKyB0aGlzLnRlbXBbaSAtIDddKSB8IDApICsgKCh0MiArIHRoaXMudGVtcFtpIC0gMTZdKSB8IDApO1xuICAgICAgfVxuXG4gICAgICBjb25zdCB0MSA9XG4gICAgICAgICgoKCgoKHN0YXRlNCA+Pj4gNikgfCAoc3RhdGU0IDw8IDI2KSkgXlxuICAgICAgICAgICgoc3RhdGU0ID4+PiAxMSkgfCAoc3RhdGU0IDw8IDIxKSkgXlxuICAgICAgICAgICgoc3RhdGU0ID4+PiAyNSkgfCAoc3RhdGU0IDw8IDcpKSkgK1xuICAgICAgICAgICgoc3RhdGU0ICYgc3RhdGU1KSBeICh+c3RhdGU0ICYgc3RhdGU2KSkpIHxcbiAgICAgICAgICAwKSArXG4gICAgICAgICAgKChzdGF0ZTcgKyAoKEtFWVtpXSArIHRoaXMudGVtcFtpXSkgfCAwKSkgfCAwKSkgfFxuICAgICAgICAwO1xuXG4gICAgICBjb25zdCB0MiA9XG4gICAgICAgICgoKChzdGF0ZTAgPj4+IDIpIHwgKHN0YXRlMCA8PCAzMCkpIF5cbiAgICAgICAgICAoKHN0YXRlMCA+Pj4gMTMpIHwgKHN0YXRlMCA8PCAxOSkpIF5cbiAgICAgICAgICAoKHN0YXRlMCA+Pj4gMjIpIHwgKHN0YXRlMCA8PCAxMCkpKSArXG4gICAgICAgICAgKChzdGF0ZTAgJiBzdGF0ZTEpIF4gKHN0YXRlMCAmIHN0YXRlMikgXiAoc3RhdGUxICYgc3RhdGUyKSkpIHxcbiAgICAgICAgMDtcblxuICAgICAgc3RhdGU3ID0gc3RhdGU2O1xuICAgICAgc3RhdGU2ID0gc3RhdGU1O1xuICAgICAgc3RhdGU1ID0gc3RhdGU0O1xuICAgICAgc3RhdGU0ID0gKHN0YXRlMyArIHQxKSB8IDA7XG4gICAgICBzdGF0ZTMgPSBzdGF0ZTI7XG4gICAgICBzdGF0ZTIgPSBzdGF0ZTE7XG4gICAgICBzdGF0ZTEgPSBzdGF0ZTA7XG4gICAgICBzdGF0ZTAgPSAodDEgKyB0MikgfCAwO1xuICAgIH1cblxuICAgIHN0YXRlWzBdICs9IHN0YXRlMDtcbiAgICBzdGF0ZVsxXSArPSBzdGF0ZTE7XG4gICAgc3RhdGVbMl0gKz0gc3RhdGUyO1xuICAgIHN0YXRlWzNdICs9IHN0YXRlMztcbiAgICBzdGF0ZVs0XSArPSBzdGF0ZTQ7XG4gICAgc3RhdGVbNV0gKz0gc3RhdGU1O1xuICAgIHN0YXRlWzZdICs9IHN0YXRlNjtcbiAgICBzdGF0ZVs3XSArPSBzdGF0ZTc7XG4gIH1cbn1cbiJdfQ==
+
+/***/ }),
+
+/***/ 149:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.MAX_HASHABLE_LENGTH = exports.INIT = exports.KEY = exports.DIGEST_LENGTH = exports.BLOCK_SIZE = void 0;
+/**
+ * @internal
+ */
+exports.BLOCK_SIZE = 64;
+/**
+ * @internal
+ */
+exports.DIGEST_LENGTH = 32;
+/**
+ * @internal
+ */
+exports.KEY = new Uint32Array([
+    0x428a2f98,
+    0x71374491,
+    0xb5c0fbcf,
+    0xe9b5dba5,
+    0x3956c25b,
+    0x59f111f1,
+    0x923f82a4,
+    0xab1c5ed5,
+    0xd807aa98,
+    0x12835b01,
+    0x243185be,
+    0x550c7dc3,
+    0x72be5d74,
+    0x80deb1fe,
+    0x9bdc06a7,
+    0xc19bf174,
+    0xe49b69c1,
+    0xefbe4786,
+    0x0fc19dc6,
+    0x240ca1cc,
+    0x2de92c6f,
+    0x4a7484aa,
+    0x5cb0a9dc,
+    0x76f988da,
+    0x983e5152,
+    0xa831c66d,
+    0xb00327c8,
+    0xbf597fc7,
+    0xc6e00bf3,
+    0xd5a79147,
+    0x06ca6351,
+    0x14292967,
+    0x27b70a85,
+    0x2e1b2138,
+    0x4d2c6dfc,
+    0x53380d13,
+    0x650a7354,
+    0x766a0abb,
+    0x81c2c92e,
+    0x92722c85,
+    0xa2bfe8a1,
+    0xa81a664b,
+    0xc24b8b70,
+    0xc76c51a3,
+    0xd192e819,
+    0xd6990624,
+    0xf40e3585,
+    0x106aa070,
+    0x19a4c116,
+    0x1e376c08,
+    0x2748774c,
+    0x34b0bcb5,
+    0x391c0cb3,
+    0x4ed8aa4a,
+    0x5b9cca4f,
+    0x682e6ff3,
+    0x748f82ee,
+    0x78a5636f,
+    0x84c87814,
+    0x8cc70208,
+    0x90befffa,
+    0xa4506ceb,
+    0xbef9a3f7,
+    0xc67178f2
+]);
+/**
+ * @internal
+ */
+exports.INIT = [
+    0x6a09e667,
+    0xbb67ae85,
+    0x3c6ef372,
+    0xa54ff53a,
+    0x510e527f,
+    0x9b05688c,
+    0x1f83d9ab,
+    0x5be0cd19
+];
+/**
+ * @internal
+ */
+exports.MAX_HASHABLE_LENGTH = Math.pow(2, 53) - 1;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29uc3RhbnRzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL2NvbnN0YW50cy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQTs7R0FFRztBQUNVLFFBQUEsVUFBVSxHQUFXLEVBQUUsQ0FBQztBQUVyQzs7R0FFRztBQUNVLFFBQUEsYUFBYSxHQUFXLEVBQUUsQ0FBQztBQUV4Qzs7R0FFRztBQUNVLFFBQUEsR0FBRyxHQUFHLElBQUksV0FBVyxDQUFDO0lBQ2pDLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7Q0FDWCxDQUFDLENBQUM7QUFFSDs7R0FFRztBQUNVLFFBQUEsSUFBSSxHQUFHO0lBQ2xCLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0lBQ1YsVUFBVTtJQUNWLFVBQVU7SUFDVixVQUFVO0NBQ1gsQ0FBQztBQUVGOztHQUVHO0FBQ1UsUUFBQSxtQkFBbUIsR0FBRyxTQUFBLENBQUMsRUFBSSxFQUFFLENBQUEsR0FBRyxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIEBpbnRlcm5hbFxuICovXG5leHBvcnQgY29uc3QgQkxPQ0tfU0laRTogbnVtYmVyID0gNjQ7XG5cbi8qKlxuICogQGludGVybmFsXG4gKi9cbmV4cG9ydCBjb25zdCBESUdFU1RfTEVOR1RIOiBudW1iZXIgPSAzMjtcblxuLyoqXG4gKiBAaW50ZXJuYWxcbiAqL1xuZXhwb3J0IGNvbnN0IEtFWSA9IG5ldyBVaW50MzJBcnJheShbXG4gIDB4NDI4YTJmOTgsXG4gIDB4NzEzNzQ0OTEsXG4gIDB4YjVjMGZiY2YsXG4gIDB4ZTliNWRiYTUsXG4gIDB4Mzk1NmMyNWIsXG4gIDB4NTlmMTExZjEsXG4gIDB4OTIzZjgyYTQsXG4gIDB4YWIxYzVlZDUsXG4gIDB4ZDgwN2FhOTgsXG4gIDB4MTI4MzViMDEsXG4gIDB4MjQzMTg1YmUsXG4gIDB4NTUwYzdkYzMsXG4gIDB4NzJiZTVkNzQsXG4gIDB4ODBkZWIxZmUsXG4gIDB4OWJkYzA2YTcsXG4gIDB4YzE5YmYxNzQsXG4gIDB4ZTQ5YjY5YzEsXG4gIDB4ZWZiZTQ3ODYsXG4gIDB4MGZjMTlkYzYsXG4gIDB4MjQwY2ExY2MsXG4gIDB4MmRlOTJjNmYsXG4gIDB4NGE3NDg0YWEsXG4gIDB4NWNiMGE5ZGMsXG4gIDB4NzZmOTg4ZGEsXG4gIDB4OTgzZTUxNTIsXG4gIDB4YTgzMWM2NmQsXG4gIDB4YjAwMzI3YzgsXG4gIDB4YmY1OTdmYzcsXG4gIDB4YzZlMDBiZjMsXG4gIDB4ZDVhNzkxNDcsXG4gIDB4MDZjYTYzNTEsXG4gIDB4MTQyOTI5NjcsXG4gIDB4MjdiNzBhODUsXG4gIDB4MmUxYjIxMzgsXG4gIDB4NGQyYzZkZmMsXG4gIDB4NTMzODBkMTMsXG4gIDB4NjUwYTczNTQsXG4gIDB4NzY2YTBhYmIsXG4gIDB4ODFjMmM5MmUsXG4gIDB4OTI3MjJjODUsXG4gIDB4YTJiZmU4YTEsXG4gIDB4YTgxYTY2NGIsXG4gIDB4YzI0YjhiNzAsXG4gIDB4Yzc2YzUxYTMsXG4gIDB4ZDE5MmU4MTksXG4gIDB4ZDY5OTA2MjQsXG4gIDB4ZjQwZTM1ODUsXG4gIDB4MTA2YWEwNzAsXG4gIDB4MTlhNGMxMTYsXG4gIDB4MWUzNzZjMDgsXG4gIDB4Mjc0ODc3NGMsXG4gIDB4MzRiMGJjYjUsXG4gIDB4MzkxYzBjYjMsXG4gIDB4NGVkOGFhNGEsXG4gIDB4NWI5Y2NhNGYsXG4gIDB4NjgyZTZmZjMsXG4gIDB4NzQ4ZjgyZWUsXG4gIDB4NzhhNTYzNmYsXG4gIDB4ODRjODc4MTQsXG4gIDB4OGNjNzAyMDgsXG4gIDB4OTBiZWZmZmEsXG4gIDB4YTQ1MDZjZWIsXG4gIDB4YmVmOWEzZjcsXG4gIDB4YzY3MTc4ZjJcbl0pO1xuXG4vKipcbiAqIEBpbnRlcm5hbFxuICovXG5leHBvcnQgY29uc3QgSU5JVCA9IFtcbiAgMHg2YTA5ZTY2NyxcbiAgMHhiYjY3YWU4NSxcbiAgMHgzYzZlZjM3MixcbiAgMHhhNTRmZjUzYSxcbiAgMHg1MTBlNTI3ZixcbiAgMHg5YjA1Njg4YyxcbiAgMHgxZjgzZDlhYixcbiAgMHg1YmUwY2QxOVxuXTtcblxuLyoqXG4gKiBAaW50ZXJuYWxcbiAqL1xuZXhwb3J0IGNvbnN0IE1BWF9IQVNIQUJMRV9MRU5HVEggPSAyICoqIDUzIC0gMTtcbiJdfQ==
+
+/***/ }),
+
+/***/ 387:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+var tslib_1 = __webpack_require__(163);
+(0, tslib_1.__exportStar)(__webpack_require__(572), exports);
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEsMERBQTJCIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0ICogZnJvbSBcIi4vanNTaGEyNTZcIjtcbiJdfQ==
+
+/***/ }),
+
+/***/ 572:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Sha256 = void 0;
+var tslib_1 = __webpack_require__(163);
+var constants_1 = __webpack_require__(149);
+var RawSha256_1 = __webpack_require__(2);
+var util_1 = __webpack_require__(948);
+var Sha256 = /** @class */ (function () {
+    function Sha256(secret) {
+        this.hash = new RawSha256_1.RawSha256();
+        if (secret) {
+            this.outer = new RawSha256_1.RawSha256();
+            var inner = bufferFromSecret(secret);
+            var outer = new Uint8Array(constants_1.BLOCK_SIZE);
+            outer.set(inner);
+            for (var i = 0; i < constants_1.BLOCK_SIZE; i++) {
+                inner[i] ^= 0x36;
+                outer[i] ^= 0x5c;
+            }
+            this.hash.update(inner);
+            this.outer.update(outer);
+            // overwrite the copied key in memory
+            for (var i = 0; i < inner.byteLength; i++) {
+                inner[i] = 0;
+            }
+        }
+    }
+    Sha256.prototype.update = function (toHash) {
+        if ((0, util_1.isEmptyData)(toHash) || this.error) {
+            return;
+        }
+        try {
+            this.hash.update((0, util_1.convertToBuffer)(toHash));
+        }
+        catch (e) {
+            this.error = e;
+        }
+    };
+    /* This synchronous method keeps compatibility
+     * with the v2 aws-sdk.
+     */
+    Sha256.prototype.digestSync = function () {
+        if (this.error) {
+            throw this.error;
+        }
+        if (this.outer) {
+            if (!this.outer.finished) {
+                this.outer.update(this.hash.digest());
+            }
+            return this.outer.digest();
+        }
+        return this.hash.digest();
+    };
+    /* The underlying digest method here is synchronous.
+     * To keep the same interface with the other hash functions
+     * the default is to expose this as an async method.
+     * However, it can sometimes be useful to have a sync method.
+     */
+    Sha256.prototype.digest = function () {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function () {
+            return (0, tslib_1.__generator)(this, function (_a) {
+                return [2 /*return*/, this.digestSync()];
+            });
+        });
+    };
+    return Sha256;
+}());
+exports.Sha256 = Sha256;
+function bufferFromSecret(secret) {
+    var input = (0, util_1.convertToBuffer)(secret);
+    if (input.byteLength > constants_1.BLOCK_SIZE) {
+        var bufferHash = new RawSha256_1.RawSha256();
+        bufferHash.update(input);
+        input = bufferHash.digest();
+    }
+    var buffer = new Uint8Array(constants_1.BLOCK_SIZE);
+    buffer.set(input);
+    return buffer;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoianNTaGEyNTYuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvanNTaGEyNTYudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztBQUFBLHlDQUF5QztBQUN6Qyx5Q0FBd0M7QUFFeEMseUNBQWdFO0FBRWhFO0lBS0UsZ0JBQVksTUFBbUI7UUFKZCxTQUFJLEdBQUcsSUFBSSxxQkFBUyxFQUFFLENBQUM7UUFLdEMsSUFBSSxNQUFNLEVBQUU7WUFDVixJQUFJLENBQUMsS0FBSyxHQUFHLElBQUkscUJBQVMsRUFBRSxDQUFDO1lBQzdCLElBQU0sS0FBSyxHQUFHLGdCQUFnQixDQUFDLE1BQU0sQ0FBQyxDQUFDO1lBQ3ZDLElBQU0sS0FBSyxHQUFHLElBQUksVUFBVSxDQUFDLHNCQUFVLENBQUMsQ0FBQztZQUN6QyxLQUFLLENBQUMsR0FBRyxDQUFDLEtBQUssQ0FBQyxDQUFDO1lBRWpCLEtBQUssSUFBSSxDQUFDLEdBQUcsQ0FBQyxFQUFFLENBQUMsR0FBRyxzQkFBVSxFQUFFLENBQUMsRUFBRSxFQUFFO2dCQUNuQyxLQUFLLENBQUMsQ0FBQyxDQUFDLElBQUksSUFBSSxDQUFDO2dCQUNqQixLQUFLLENBQUMsQ0FBQyxDQUFDLElBQUksSUFBSSxDQUFDO2FBQ2xCO1lBRUQsSUFBSSxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsS0FBSyxDQUFDLENBQUM7WUFDeEIsSUFBSSxDQUFDLEtBQUssQ0FBQyxNQUFNLENBQUMsS0FBSyxDQUFDLENBQUM7WUFFekIscUNBQXFDO1lBQ3JDLEtBQUssSUFBSSxDQUFDLEdBQUcsQ0FBQyxFQUFFLENBQUMsR0FBRyxLQUFLLENBQUMsVUFBVSxFQUFFLENBQUMsRUFBRSxFQUFFO2dCQUN6QyxLQUFLLENBQUMsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDO2FBQ2Q7U0FDRjtJQUNILENBQUM7SUFFRCx1QkFBTSxHQUFOLFVBQU8sTUFBa0I7UUFDdkIsSUFBSSxJQUFBLGtCQUFXLEVBQUMsTUFBTSxDQUFDLElBQUksSUFBSSxDQUFDLEtBQUssRUFBRTtZQUNyQyxPQUFPO1NBQ1I7UUFFRCxJQUFJO1lBQ0YsSUFBSSxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsSUFBQSxzQkFBZSxFQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUM7U0FDM0M7UUFBQyxPQUFPLENBQUMsRUFBRTtZQUNWLElBQUksQ0FBQyxLQUFLLEdBQUcsQ0FBQyxDQUFDO1NBQ2hCO0lBQ0gsQ0FBQztJQUVEOztPQUVHO0lBQ0gsMkJBQVUsR0FBVjtRQUNFLElBQUksSUFBSSxDQUFDLEtBQUssRUFBRTtZQUNkLE1BQU0sSUFBSSxDQUFDLEtBQUssQ0FBQztTQUNsQjtRQUVELElBQUksSUFBSSxDQUFDLEtBQUssRUFBRTtZQUNkLElBQUksQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLFFBQVEsRUFBRTtnQkFDeEIsSUFBSSxDQUFDLEtBQUssQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxNQUFNLEVBQUUsQ0FBQyxDQUFDO2FBQ3ZDO1lBRUQsT0FBTyxJQUFJLENBQUMsS0FBSyxDQUFDLE1BQU0sRUFBRSxDQUFDO1NBQzVCO1FBRUQsT0FBTyxJQUFJLENBQUMsSUFBSSxDQUFDLE1BQU0sRUFBRSxDQUFDO0lBQzVCLENBQUM7SUFFRDs7OztPQUlHO0lBQ0csdUJBQU0sR0FBWjs7O2dCQUNFLHNCQUFPLElBQUksQ0FBQyxVQUFVLEVBQUUsRUFBQzs7O0tBQzFCO0lBQ0gsYUFBQztBQUFELENBQUMsQUFsRUQsSUFrRUM7QUFsRVksd0JBQU07QUFvRW5CLFNBQVMsZ0JBQWdCLENBQUMsTUFBa0I7SUFDMUMsSUFBSSxLQUFLLEdBQUcsSUFBQSxzQkFBZSxFQUFDLE1BQU0sQ0FBQyxDQUFDO0lBRXBDLElBQUksS0FBSyxDQUFDLFVBQVUsR0FBRyxzQkFBVSxFQUFFO1FBQ2pDLElBQU0sVUFBVSxHQUFHLElBQUkscUJBQVMsRUFBRSxDQUFDO1FBQ25DLFVBQVUsQ0FBQyxNQUFNLENBQUMsS0FBSyxDQUFDLENBQUM7UUFDekIsS0FBSyxHQUFHLFVBQVUsQ0FBQyxNQUFNLEVBQUUsQ0FBQztLQUM3QjtJQUVELElBQU0sTUFBTSxHQUFHLElBQUksVUFBVSxDQUFDLHNCQUFVLENBQUMsQ0FBQztJQUMxQyxNQUFNLENBQUMsR0FBRyxDQUFDLEtBQUssQ0FBQyxDQUFDO0lBQ2xCLE9BQU8sTUFBTSxDQUFDO0FBQ2hCLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBCTE9DS19TSVpFIH0gZnJvbSBcIi4vY29uc3RhbnRzXCI7XG5pbXBvcnQgeyBSYXdTaGEyNTYgfSBmcm9tIFwiLi9SYXdTaGEyNTZcIjtcbmltcG9ydCB7IEhhc2gsIFNvdXJjZURhdGEgfSBmcm9tIFwiQGF3cy1zZGsvdHlwZXNcIjtcbmltcG9ydCB7IGlzRW1wdHlEYXRhLCBjb252ZXJ0VG9CdWZmZXIgfSBmcm9tIFwiQGF3cy1jcnlwdG8vdXRpbFwiO1xuXG5leHBvcnQgY2xhc3MgU2hhMjU2IGltcGxlbWVudHMgSGFzaCB7XG4gIHByaXZhdGUgcmVhZG9ubHkgaGFzaCA9IG5ldyBSYXdTaGEyNTYoKTtcbiAgcHJpdmF0ZSByZWFkb25seSBvdXRlcj86IFJhd1NoYTI1NjtcbiAgcHJpdmF0ZSBlcnJvcjogYW55O1xuXG4gIGNvbnN0cnVjdG9yKHNlY3JldD86IFNvdXJjZURhdGEpIHtcbiAgICBpZiAoc2VjcmV0KSB7XG4gICAgICB0aGlzLm91dGVyID0gbmV3IFJhd1NoYTI1NigpO1xuICAgICAgY29uc3QgaW5uZXIgPSBidWZmZXJGcm9tU2VjcmV0KHNlY3JldCk7XG4gICAgICBjb25zdCBvdXRlciA9IG5ldyBVaW50OEFycmF5KEJMT0NLX1NJWkUpO1xuICAgICAgb3V0ZXIuc2V0KGlubmVyKTtcblxuICAgICAgZm9yIChsZXQgaSA9IDA7IGkgPCBCTE9DS19TSVpFOyBpKyspIHtcbiAgICAgICAgaW5uZXJbaV0gXj0gMHgzNjtcbiAgICAgICAgb3V0ZXJbaV0gXj0gMHg1YztcbiAgICAgIH1cblxuICAgICAgdGhpcy5oYXNoLnVwZGF0ZShpbm5lcik7XG4gICAgICB0aGlzLm91dGVyLnVwZGF0ZShvdXRlcik7XG5cbiAgICAgIC8vIG92ZXJ3cml0ZSB0aGUgY29waWVkIGtleSBpbiBtZW1vcnlcbiAgICAgIGZvciAobGV0IGkgPSAwOyBpIDwgaW5uZXIuYnl0ZUxlbmd0aDsgaSsrKSB7XG4gICAgICAgIGlubmVyW2ldID0gMDtcbiAgICAgIH1cbiAgICB9XG4gIH1cblxuICB1cGRhdGUodG9IYXNoOiBTb3VyY2VEYXRhKTogdm9pZCB7XG4gICAgaWYgKGlzRW1wdHlEYXRhKHRvSGFzaCkgfHwgdGhpcy5lcnJvcikge1xuICAgICAgcmV0dXJuO1xuICAgIH1cblxuICAgIHRyeSB7XG4gICAgICB0aGlzLmhhc2gudXBkYXRlKGNvbnZlcnRUb0J1ZmZlcih0b0hhc2gpKTtcbiAgICB9IGNhdGNoIChlKSB7XG4gICAgICB0aGlzLmVycm9yID0gZTtcbiAgICB9XG4gIH1cblxuICAvKiBUaGlzIHN5bmNocm9ub3VzIG1ldGhvZCBrZWVwcyBjb21wYXRpYmlsaXR5XG4gICAqIHdpdGggdGhlIHYyIGF3cy1zZGsuXG4gICAqL1xuICBkaWdlc3RTeW5jKCk6IFVpbnQ4QXJyYXkge1xuICAgIGlmICh0aGlzLmVycm9yKSB7XG4gICAgICB0aHJvdyB0aGlzLmVycm9yO1xuICAgIH1cblxuICAgIGlmICh0aGlzLm91dGVyKSB7XG4gICAgICBpZiAoIXRoaXMub3V0ZXIuZmluaXNoZWQpIHtcbiAgICAgICAgdGhpcy5vdXRlci51cGRhdGUodGhpcy5oYXNoLmRpZ2VzdCgpKTtcbiAgICAgIH1cblxuICAgICAgcmV0dXJuIHRoaXMub3V0ZXIuZGlnZXN0KCk7XG4gICAgfVxuXG4gICAgcmV0dXJuIHRoaXMuaGFzaC5kaWdlc3QoKTtcbiAgfVxuXG4gIC8qIFRoZSB1bmRlcmx5aW5nIGRpZ2VzdCBtZXRob2QgaGVyZSBpcyBzeW5jaHJvbm91cy5cbiAgICogVG8ga2VlcCB0aGUgc2FtZSBpbnRlcmZhY2Ugd2l0aCB0aGUgb3RoZXIgaGFzaCBmdW5jdGlvbnNcbiAgICogdGhlIGRlZmF1bHQgaXMgdG8gZXhwb3NlIHRoaXMgYXMgYW4gYXN5bmMgbWV0aG9kLlxuICAgKiBIb3dldmVyLCBpdCBjYW4gc29tZXRpbWVzIGJlIHVzZWZ1bCB0byBoYXZlIGEgc3luYyBtZXRob2QuXG4gICAqL1xuICBhc3luYyBkaWdlc3QoKTogUHJvbWlzZTxVaW50OEFycmF5PiB7XG4gICAgcmV0dXJuIHRoaXMuZGlnZXN0U3luYygpO1xuICB9XG59XG5cbmZ1bmN0aW9uIGJ1ZmZlckZyb21TZWNyZXQoc2VjcmV0OiBTb3VyY2VEYXRhKTogVWludDhBcnJheSB7XG4gIGxldCBpbnB1dCA9IGNvbnZlcnRUb0J1ZmZlcihzZWNyZXQpO1xuXG4gIGlmIChpbnB1dC5ieXRlTGVuZ3RoID4gQkxPQ0tfU0laRSkge1xuICAgIGNvbnN0IGJ1ZmZlckhhc2ggPSBuZXcgUmF3U2hhMjU2KCk7XG4gICAgYnVmZmVySGFzaC51cGRhdGUoaW5wdXQpO1xuICAgIGlucHV0ID0gYnVmZmVySGFzaC5kaWdlc3QoKTtcbiAgfVxuXG4gIGNvbnN0IGJ1ZmZlciA9IG5ldyBVaW50OEFycmF5KEJMT0NLX1NJWkUpO1xuICBidWZmZXIuc2V0KGlucHV0KTtcbiAgcmV0dXJuIGJ1ZmZlcjtcbn1cbiJdfQ==
+
+/***/ }),
+
+/***/ 242:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+// Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.convertToBuffer = void 0;
+var util_utf8_browser_1 = __webpack_require__(152);
+// Quick polyfill
+var fromUtf8 = typeof Buffer !== "undefined" && Buffer.from
+    ? function (input) { return Buffer.from(input, "utf8"); }
+    : util_utf8_browser_1.fromUtf8;
+function convertToBuffer(data) {
+    // Already a Uint8, do nothing
+    if (data instanceof Uint8Array)
+        return data;
+    if (typeof data === "string") {
+        return fromUtf8(data);
+    }
+    if (ArrayBuffer.isView(data)) {
+        return new Uint8Array(data.buffer, data.byteOffset, data.byteLength / Uint8Array.BYTES_PER_ELEMENT);
+    }
+    return new Uint8Array(data);
+}
+exports.convertToBuffer = convertToBuffer;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29udmVydFRvQnVmZmVyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL2NvbnZlcnRUb0J1ZmZlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsb0VBQW9FO0FBQ3BFLHNDQUFzQzs7O0FBR3RDLGdFQUF5RTtBQUV6RSxpQkFBaUI7QUFDakIsSUFBTSxRQUFRLEdBQ1osT0FBTyxNQUFNLEtBQUssV0FBVyxJQUFJLE1BQU0sQ0FBQyxJQUFJO0lBQzFDLENBQUMsQ0FBQyxVQUFDLEtBQWEsSUFBSyxPQUFBLE1BQU0sQ0FBQyxJQUFJLENBQUMsS0FBSyxFQUFFLE1BQU0sQ0FBQyxFQUExQixDQUEwQjtJQUMvQyxDQUFDLENBQUMsNEJBQWUsQ0FBQztBQUV0QixTQUFnQixlQUFlLENBQUMsSUFBZ0I7SUFDOUMsOEJBQThCO0lBQzlCLElBQUksSUFBSSxZQUFZLFVBQVU7UUFBRSxPQUFPLElBQUksQ0FBQztJQUU1QyxJQUFJLE9BQU8sSUFBSSxLQUFLLFFBQVEsRUFBRTtRQUM1QixPQUFPLFFBQVEsQ0FBQyxJQUFJLENBQUMsQ0FBQztLQUN2QjtJQUVELElBQUksV0FBVyxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUMsRUFBRTtRQUM1QixPQUFPLElBQUksVUFBVSxDQUNuQixJQUFJLENBQUMsTUFBTSxFQUNYLElBQUksQ0FBQyxVQUFVLEVBQ2YsSUFBSSxDQUFDLFVBQVUsR0FBRyxVQUFVLENBQUMsaUJBQWlCLENBQy9DLENBQUM7S0FDSDtJQUVELE9BQU8sSUFBSSxVQUFVLENBQUMsSUFBSSxDQUFDLENBQUM7QUFDOUIsQ0FBQztBQWpCRCwwQ0FpQkMiLCJzb3VyY2VzQ29udGVudCI6WyIvLyBDb3B5cmlnaHQgQW1hem9uLmNvbSBJbmMuIG9yIGl0cyBhZmZpbGlhdGVzLiBBbGwgUmlnaHRzIFJlc2VydmVkLlxuLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEFwYWNoZS0yLjBcblxuaW1wb3J0IHsgU291cmNlRGF0YSB9IGZyb20gXCJAYXdzLXNkay90eXBlc1wiO1xuaW1wb3J0IHsgZnJvbVV0ZjggYXMgZnJvbVV0ZjhCcm93c2VyIH0gZnJvbSBcIkBhd3Mtc2RrL3V0aWwtdXRmOC1icm93c2VyXCI7XG5cbi8vIFF1aWNrIHBvbHlmaWxsXG5jb25zdCBmcm9tVXRmOCA9XG4gIHR5cGVvZiBCdWZmZXIgIT09IFwidW5kZWZpbmVkXCIgJiYgQnVmZmVyLmZyb21cbiAgICA/IChpbnB1dDogc3RyaW5nKSA9PiBCdWZmZXIuZnJvbShpbnB1dCwgXCJ1dGY4XCIpXG4gICAgOiBmcm9tVXRmOEJyb3dzZXI7XG5cbmV4cG9ydCBmdW5jdGlvbiBjb252ZXJ0VG9CdWZmZXIoZGF0YTogU291cmNlRGF0YSk6IFVpbnQ4QXJyYXkge1xuICAvLyBBbHJlYWR5IGEgVWludDgsIGRvIG5vdGhpbmdcbiAgaWYgKGRhdGEgaW5zdGFuY2VvZiBVaW50OEFycmF5KSByZXR1cm4gZGF0YTtcblxuICBpZiAodHlwZW9mIGRhdGEgPT09IFwic3RyaW5nXCIpIHtcbiAgICByZXR1cm4gZnJvbVV0ZjgoZGF0YSk7XG4gIH1cblxuICBpZiAoQXJyYXlCdWZmZXIuaXNWaWV3KGRhdGEpKSB7XG4gICAgcmV0dXJuIG5ldyBVaW50OEFycmF5KFxuICAgICAgZGF0YS5idWZmZXIsXG4gICAgICBkYXRhLmJ5dGVPZmZzZXQsXG4gICAgICBkYXRhLmJ5dGVMZW5ndGggLyBVaW50OEFycmF5LkJZVEVTX1BFUl9FTEVNRU5UXG4gICAgKTtcbiAgfVxuXG4gIHJldHVybiBuZXcgVWludDhBcnJheShkYXRhKTtcbn1cbiJdfQ==
+
+/***/ }),
+
+/***/ 948:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+// Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.uint32ArrayFrom = exports.numToUint8 = exports.isEmptyData = exports.convertToBuffer = void 0;
+var convertToBuffer_1 = __webpack_require__(242);
+Object.defineProperty(exports, "convertToBuffer", ({ enumerable: true, get: function () { return convertToBuffer_1.convertToBuffer; } }));
+var isEmptyData_1 = __webpack_require__(260);
+Object.defineProperty(exports, "isEmptyData", ({ enumerable: true, get: function () { return isEmptyData_1.isEmptyData; } }));
+var numToUint8_1 = __webpack_require__(668);
+Object.defineProperty(exports, "numToUint8", ({ enumerable: true, get: function () { return numToUint8_1.numToUint8; } }));
+var uint32ArrayFrom_1 = __webpack_require__(331);
+Object.defineProperty(exports, "uint32ArrayFrom", ({ enumerable: true, get: function () { return uint32ArrayFrom_1.uint32ArrayFrom; } }));
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBLG9FQUFvRTtBQUNwRSxzQ0FBc0M7OztBQUV0QyxxREFBb0Q7QUFBM0Msa0hBQUEsZUFBZSxPQUFBO0FBQ3hCLDZDQUE0QztBQUFuQywwR0FBQSxXQUFXLE9BQUE7QUFDcEIsMkNBQTBDO0FBQWpDLHdHQUFBLFVBQVUsT0FBQTtBQUNuQixxREFBa0Q7QUFBMUMsa0hBQUEsZUFBZSxPQUFBIiwic291cmNlc0NvbnRlbnQiOlsiLy8gQ29weXJpZ2h0IEFtYXpvbi5jb20gSW5jLiBvciBpdHMgYWZmaWxpYXRlcy4gQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbi8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBBcGFjaGUtMi4wXG5cbmV4cG9ydCB7IGNvbnZlcnRUb0J1ZmZlciB9IGZyb20gXCIuL2NvbnZlcnRUb0J1ZmZlclwiO1xuZXhwb3J0IHsgaXNFbXB0eURhdGEgfSBmcm9tIFwiLi9pc0VtcHR5RGF0YVwiO1xuZXhwb3J0IHsgbnVtVG9VaW50OCB9IGZyb20gXCIuL251bVRvVWludDhcIjtcbmV4cG9ydCB7dWludDMyQXJyYXlGcm9tfSBmcm9tICcuL3VpbnQzMkFycmF5RnJvbSc7XG4iXX0=
+
+/***/ }),
+
+/***/ 260:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.isEmptyData = void 0;
+function isEmptyData(data) {
+    if (typeof data === "string") {
+        return data.length === 0;
+    }
+    return data.byteLength === 0;
+}
+exports.isEmptyData = isEmptyData;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaXNFbXB0eURhdGEuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9zcmMvaXNFbXB0eURhdGEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBLG9FQUFvRTtBQUNwRSxzQ0FBc0M7OztBQUl0QyxTQUFnQixXQUFXLENBQUMsSUFBZ0I7SUFDMUMsSUFBSSxPQUFPLElBQUksS0FBSyxRQUFRLEVBQUU7UUFDNUIsT0FBTyxJQUFJLENBQUMsTUFBTSxLQUFLLENBQUMsQ0FBQztLQUMxQjtJQUVELE9BQU8sSUFBSSxDQUFDLFVBQVUsS0FBSyxDQUFDLENBQUM7QUFDL0IsQ0FBQztBQU5ELGtDQU1DIiwic291cmNlc0NvbnRlbnQiOlsiLy8gQ29weXJpZ2h0IEFtYXpvbi5jb20gSW5jLiBvciBpdHMgYWZmaWxpYXRlcy4gQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbi8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBBcGFjaGUtMi4wXG5cbmltcG9ydCB7IFNvdXJjZURhdGEgfSBmcm9tIFwiQGF3cy1zZGsvdHlwZXNcIjtcblxuZXhwb3J0IGZ1bmN0aW9uIGlzRW1wdHlEYXRhKGRhdGE6IFNvdXJjZURhdGEpOiBib29sZWFuIHtcbiAgaWYgKHR5cGVvZiBkYXRhID09PSBcInN0cmluZ1wiKSB7XG4gICAgcmV0dXJuIGRhdGEubGVuZ3RoID09PSAwO1xuICB9XG5cbiAgcmV0dXJuIGRhdGEuYnl0ZUxlbmd0aCA9PT0gMDtcbn1cbiJdfQ==
+
+/***/ }),
+
+/***/ 668:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.numToUint8 = void 0;
+function numToUint8(num) {
+    return new Uint8Array([
+        (num & 0xff000000) >> 24,
+        (num & 0x00ff0000) >> 16,
+        (num & 0x0000ff00) >> 8,
+        num & 0x000000ff,
+    ]);
+}
+exports.numToUint8 = numToUint8;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibnVtVG9VaW50OC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uL3NyYy9udW1Ub1VpbnQ4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBQSxvRUFBb0U7QUFDcEUsc0NBQXNDOzs7QUFFdEMsU0FBZ0IsVUFBVSxDQUFDLEdBQVc7SUFDcEMsT0FBTyxJQUFJLFVBQVUsQ0FBQztRQUNwQixDQUFDLEdBQUcsR0FBRyxVQUFVLENBQUMsSUFBSSxFQUFFO1FBQ3hCLENBQUMsR0FBRyxHQUFHLFVBQVUsQ0FBQyxJQUFJLEVBQUU7UUFDeEIsQ0FBQyxHQUFHLEdBQUcsVUFBVSxDQUFDLElBQUksQ0FBQztRQUN2QixHQUFHLEdBQUcsVUFBVTtLQUNqQixDQUFDLENBQUM7QUFDTCxDQUFDO0FBUEQsZ0NBT0MiLCJzb3VyY2VzQ29udGVudCI6WyIvLyBDb3B5cmlnaHQgQW1hem9uLmNvbSBJbmMuIG9yIGl0cyBhZmZpbGlhdGVzLiBBbGwgUmlnaHRzIFJlc2VydmVkLlxuLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEFwYWNoZS0yLjBcblxuZXhwb3J0IGZ1bmN0aW9uIG51bVRvVWludDgobnVtOiBudW1iZXIpIHtcbiAgcmV0dXJuIG5ldyBVaW50OEFycmF5KFtcbiAgICAobnVtICYgMHhmZjAwMDAwMCkgPj4gMjQsXG4gICAgKG51bSAmIDB4MDBmZjAwMDApID4+IDE2LFxuICAgIChudW0gJiAweDAwMDBmZjAwKSA+PiA4LFxuICAgIG51bSAmIDB4MDAwMDAwZmYsXG4gIF0pO1xufVxuIl19
+
+/***/ }),
+
+/***/ 331:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+// Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.uint32ArrayFrom = void 0;
+// IE 11 does not support Array.from, so we do it manually
+function uint32ArrayFrom(a_lookUpTable) {
+    if (!Array.from) {
+        var return_array = new Uint32Array(a_lookUpTable.length);
+        var a_index = 0;
+        while (a_index < a_lookUpTable.length) {
+            return_array[a_index] = a_lookUpTable[a_index];
+        }
+        return return_array;
+    }
+    return Uint32Array.from(a_lookUpTable);
+}
+exports.uint32ArrayFrom = uint32ArrayFrom;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidWludDMyQXJyYXlGcm9tLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL3VpbnQzMkFycmF5RnJvbS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsb0VBQW9FO0FBQ3BFLHNDQUFzQzs7O0FBRXRDLDBEQUEwRDtBQUMxRCxTQUFnQixlQUFlLENBQUMsYUFBNEI7SUFDMUQsSUFBSSxDQUFDLEtBQUssQ0FBQyxJQUFJLEVBQUU7UUFDZixJQUFNLFlBQVksR0FBRyxJQUFJLFdBQVcsQ0FBQyxhQUFhLENBQUMsTUFBTSxDQUFDLENBQUE7UUFDMUQsSUFBSSxPQUFPLEdBQUcsQ0FBQyxDQUFBO1FBQ2YsT0FBTyxPQUFPLEdBQUcsYUFBYSxDQUFDLE1BQU0sRUFBRTtZQUNyQyxZQUFZLENBQUMsT0FBTyxDQUFDLEdBQUcsYUFBYSxDQUFDLE9BQU8sQ0FBQyxDQUFBO1NBQy9DO1FBQ0QsT0FBTyxZQUFZLENBQUE7S0FDcEI7SUFDRCxPQUFPLFdBQVcsQ0FBQyxJQUFJLENBQUMsYUFBYSxDQUFDLENBQUE7QUFDeEMsQ0FBQztBQVZELDBDQVVDIiwic291cmNlc0NvbnRlbnQiOlsiLy8gQ29weXJpZ2h0IEFtYXpvbi5jb20gSW5jLiBvciBpdHMgYWZmaWxpYXRlcy4gQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbi8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBBcGFjaGUtMi4wXG5cbi8vIElFIDExIGRvZXMgbm90IHN1cHBvcnQgQXJyYXkuZnJvbSwgc28gd2UgZG8gaXQgbWFudWFsbHlcbmV4cG9ydCBmdW5jdGlvbiB1aW50MzJBcnJheUZyb20oYV9sb29rVXBUYWJsZTogQXJyYXk8bnVtYmVyPik6IFVpbnQzMkFycmF5IHtcbiAgaWYgKCFBcnJheS5mcm9tKSB7XG4gICAgY29uc3QgcmV0dXJuX2FycmF5ID0gbmV3IFVpbnQzMkFycmF5KGFfbG9va1VwVGFibGUubGVuZ3RoKVxuICAgIGxldCBhX2luZGV4ID0gMFxuICAgIHdoaWxlIChhX2luZGV4IDwgYV9sb29rVXBUYWJsZS5sZW5ndGgpIHtcbiAgICAgIHJldHVybl9hcnJheVthX2luZGV4XSA9IGFfbG9va1VwVGFibGVbYV9pbmRleF1cbiAgICB9XG4gICAgcmV0dXJuIHJldHVybl9hcnJheVxuICB9XG4gIHJldHVybiBVaW50MzJBcnJheS5mcm9tKGFfbG9va1VwVGFibGUpXG59XG4iXX0=
+
+/***/ }),
+
+/***/ 152:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  fromUtf8: () => (/* binding */ dist_es_fromUtf8),
+  toUtf8: () => (/* binding */ dist_es_toUtf8)
+});
+
+;// CONCATENATED MODULE: ../../node_modules/@aws-crypto/sha256-js/node_modules/@aws-sdk/util-utf8-browser/dist-es/pureJs.js
+const fromUtf8 = (input) => {
+    const bytes = [];
+    for (let i = 0, len = input.length; i < len; i++) {
+        const value = input.charCodeAt(i);
+        if (value < 0x80) {
+            bytes.push(value);
+        }
+        else if (value < 0x800) {
+            bytes.push((value >> 6) | 0b11000000, (value & 0b111111) | 0b10000000);
+        }
+        else if (i + 1 < input.length && (value & 0xfc00) === 0xd800 && (input.charCodeAt(i + 1) & 0xfc00) === 0xdc00) {
+            const surrogatePair = 0x10000 + ((value & 0b1111111111) << 10) + (input.charCodeAt(++i) & 0b1111111111);
+            bytes.push((surrogatePair >> 18) | 0b11110000, ((surrogatePair >> 12) & 0b111111) | 0b10000000, ((surrogatePair >> 6) & 0b111111) | 0b10000000, (surrogatePair & 0b111111) | 0b10000000);
+        }
+        else {
+            bytes.push((value >> 12) | 0b11100000, ((value >> 6) & 0b111111) | 0b10000000, (value & 0b111111) | 0b10000000);
+        }
+    }
+    return Uint8Array.from(bytes);
+};
+const toUtf8 = (input) => {
+    let decoded = "";
+    for (let i = 0, len = input.length; i < len; i++) {
+        const byte = input[i];
+        if (byte < 0x80) {
+            decoded += String.fromCharCode(byte);
+        }
+        else if (0b11000000 <= byte && byte < 0b11100000) {
+            const nextByte = input[++i];
+            decoded += String.fromCharCode(((byte & 0b11111) << 6) | (nextByte & 0b111111));
+        }
+        else if (0b11110000 <= byte && byte < 0b101101101) {
+            const surrogatePair = [byte, input[++i], input[++i], input[++i]];
+            const encoded = "%" + surrogatePair.map((byteValue) => byteValue.toString(16)).join("%");
+            decoded += decodeURIComponent(encoded);
+        }
+        else {
+            decoded += String.fromCharCode(((byte & 0b1111) << 12) | ((input[++i] & 0b111111) << 6) | (input[++i] & 0b111111));
+        }
+    }
+    return decoded;
+};
+
+;// CONCATENATED MODULE: ../../node_modules/@aws-crypto/sha256-js/node_modules/@aws-sdk/util-utf8-browser/dist-es/whatwgEncodingApi.js
+function whatwgEncodingApi_fromUtf8(input) {
+    return new TextEncoder().encode(input);
+}
+function whatwgEncodingApi_toUtf8(input) {
+    return new TextDecoder("utf-8").decode(input);
+}
+
+;// CONCATENATED MODULE: ../../node_modules/@aws-crypto/sha256-js/node_modules/@aws-sdk/util-utf8-browser/dist-es/index.js
+
+
+const dist_es_fromUtf8 = (input) => typeof TextEncoder === "function" ? whatwgEncodingApi_fromUtf8(input) : fromUtf8(input);
+const dist_es_toUtf8 = (input) => typeof TextDecoder === "function" ? whatwgEncodingApi_toUtf8(input) : toUtf8(input);
+
+
+/***/ }),
+
+/***/ 766:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+exports.byteLength = byteLength
+exports.toByteArray = toByteArray
+exports.fromByteArray = fromByteArray
+
+var lookup = []
+var revLookup = []
+var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array
+
+var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+for (var i = 0, len = code.length; i < len; ++i) {
+  lookup[i] = code[i]
+  revLookup[code.charCodeAt(i)] = i
+}
+
+// Support decoding URL-safe base64 strings, as Node.js does.
+// See: https://en.wikipedia.org/wiki/Base64#URL_applications
+revLookup['-'.charCodeAt(0)] = 62
+revLookup['_'.charCodeAt(0)] = 63
+
+function getLens (b64) {
+  var len = b64.length
+
+  if (len % 4 > 0) {
+    throw new Error('Invalid string. Length must be a multiple of 4')
+  }
+
+  // Trim off extra bytes after placeholder bytes are found
+  // See: https://github.com/beatgammit/base64-js/issues/42
+  var validLen = b64.indexOf('=')
+  if (validLen === -1) validLen = len
+
+  var placeHoldersLen = validLen === len
+    ? 0
+    : 4 - (validLen % 4)
+
+  return [validLen, placeHoldersLen]
+}
+
+// base64 is 4/3 + up to two characters of the original data
+function byteLength (b64) {
+  var lens = getLens(b64)
+  var validLen = lens[0]
+  var placeHoldersLen = lens[1]
+  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
+}
+
+function _byteLength (b64, validLen, placeHoldersLen) {
+  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
+}
+
+function toByteArray (b64) {
+  var tmp
+  var lens = getLens(b64)
+  var validLen = lens[0]
+  var placeHoldersLen = lens[1]
+
+  var arr = new Arr(_byteLength(b64, validLen, placeHoldersLen))
+
+  var curByte = 0
+
+  // if there are placeholders, only get up to the last complete 4 chars
+  var len = placeHoldersLen > 0
+    ? validLen - 4
+    : validLen
+
+  var i
+  for (i = 0; i < len; i += 4) {
+    tmp =
+      (revLookup[b64.charCodeAt(i)] << 18) |
+      (revLookup[b64.charCodeAt(i + 1)] << 12) |
+      (revLookup[b64.charCodeAt(i + 2)] << 6) |
+      revLookup[b64.charCodeAt(i + 3)]
+    arr[curByte++] = (tmp >> 16) & 0xFF
+    arr[curByte++] = (tmp >> 8) & 0xFF
+    arr[curByte++] = tmp & 0xFF
+  }
+
+  if (placeHoldersLen === 2) {
+    tmp =
+      (revLookup[b64.charCodeAt(i)] << 2) |
+      (revLookup[b64.charCodeAt(i + 1)] >> 4)
+    arr[curByte++] = tmp & 0xFF
+  }
+
+  if (placeHoldersLen === 1) {
+    tmp =
+      (revLookup[b64.charCodeAt(i)] << 10) |
+      (revLookup[b64.charCodeAt(i + 1)] << 4) |
+      (revLookup[b64.charCodeAt(i + 2)] >> 2)
+    arr[curByte++] = (tmp >> 8) & 0xFF
+    arr[curByte++] = tmp & 0xFF
+  }
+
+  return arr
+}
+
+function tripletToBase64 (num) {
+  return lookup[num >> 18 & 0x3F] +
+    lookup[num >> 12 & 0x3F] +
+    lookup[num >> 6 & 0x3F] +
+    lookup[num & 0x3F]
+}
+
+function encodeChunk (uint8, start, end) {
+  var tmp
+  var output = []
+  for (var i = start; i < end; i += 3) {
+    tmp =
+      ((uint8[i] << 16) & 0xFF0000) +
+      ((uint8[i + 1] << 8) & 0xFF00) +
+      (uint8[i + 2] & 0xFF)
+    output.push(tripletToBase64(tmp))
+  }
+  return output.join('')
+}
+
+function fromByteArray (uint8) {
+  var tmp
+  var len = uint8.length
+  var extraBytes = len % 3 // if we have 1 byte left, pad 2 bytes
+  var parts = []
+  var maxChunkLength = 16383 // must be multiple of 3
+
+  // go through the array every three bytes, we'll deal with trailing stuff later
+  for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
+    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)))
+  }
+
+  // pad the end with zeros, but make sure to not forget the extra bytes
+  if (extraBytes === 1) {
+    tmp = uint8[len - 1]
+    parts.push(
+      lookup[tmp >> 2] +
+      lookup[(tmp << 4) & 0x3F] +
+      '=='
+    )
+  } else if (extraBytes === 2) {
+    tmp = (uint8[len - 2] << 8) + uint8[len - 1]
+    parts.push(
+      lookup[tmp >> 10] +
+      lookup[(tmp >> 4) & 0x3F] +
+      lookup[(tmp << 2) & 0x3F] +
+      '='
+    )
+  }
+
+  return parts.join('')
+}
+
+
+/***/ }),
+
+/***/ 834:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+var __webpack_unused_export__;
+/*!
  * The buffer module from node.js, for the browser.
  *
- * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @author   Feross Aboukhadijeh <http://feross.org>
  * @license  MIT
  */
 /* eslint-disable no-proto */
 
 
 
-var base64 = __webpack_require__(19)
-var ieee754 = __webpack_require__(20)
-var isArray = __webpack_require__(21)
+var base64 = __webpack_require__(766)
+var ieee754 = __webpack_require__(333)
+var isArray = __webpack_require__(906)
 
-exports.Buffer = Buffer
-exports.SlowBuffer = SlowBuffer
-exports.INSPECT_MAX_BYTES = 50
+exports.lW = Buffer
+__webpack_unused_export__ = SlowBuffer
+exports.h2 = 50
 
 /**
  * If `Buffer.TYPED_ARRAY_SUPPORT`:
@@ -903,14 +751,14 @@ exports.INSPECT_MAX_BYTES = 50
  * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
  * get the Object implementation, which is slower but behaves correctly.
  */
-Buffer.TYPED_ARRAY_SUPPORT = global.TYPED_ARRAY_SUPPORT !== undefined
-  ? global.TYPED_ARRAY_SUPPORT
+Buffer.TYPED_ARRAY_SUPPORT = __webpack_require__.g.TYPED_ARRAY_SUPPORT !== undefined
+  ? __webpack_require__.g.TYPED_ARRAY_SUPPORT
   : typedArraySupport()
 
 /*
  * Export kMaxLength after typed array support is determined.
  */
-exports.kMaxLength = kMaxLength()
+__webpack_unused_export__ = kMaxLength()
 
 function typedArraySupport () {
   try {
@@ -1444,7 +1292,7 @@ Buffer.prototype.equals = function equals (b) {
 
 Buffer.prototype.inspect = function inspect () {
   var str = ''
-  var max = exports.INSPECT_MAX_BYTES
+  var max = exports.h2
   if (this.length > 0) {
     str = this.toString('hex', 0, max).match(/.{2}/g).join(' ')
     if (this.length > max) str += ' ... '
@@ -2651,4389 +2499,13 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
 
 /***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_buffer___ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_buffer____default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_buffer___);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_crypto_js_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_crypto_js_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_crypto_js_core__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_crypto_js_lib_typedarrays__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_crypto_js_lib_typedarrays___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_crypto_js_lib_typedarrays__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_crypto_js_sha256__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_crypto_js_sha256___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_crypto_js_sha256__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_crypto_js_hmac_sha256__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_crypto_js_hmac_sha256___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_crypto_js_hmac_sha256__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__BigInteger__ = __webpack_require__(6);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+/***/ 333:
+/***/ ((__unused_webpack_module, exports) => {
 
-/*!
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- *
- *     http://aws.amazon.com/asl/
- *
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
- // necessary for crypto js
-
-
-
-var randomBytes = function randomBytes(nBytes) {
-	return __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(__WEBPACK_IMPORTED_MODULE_1_crypto_js_core___default.a.lib.WordArray.random(nBytes).toString(), 'hex');
-};
-
-
-
-var initN = 'FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD1' + '29024E088A67CC74020BBEA63B139B22514A08798E3404DD' + 'EF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245' + 'E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7ED' + 'EE386BFB5A899FA5AE9F24117C4B1FE649286651ECE45B3D' + 'C2007CB8A163BF0598DA48361C55D39A69163FA8FD24CF5F' + '83655D23DCA3AD961C62F356208552BB9ED529077096966D' + '670C354E4ABC9804F1746C08CA18217C32905E462E36CE3B' + 'E39E772C180E86039B2783A2EC07A28FB5C55DF06F4C52C9' + 'DE2BCBF6955817183995497CEA956AE515D2261898FA0510' + '15728E5A8AAAC42DAD33170D04507A33A85521ABDF1CBA64' + 'ECFB850458DBEF0A8AEA71575D060C7DB3970F85A6E1E4C7' + 'ABF5AE8CDB0933D71E8C94E04A25619DCEE3D2261AD2EE6B' + 'F12FFA06D98A0864D87602733EC86A64521F2B18177B200C' + 'BBE117577A615D6C770988C0BAD946E208E24FA074E5AB31' + '43DB5BFCE0FD108E4B82D120A93AD2CAFFFFFFFFFFFFFFFF';
-
-var newPasswordRequiredChallengeUserAttributePrefix = 'userAttributes.';
-
-/** @class */
-
-var AuthenticationHelper = function () {
-	/**
-  * Constructs a new AuthenticationHelper object
-  * @param {string} PoolName Cognito user pool name.
-  */
-	function AuthenticationHelper(PoolName) {
-		_classCallCheck(this, AuthenticationHelper);
-
-		this.N = new __WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */](initN, 16);
-		this.g = new __WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */]('2', 16);
-		this.k = new __WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */](this.hexHash('00' + this.N.toString(16) + '0' + this.g.toString(16)), 16);
-
-		this.smallAValue = this.generateRandomSmallA();
-		this.getLargeAValue(function () {});
-
-		this.infoBits = __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from('Caldera Derived Key', 'utf8');
-
-		this.poolName = PoolName;
-	}
-
-	/**
-  * @returns {BigInteger} small A, a random number
-  */
-
-
-	AuthenticationHelper.prototype.getSmallAValue = function getSmallAValue() {
-		return this.smallAValue;
-	};
-
-	/**
-  * @param {nodeCallback<BigInteger>} callback Called with (err, largeAValue)
-  * @returns {void}
-  */
-
-
-	AuthenticationHelper.prototype.getLargeAValue = function getLargeAValue(callback) {
-		var _this = this;
-
-		if (this.largeAValue) {
-			callback(null, this.largeAValue);
-		} else {
-			this.calculateA(this.smallAValue, function (err, largeAValue) {
-				if (err) {
-					callback(err, null);
-				}
-
-				_this.largeAValue = largeAValue;
-				callback(null, _this.largeAValue);
-			});
-		}
-	};
-
-	/**
-  * helper function to generate a random big integer
-  * @returns {BigInteger} a random value.
-  * @private
-  */
-
-
-	AuthenticationHelper.prototype.generateRandomSmallA = function generateRandomSmallA() {
-		var hexRandom = randomBytes(128).toString('hex');
-
-		var randomBigInt = new __WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */](hexRandom, 16);
-		var smallABigInt = randomBigInt.mod(this.N);
-
-		return smallABigInt;
-	};
-
-	/**
-  * helper function to generate a random string
-  * @returns {string} a random value.
-  * @private
-  */
-
-
-	AuthenticationHelper.prototype.generateRandomString = function generateRandomString() {
-		return randomBytes(40).toString('base64');
-	};
-
-	/**
-  * @returns {string} Generated random value included in password hash.
-  */
-
-
-	AuthenticationHelper.prototype.getRandomPassword = function getRandomPassword() {
-		return this.randomPassword;
-	};
-
-	/**
-  * @returns {string} Generated random value included in devices hash.
-  */
-
-
-	AuthenticationHelper.prototype.getSaltDevices = function getSaltDevices() {
-		return this.SaltToHashDevices;
-	};
-
-	/**
-  * @returns {string} Value used to verify devices.
-  */
-
-
-	AuthenticationHelper.prototype.getVerifierDevices = function getVerifierDevices() {
-		return this.verifierDevices;
-	};
-
-	/**
-  * Generate salts and compute verifier.
-  * @param {string} deviceGroupKey Devices to generate verifier for.
-  * @param {string} username User to generate verifier for.
-  * @param {nodeCallback<null>} callback Called with (err, null)
-  * @returns {void}
-  */
-
-
-	AuthenticationHelper.prototype.generateHashDevice = function generateHashDevice(deviceGroupKey, username, callback) {
-		var _this2 = this;
-
-		this.randomPassword = this.generateRandomString();
-		var combinedString = '' + deviceGroupKey + username + ':' + this.randomPassword;
-		var hashedString = this.hash(combinedString);
-
-		var hexRandom = randomBytes(16).toString('hex');
-		this.SaltToHashDevices = this.padHex(new __WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */](hexRandom, 16));
-
-		this.g.modPow(new __WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */](this.hexHash(this.SaltToHashDevices + hashedString), 16), this.N, function (err, verifierDevicesNotPadded) {
-			if (err) {
-				callback(err, null);
-			}
-
-			_this2.verifierDevices = _this2.padHex(verifierDevicesNotPadded);
-			callback(null, null);
-		});
-	};
-
-	/**
-  * Calculate the client's public value A = g^a%N
-  * with the generated random number a
-  * @param {BigInteger} a Randomly generated small A.
-  * @param {nodeCallback<BigInteger>} callback Called with (err, largeAValue)
-  * @returns {void}
-  * @private
-  */
-
-
-	AuthenticationHelper.prototype.calculateA = function calculateA(a, callback) {
-		var _this3 = this;
-
-		this.g.modPow(a, this.N, function (err, A) {
-			if (err) {
-				callback(err, null);
-			}
-
-			if (A.mod(_this3.N).equals(__WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */].ZERO)) {
-				callback(new Error('Illegal paramater. A mod N cannot be 0.'), null);
-			}
-
-			callback(null, A);
-		});
-	};
-
-	/**
-  * Calculate the client's value U which is the hash of A and B
-  * @param {BigInteger} A Large A value.
-  * @param {BigInteger} B Server B value.
-  * @returns {BigInteger} Computed U value.
-  * @private
-  */
-
-
-	AuthenticationHelper.prototype.calculateU = function calculateU(A, B) {
-		this.UHexHash = this.hexHash(this.padHex(A) + this.padHex(B));
-		var finalU = new __WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */](this.UHexHash, 16);
-
-		return finalU;
-	};
-
-	/**
-  * Calculate a hash from a bitArray
-  * @param {Buffer} buf Value to hash.
-  * @returns {String} Hex-encoded hash.
-  * @private
-  */
-
-
-	AuthenticationHelper.prototype.hash = function hash(buf) {
-		var str = buf instanceof __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"] ? __WEBPACK_IMPORTED_MODULE_1_crypto_js_core___default.a.lib.WordArray.create(buf) : buf;
-		var hashHex = __WEBPACK_IMPORTED_MODULE_3_crypto_js_sha256___default()(str).toString();
-
-		return new Array(64 - hashHex.length).join('0') + hashHex;
-	};
-
-	/**
-  * Calculate a hash from a hex string
-  * @param {String} hexStr Value to hash.
-  * @returns {String} Hex-encoded hash.
-  * @private
-  */
-
-
-	AuthenticationHelper.prototype.hexHash = function hexHash(hexStr) {
-		return this.hash(__WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(hexStr, 'hex'));
-	};
-
-	/**
-  * Standard hkdf algorithm
-  * @param {Buffer} ikm Input key material.
-  * @param {Buffer} salt Salt value.
-  * @returns {Buffer} Strong key material.
-  * @private
-  */
-
-
-	AuthenticationHelper.prototype.computehkdf = function computehkdf(ikm, salt) {
-		var infoBitsWordArray = __WEBPACK_IMPORTED_MODULE_1_crypto_js_core___default.a.lib.WordArray.create(__WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].concat([this.infoBits, __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(String.fromCharCode(1), 'utf8')]));
-		var ikmWordArray = ikm instanceof __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"] ? __WEBPACK_IMPORTED_MODULE_1_crypto_js_core___default.a.lib.WordArray.create(ikm) : ikm;
-		var saltWordArray = salt instanceof __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"] ? __WEBPACK_IMPORTED_MODULE_1_crypto_js_core___default.a.lib.WordArray.create(salt) : salt;
-
-		var prk = __WEBPACK_IMPORTED_MODULE_4_crypto_js_hmac_sha256___default()(ikmWordArray, saltWordArray);
-		var hmac = __WEBPACK_IMPORTED_MODULE_4_crypto_js_hmac_sha256___default()(infoBitsWordArray, prk);
-		return __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(hmac.toString(), 'hex').slice(0, 16);
-	};
-
-	/**
-  * Calculates the final hkdf based on computed S value, and computed U value and the key
-  * @param {String} username Username.
-  * @param {String} password Password.
-  * @param {BigInteger} serverBValue Server B value.
-  * @param {BigInteger} salt Generated salt.
-  * @param {nodeCallback<Buffer>} callback Called with (err, hkdfValue)
-  * @returns {void}
-  */
-
-
-	AuthenticationHelper.prototype.getPasswordAuthenticationKey = function getPasswordAuthenticationKey(username, password, serverBValue, salt, callback) {
-		var _this4 = this;
-
-		if (serverBValue.mod(this.N).equals(__WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */].ZERO)) {
-			throw new Error('B cannot be zero.');
-		}
-
-		this.UValue = this.calculateU(this.largeAValue, serverBValue);
-
-		if (this.UValue.equals(__WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */].ZERO)) {
-			throw new Error('U cannot be zero.');
-		}
-
-		var usernamePassword = '' + this.poolName + username + ':' + password;
-		var usernamePasswordHash = this.hash(usernamePassword);
-
-		var xValue = new __WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */](this.hexHash(this.padHex(salt) + usernamePasswordHash), 16);
-		this.calculateS(xValue, serverBValue, function (err, sValue) {
-			if (err) {
-				callback(err, null);
-			}
-
-			var hkdf = _this4.computehkdf(__WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(_this4.padHex(sValue), 'hex'), __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(_this4.padHex(_this4.UValue.toString(16)), 'hex'));
-
-			callback(null, hkdf);
-		});
-	};
-
-	/**
-  * Calculates the S value used in getPasswordAuthenticationKey
-  * @param {BigInteger} xValue Salted password hash value.
-  * @param {BigInteger} serverBValue Server B value.
-  * @param {nodeCallback<string>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	AuthenticationHelper.prototype.calculateS = function calculateS(xValue, serverBValue, callback) {
-		var _this5 = this;
-
-		this.g.modPow(xValue, this.N, function (err, gModPowXN) {
-			if (err) {
-				callback(err, null);
-			}
-
-			var intValue2 = serverBValue.subtract(_this5.k.multiply(gModPowXN));
-			intValue2.modPow(_this5.smallAValue.add(_this5.UValue.multiply(xValue)), _this5.N, function (err2, result) {
-				if (err2) {
-					callback(err2, null);
-				}
-
-				callback(null, result.mod(_this5.N));
-			});
-		});
-	};
-
-	/**
-  * Return constant newPasswordRequiredChallengeUserAttributePrefix
-  * @return {newPasswordRequiredChallengeUserAttributePrefix} constant prefix value
-  */
-
-
-	AuthenticationHelper.prototype.getNewPasswordRequiredChallengeUserAttributePrefix = function getNewPasswordRequiredChallengeUserAttributePrefix() {
-		return newPasswordRequiredChallengeUserAttributePrefix;
-	};
-
-	/**
-  * Converts a BigInteger (or hex string) to hex format padded with zeroes for hashing
-  * @param {BigInteger|String} bigInt Number or string to pad.
-  * @returns {String} Padded hex string.
-  */
-
-
-	AuthenticationHelper.prototype.padHex = function padHex(bigInt) {
-		var hashStr = bigInt.toString(16);
-		if (hashStr.length % 2 === 1) {
-			hashStr = '0' + hashStr;
-		} else if ('89ABCDEFabcdef'.indexOf(hashStr[0]) !== -1) {
-			hashStr = '00' + hashStr;
-		}
-		return hashStr;
-	};
-
-	return AuthenticationHelper;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (AuthenticationHelper);
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-;(function (root, factory) {
-	if (true) {
-		// CommonJS
-		module.exports = exports = factory(__webpack_require__(0));
-	}
-	else if (typeof define === "function" && define.amd) {
-		// AMD
-		define(["./core"], factory);
-	}
-	else {
-		// Global (browser)
-		factory(root.CryptoJS);
-	}
-}(this, function (CryptoJS) {
-
-	(function () {
-	    // Check if typed arrays are supported
-	    if (typeof ArrayBuffer != 'function') {
-	        return;
-	    }
-
-	    // Shortcuts
-	    var C = CryptoJS;
-	    var C_lib = C.lib;
-	    var WordArray = C_lib.WordArray;
-
-	    // Reference original init
-	    var superInit = WordArray.init;
-
-	    // Augment WordArray.init to handle typed arrays
-	    var subInit = WordArray.init = function (typedArray) {
-	        // Convert buffers to uint8
-	        if (typedArray instanceof ArrayBuffer) {
-	            typedArray = new Uint8Array(typedArray);
-	        }
-
-	        // Convert other array views to uint8
-	        if (
-	            typedArray instanceof Int8Array ||
-	            (typeof Uint8ClampedArray !== "undefined" && typedArray instanceof Uint8ClampedArray) ||
-	            typedArray instanceof Int16Array ||
-	            typedArray instanceof Uint16Array ||
-	            typedArray instanceof Int32Array ||
-	            typedArray instanceof Uint32Array ||
-	            typedArray instanceof Float32Array ||
-	            typedArray instanceof Float64Array
-	        ) {
-	            typedArray = new Uint8Array(typedArray.buffer, typedArray.byteOffset, typedArray.byteLength);
-	        }
-
-	        // Handle Uint8Array
-	        if (typedArray instanceof Uint8Array) {
-	            // Shortcut
-	            var typedArrayByteLength = typedArray.byteLength;
-
-	            // Extract bytes
-	            var words = [];
-	            for (var i = 0; i < typedArrayByteLength; i++) {
-	                words[i >>> 2] |= typedArray[i] << (24 - (i % 4) * 8);
-	            }
-
-	            // Initialize this word array
-	            superInit.call(this, words, typedArrayByteLength);
-	        } else {
-	            // Else call normal init
-	            superInit.apply(this, arguments);
-	        }
-	    };
-
-	    subInit.prototype = WordArray;
-	}());
-
-
-	return CryptoJS.lib.WordArray;
-
-}));
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-;(function (root, factory) {
-	if (true) {
-		// CommonJS
-		module.exports = exports = factory(__webpack_require__(0));
-	}
-	else if (typeof define === "function" && define.amd) {
-		// AMD
-		define(["./core"], factory);
-	}
-	else {
-		// Global (browser)
-		factory(root.CryptoJS);
-	}
-}(this, function (CryptoJS) {
-
-	(function (Math) {
-	    // Shortcuts
-	    var C = CryptoJS;
-	    var C_lib = C.lib;
-	    var WordArray = C_lib.WordArray;
-	    var Hasher = C_lib.Hasher;
-	    var C_algo = C.algo;
-
-	    // Initialization and round constants tables
-	    var H = [];
-	    var K = [];
-
-	    // Compute constants
-	    (function () {
-	        function isPrime(n) {
-	            var sqrtN = Math.sqrt(n);
-	            for (var factor = 2; factor <= sqrtN; factor++) {
-	                if (!(n % factor)) {
-	                    return false;
-	                }
-	            }
-
-	            return true;
-	        }
-
-	        function getFractionalBits(n) {
-	            return ((n - (n | 0)) * 0x100000000) | 0;
-	        }
-
-	        var n = 2;
-	        var nPrime = 0;
-	        while (nPrime < 64) {
-	            if (isPrime(n)) {
-	                if (nPrime < 8) {
-	                    H[nPrime] = getFractionalBits(Math.pow(n, 1 / 2));
-	                }
-	                K[nPrime] = getFractionalBits(Math.pow(n, 1 / 3));
-
-	                nPrime++;
-	            }
-
-	            n++;
-	        }
-	    }());
-
-	    // Reusable object
-	    var W = [];
-
-	    /**
-	     * SHA-256 hash algorithm.
-	     */
-	    var SHA256 = C_algo.SHA256 = Hasher.extend({
-	        _doReset: function () {
-	            this._hash = new WordArray.init(H.slice(0));
-	        },
-
-	        _doProcessBlock: function (M, offset) {
-	            // Shortcut
-	            var H = this._hash.words;
-
-	            // Working variables
-	            var a = H[0];
-	            var b = H[1];
-	            var c = H[2];
-	            var d = H[3];
-	            var e = H[4];
-	            var f = H[5];
-	            var g = H[6];
-	            var h = H[7];
-
-	            // Computation
-	            for (var i = 0; i < 64; i++) {
-	                if (i < 16) {
-	                    W[i] = M[offset + i] | 0;
-	                } else {
-	                    var gamma0x = W[i - 15];
-	                    var gamma0  = ((gamma0x << 25) | (gamma0x >>> 7))  ^
-	                                  ((gamma0x << 14) | (gamma0x >>> 18)) ^
-	                                   (gamma0x >>> 3);
-
-	                    var gamma1x = W[i - 2];
-	                    var gamma1  = ((gamma1x << 15) | (gamma1x >>> 17)) ^
-	                                  ((gamma1x << 13) | (gamma1x >>> 19)) ^
-	                                   (gamma1x >>> 10);
-
-	                    W[i] = gamma0 + W[i - 7] + gamma1 + W[i - 16];
-	                }
-
-	                var ch  = (e & f) ^ (~e & g);
-	                var maj = (a & b) ^ (a & c) ^ (b & c);
-
-	                var sigma0 = ((a << 30) | (a >>> 2)) ^ ((a << 19) | (a >>> 13)) ^ ((a << 10) | (a >>> 22));
-	                var sigma1 = ((e << 26) | (e >>> 6)) ^ ((e << 21) | (e >>> 11)) ^ ((e << 7)  | (e >>> 25));
-
-	                var t1 = h + sigma1 + ch + K[i] + W[i];
-	                var t2 = sigma0 + maj;
-
-	                h = g;
-	                g = f;
-	                f = e;
-	                e = (d + t1) | 0;
-	                d = c;
-	                c = b;
-	                b = a;
-	                a = (t1 + t2) | 0;
-	            }
-
-	            // Intermediate hash value
-	            H[0] = (H[0] + a) | 0;
-	            H[1] = (H[1] + b) | 0;
-	            H[2] = (H[2] + c) | 0;
-	            H[3] = (H[3] + d) | 0;
-	            H[4] = (H[4] + e) | 0;
-	            H[5] = (H[5] + f) | 0;
-	            H[6] = (H[6] + g) | 0;
-	            H[7] = (H[7] + h) | 0;
-	        },
-
-	        _doFinalize: function () {
-	            // Shortcuts
-	            var data = this._data;
-	            var dataWords = data.words;
-
-	            var nBitsTotal = this._nDataBytes * 8;
-	            var nBitsLeft = data.sigBytes * 8;
-
-	            // Add padding
-	            dataWords[nBitsLeft >>> 5] |= 0x80 << (24 - nBitsLeft % 32);
-	            dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 14] = Math.floor(nBitsTotal / 0x100000000);
-	            dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 15] = nBitsTotal;
-	            data.sigBytes = dataWords.length * 4;
-
-	            // Hash final blocks
-	            this._process();
-
-	            // Return final computed hash
-	            return this._hash;
-	        },
-
-	        clone: function () {
-	            var clone = Hasher.clone.call(this);
-	            clone._hash = this._hash.clone();
-
-	            return clone;
-	        }
-	    });
-
-	    /**
-	     * Shortcut function to the hasher's object interface.
-	     *
-	     * @param {WordArray|string} message The message to hash.
-	     *
-	     * @return {WordArray} The hash.
-	     *
-	     * @static
-	     *
-	     * @example
-	     *
-	     *     var hash = CryptoJS.SHA256('message');
-	     *     var hash = CryptoJS.SHA256(wordArray);
-	     */
-	    C.SHA256 = Hasher._createHelper(SHA256);
-
-	    /**
-	     * Shortcut function to the HMAC's object interface.
-	     *
-	     * @param {WordArray|string} message The message to hash.
-	     * @param {WordArray|string} key The secret key.
-	     *
-	     * @return {WordArray} The HMAC.
-	     *
-	     * @static
-	     *
-	     * @example
-	     *
-	     *     var hmac = CryptoJS.HmacSHA256(message, key);
-	     */
-	    C.HmacSHA256 = Hasher._createHmacHelper(SHA256);
-	}(Math));
-
-
-	return CryptoJS.SHA256;
-
-}));
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-;(function (root, factory, undef) {
-	if (true) {
-		// CommonJS
-		module.exports = exports = factory(__webpack_require__(0), __webpack_require__(4), __webpack_require__(22));
-	}
-	else if (typeof define === "function" && define.amd) {
-		// AMD
-		define(["./core", "./sha256", "./hmac"], factory);
-	}
-	else {
-		// Global (browser)
-		factory(root.CryptoJS);
-	}
-}(this, function (CryptoJS) {
-
-	return CryptoJS.HmacSHA256;
-
-}));
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-// A small implementation of BigInteger based on http://www-cs-students.stanford.edu/~tjw/jsbn/
-//
-// All public methods have been removed except the following:
-//   new BigInteger(a, b) (only radix 2, 4, 8, 16 and 32 supported)
-//   toString (only radix 2, 4, 8, 16 and 32 supported)
-//   negate
-//   abs
-//   compareTo
-//   bitLength
-//   mod
-//   equals
-//   add
-//   subtract
-//   multiply
-//   divide
-//   modPow
-
-/* harmony default export */ __webpack_exports__["a"] = (BigInteger);
-
-/*
- * Copyright (c) 2003-2005  Tom Wu
- * All Rights Reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
- *
- * IN NO EVENT SHALL TOM WU BE LIABLE FOR ANY SPECIAL, INCIDENTAL,
- * INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER
- * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER OR NOT ADVISED OF
- * THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF LIABILITY, ARISING OUT
- * OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- *
- * In addition, the following condition applies:
- *
- * All redistributions must retain an intact copy of this copyright notice
- * and disclaimer.
- */
-
-// (public) Constructor
-function BigInteger(a, b) {
-	if (a != null) this.fromString(a, b);
-}
-
-// return new, unset BigInteger
-function nbi() {
-	return new BigInteger(null);
-}
-
-// Bits per digit
-var dbits;
-
-// JavaScript engine analysis
-var canary = 0xdeadbeefcafe;
-var j_lm = (canary & 0xffffff) == 0xefcafe;
-
-// am: Compute w_j += (x*this_i), propagate carries,
-// c is initial carry, returns final carry.
-// c < 3*dvalue, x < 2*dvalue, this_i < dvalue
-// We need to select the fastest one that works in this environment.
-
-// am1: use a single mult and divide to get the high bits,
-// max digit bits should be 26 because
-// max internal value = 2*dvalue^2-2*dvalue (< 2^53)
-function am1(i, x, w, j, c, n) {
-	while (--n >= 0) {
-		var v = x * this[i++] + w[j] + c;
-		c = Math.floor(v / 0x4000000);
-		w[j++] = v & 0x3ffffff;
-	}
-	return c;
-}
-// am2 avoids a big mult-and-extract completely.
-// Max digit bits should be <= 30 because we do bitwise ops
-// on values up to 2*hdvalue^2-hdvalue-1 (< 2^31)
-function am2(i, x, w, j, c, n) {
-	var xl = x & 0x7fff,
-	    xh = x >> 15;
-	while (--n >= 0) {
-		var l = this[i] & 0x7fff;
-		var h = this[i++] >> 15;
-		var m = xh * l + h * xl;
-		l = xl * l + ((m & 0x7fff) << 15) + w[j] + (c & 0x3fffffff);
-		c = (l >>> 30) + (m >>> 15) + xh * h + (c >>> 30);
-		w[j++] = l & 0x3fffffff;
-	}
-	return c;
-}
-// Alternately, set max digit bits to 28 since some
-// browsers slow down when dealing with 32-bit numbers.
-function am3(i, x, w, j, c, n) {
-	var xl = x & 0x3fff,
-	    xh = x >> 14;
-	while (--n >= 0) {
-		var l = this[i] & 0x3fff;
-		var h = this[i++] >> 14;
-		var m = xh * l + h * xl;
-		l = xl * l + ((m & 0x3fff) << 14) + w[j] + c;
-		c = (l >> 28) + (m >> 14) + xh * h;
-		w[j++] = l & 0xfffffff;
-	}
-	return c;
-}
-var inBrowser = typeof navigator !== 'undefined';
-if (inBrowser && j_lm && navigator.appName == 'Microsoft Internet Explorer') {
-	BigInteger.prototype.am = am2;
-	dbits = 30;
-} else if (inBrowser && j_lm && navigator.appName != 'Netscape') {
-	BigInteger.prototype.am = am1;
-	dbits = 26;
-} else {
-	// Mozilla/Netscape seems to prefer am3
-	BigInteger.prototype.am = am3;
-	dbits = 28;
-}
-
-BigInteger.prototype.DB = dbits;
-BigInteger.prototype.DM = (1 << dbits) - 1;
-BigInteger.prototype.DV = 1 << dbits;
-
-var BI_FP = 52;
-BigInteger.prototype.FV = Math.pow(2, BI_FP);
-BigInteger.prototype.F1 = BI_FP - dbits;
-BigInteger.prototype.F2 = 2 * dbits - BI_FP;
-
-// Digit conversions
-var BI_RM = '0123456789abcdefghijklmnopqrstuvwxyz';
-var BI_RC = new Array();
-var rr, vv;
-rr = '0'.charCodeAt(0);
-for (vv = 0; vv <= 9; ++vv) {
-	BI_RC[rr++] = vv;
-}rr = 'a'.charCodeAt(0);
-for (vv = 10; vv < 36; ++vv) {
-	BI_RC[rr++] = vv;
-}rr = 'A'.charCodeAt(0);
-for (vv = 10; vv < 36; ++vv) {
-	BI_RC[rr++] = vv;
-}function int2char(n) {
-	return BI_RM.charAt(n);
-}
-function intAt(s, i) {
-	var c = BI_RC[s.charCodeAt(i)];
-	return c == null ? -1 : c;
-}
-
-// (protected) copy this to r
-function bnpCopyTo(r) {
-	for (var i = this.t - 1; i >= 0; --i) {
-		r[i] = this[i];
-	}r.t = this.t;
-	r.s = this.s;
-}
-
-// (protected) set from integer value x, -DV <= x < DV
-function bnpFromInt(x) {
-	this.t = 1;
-	this.s = x < 0 ? -1 : 0;
-	if (x > 0) this[0] = x;else if (x < -1) this[0] = x + this.DV;else this.t = 0;
-}
-
-// return bigint initialized to value
-function nbv(i) {
-	var r = nbi();
-
-	r.fromInt(i);
-
-	return r;
-}
-
-// (protected) set from string and radix
-function bnpFromString(s, b) {
-	var k;
-	if (b == 16) k = 4;else if (b == 8) k = 3;else if (b == 2) k = 1;else if (b == 32) k = 5;else if (b == 4) k = 2;else throw new Error('Only radix 2, 4, 8, 16, 32 are supported');
-	this.t = 0;
-	this.s = 0;
-	var i = s.length,
-	    mi = false,
-	    sh = 0;
-	while (--i >= 0) {
-		var x = intAt(s, i);
-		if (x < 0) {
-			if (s.charAt(i) == '-') mi = true;
-			continue;
-		}
-		mi = false;
-		if (sh == 0) this[this.t++] = x;else if (sh + k > this.DB) {
-			this[this.t - 1] |= (x & (1 << this.DB - sh) - 1) << sh;
-			this[this.t++] = x >> this.DB - sh;
-		} else this[this.t - 1] |= x << sh;
-		sh += k;
-		if (sh >= this.DB) sh -= this.DB;
-	}
-	this.clamp();
-	if (mi) BigInteger.ZERO.subTo(this, this);
-}
-
-// (protected) clamp off excess high words
-function bnpClamp() {
-	var c = this.s & this.DM;
-	while (this.t > 0 && this[this.t - 1] == c) {
-		--this.t;
-	}
-}
-
-// (public) return string representation in given radix
-function bnToString(b) {
-	if (this.s < 0) return '-' + this.negate().toString();
-	var k;
-	if (b == 16) k = 4;else if (b == 8) k = 3;else if (b == 2) k = 1;else if (b == 32) k = 5;else if (b == 4) k = 2;else throw new Error('Only radix 2, 4, 8, 16, 32 are supported');
-	var km = (1 << k) - 1,
-	    d,
-	    m = false,
-	    r = '',
-	    i = this.t;
-	var p = this.DB - i * this.DB % k;
-	if (i-- > 0) {
-		if (p < this.DB && (d = this[i] >> p) > 0) {
-			m = true;
-			r = int2char(d);
-		}
-		while (i >= 0) {
-			if (p < k) {
-				d = (this[i] & (1 << p) - 1) << k - p;
-				d |= this[--i] >> (p += this.DB - k);
-			} else {
-				d = this[i] >> (p -= k) & km;
-				if (p <= 0) {
-					p += this.DB;
-					--i;
-				}
-			}
-			if (d > 0) m = true;
-			if (m) r += int2char(d);
-		}
-	}
-	return m ? r : '0';
-}
-
-// (public) -this
-function bnNegate() {
-	var r = nbi();
-
-	BigInteger.ZERO.subTo(this, r);
-
-	return r;
-}
-
-// (public) |this|
-function bnAbs() {
-	return this.s < 0 ? this.negate() : this;
-}
-
-// (public) return + if this > a, - if this < a, 0 if equal
-function bnCompareTo(a) {
-	var r = this.s - a.s;
-	if (r != 0) return r;
-	var i = this.t;
-	r = i - a.t;
-	if (r != 0) return this.s < 0 ? -r : r;
-	while (--i >= 0) {
-		if ((r = this[i] - a[i]) != 0) return r;
-	}return 0;
-}
-
-// returns bit length of the integer x
-function nbits(x) {
-	var r = 1,
-	    t;
-	if ((t = x >>> 16) != 0) {
-		x = t;
-		r += 16;
-	}
-	if ((t = x >> 8) != 0) {
-		x = t;
-		r += 8;
-	}
-	if ((t = x >> 4) != 0) {
-		x = t;
-		r += 4;
-	}
-	if ((t = x >> 2) != 0) {
-		x = t;
-		r += 2;
-	}
-	if ((t = x >> 1) != 0) {
-		x = t;
-		r += 1;
-	}
-	return r;
-}
-
-// (public) return the number of bits in "this"
-function bnBitLength() {
-	if (this.t <= 0) return 0;
-	return this.DB * (this.t - 1) + nbits(this[this.t - 1] ^ this.s & this.DM);
-}
-
-// (protected) r = this << n*DB
-function bnpDLShiftTo(n, r) {
-	var i;
-	for (i = this.t - 1; i >= 0; --i) {
-		r[i + n] = this[i];
-	}for (i = n - 1; i >= 0; --i) {
-		r[i] = 0;
-	}r.t = this.t + n;
-	r.s = this.s;
-}
-
-// (protected) r = this >> n*DB
-function bnpDRShiftTo(n, r) {
-	for (var i = n; i < this.t; ++i) {
-		r[i - n] = this[i];
-	}r.t = Math.max(this.t - n, 0);
-	r.s = this.s;
-}
-
-// (protected) r = this << n
-function bnpLShiftTo(n, r) {
-	var bs = n % this.DB;
-	var cbs = this.DB - bs;
-	var bm = (1 << cbs) - 1;
-	var ds = Math.floor(n / this.DB),
-	    c = this.s << bs & this.DM,
-	    i;
-	for (i = this.t - 1; i >= 0; --i) {
-		r[i + ds + 1] = this[i] >> cbs | c;
-		c = (this[i] & bm) << bs;
-	}
-	for (i = ds - 1; i >= 0; --i) {
-		r[i] = 0;
-	}r[ds] = c;
-	r.t = this.t + ds + 1;
-	r.s = this.s;
-	r.clamp();
-}
-
-// (protected) r = this >> n
-function bnpRShiftTo(n, r) {
-	r.s = this.s;
-	var ds = Math.floor(n / this.DB);
-	if (ds >= this.t) {
-		r.t = 0;
-		return;
-	}
-	var bs = n % this.DB;
-	var cbs = this.DB - bs;
-	var bm = (1 << bs) - 1;
-	r[0] = this[ds] >> bs;
-	for (var i = ds + 1; i < this.t; ++i) {
-		r[i - ds - 1] |= (this[i] & bm) << cbs;
-		r[i - ds] = this[i] >> bs;
-	}
-	if (bs > 0) r[this.t - ds - 1] |= (this.s & bm) << cbs;
-	r.t = this.t - ds;
-	r.clamp();
-}
-
-// (protected) r = this - a
-function bnpSubTo(a, r) {
-	var i = 0,
-	    c = 0,
-	    m = Math.min(a.t, this.t);
-	while (i < m) {
-		c += this[i] - a[i];
-		r[i++] = c & this.DM;
-		c >>= this.DB;
-	}
-	if (a.t < this.t) {
-		c -= a.s;
-		while (i < this.t) {
-			c += this[i];
-			r[i++] = c & this.DM;
-			c >>= this.DB;
-		}
-		c += this.s;
-	} else {
-		c += this.s;
-		while (i < a.t) {
-			c -= a[i];
-			r[i++] = c & this.DM;
-			c >>= this.DB;
-		}
-		c -= a.s;
-	}
-	r.s = c < 0 ? -1 : 0;
-	if (c < -1) r[i++] = this.DV + c;else if (c > 0) r[i++] = c;
-	r.t = i;
-	r.clamp();
-}
-
-// (protected) r = this * a, r != this,a (HAC 14.12)
-// "this" should be the larger one if appropriate.
-function bnpMultiplyTo(a, r) {
-	var x = this.abs(),
-	    y = a.abs();
-	var i = x.t;
-	r.t = i + y.t;
-	while (--i >= 0) {
-		r[i] = 0;
-	}for (i = 0; i < y.t; ++i) {
-		r[i + x.t] = x.am(0, y[i], r, i, 0, x.t);
-	}r.s = 0;
-	r.clamp();
-	if (this.s != a.s) BigInteger.ZERO.subTo(r, r);
-}
-
-// (protected) r = this^2, r != this (HAC 14.16)
-function bnpSquareTo(r) {
-	var x = this.abs();
-	var i = r.t = 2 * x.t;
-	while (--i >= 0) {
-		r[i] = 0;
-	}for (i = 0; i < x.t - 1; ++i) {
-		var c = x.am(i, x[i], r, 2 * i, 0, 1);
-		if ((r[i + x.t] += x.am(i + 1, 2 * x[i], r, 2 * i + 1, c, x.t - i - 1)) >= x.DV) {
-			r[i + x.t] -= x.DV;
-			r[i + x.t + 1] = 1;
-		}
-	}
-	if (r.t > 0) r[r.t - 1] += x.am(i, x[i], r, 2 * i, 0, 1);
-	r.s = 0;
-	r.clamp();
-}
-
-// (protected) divide this by m, quotient and remainder to q, r (HAC 14.20)
-// r != q, this != m.  q or r may be null.
-function bnpDivRemTo(m, q, r) {
-	var pm = m.abs();
-	if (pm.t <= 0) return;
-	var pt = this.abs();
-	if (pt.t < pm.t) {
-		if (q != null) q.fromInt(0);
-		if (r != null) this.copyTo(r);
-		return;
-	}
-	if (r == null) r = nbi();
-	var y = nbi(),
-	    ts = this.s,
-	    ms = m.s;
-	var nsh = this.DB - nbits(pm[pm.t - 1]);
-	// normalize modulus
-	if (nsh > 0) {
-		pm.lShiftTo(nsh, y);
-		pt.lShiftTo(nsh, r);
-	} else {
-		pm.copyTo(y);
-		pt.copyTo(r);
-	}
-	var ys = y.t;
-	var y0 = y[ys - 1];
-	if (y0 == 0) return;
-	var yt = y0 * (1 << this.F1) + (ys > 1 ? y[ys - 2] >> this.F2 : 0);
-	var d1 = this.FV / yt,
-	    d2 = (1 << this.F1) / yt,
-	    e = 1 << this.F2;
-	var i = r.t,
-	    j = i - ys,
-	    t = q == null ? nbi() : q;
-	y.dlShiftTo(j, t);
-	if (r.compareTo(t) >= 0) {
-		r[r.t++] = 1;
-		r.subTo(t, r);
-	}
-	BigInteger.ONE.dlShiftTo(ys, t);
-	t.subTo(y, y);
-	// "negative" y so we can replace sub with am later
-	while (y.t < ys) {
-		y[y.t++] = 0;
-	}while (--j >= 0) {
-		// Estimate quotient digit
-		var qd = r[--i] == y0 ? this.DM : Math.floor(r[i] * d1 + (r[i - 1] + e) * d2);
-		if ((r[i] += y.am(0, qd, r, j, 0, ys)) < qd) {
-			// Try it out
-			y.dlShiftTo(j, t);
-			r.subTo(t, r);
-			while (r[i] < --qd) {
-				r.subTo(t, r);
-			}
-		}
-	}
-	if (q != null) {
-		r.drShiftTo(ys, q);
-		if (ts != ms) BigInteger.ZERO.subTo(q, q);
-	}
-	r.t = ys;
-	r.clamp();
-	if (nsh > 0) r.rShiftTo(nsh, r);
-	// Denormalize remainder
-	if (ts < 0) BigInteger.ZERO.subTo(r, r);
-}
-
-// (public) this mod a
-function bnMod(a) {
-	var r = nbi();
-	this.abs().divRemTo(a, null, r);
-	if (this.s < 0 && r.compareTo(BigInteger.ZERO) > 0) a.subTo(r, r);
-	return r;
-}
-
-// (protected) return "-1/this % 2^DB"; useful for Mont. reduction
-// justification:
-//         xy == 1 (mod m)
-//         xy =  1+km
-//   xy(2-xy) = (1+km)(1-km)
-// x[y(2-xy)] = 1-k^2m^2
-// x[y(2-xy)] == 1 (mod m^2)
-// if y is 1/x mod m, then y(2-xy) is 1/x mod m^2
-// should reduce x and y(2-xy) by m^2 at each step to keep size bounded.
-// JS multiply "overflows" differently from C/C++, so care is needed here.
-function bnpInvDigit() {
-	if (this.t < 1) return 0;
-	var x = this[0];
-	if ((x & 1) == 0) return 0;
-	var y = x & 3;
-	// y == 1/x mod 2^2
-	y = y * (2 - (x & 0xf) * y) & 0xf;
-	// y == 1/x mod 2^4
-	y = y * (2 - (x & 0xff) * y) & 0xff;
-	// y == 1/x mod 2^8
-	y = y * (2 - ((x & 0xffff) * y & 0xffff)) & 0xffff;
-	// y == 1/x mod 2^16
-	// last step - calculate inverse mod DV directly;
-	// assumes 16 < DB <= 32 and assumes ability to handle 48-bit ints
-	y = y * (2 - x * y % this.DV) % this.DV;
-	// y == 1/x mod 2^dbits
-	// we really want the negative inverse, and -DV < y < DV
-	return y > 0 ? this.DV - y : -y;
-}
-
-function bnEquals(a) {
-	return this.compareTo(a) == 0;
-}
-
-// (protected) r = this + a
-function bnpAddTo(a, r) {
-	var i = 0,
-	    c = 0,
-	    m = Math.min(a.t, this.t);
-	while (i < m) {
-		c += this[i] + a[i];
-		r[i++] = c & this.DM;
-		c >>= this.DB;
-	}
-	if (a.t < this.t) {
-		c += a.s;
-		while (i < this.t) {
-			c += this[i];
-			r[i++] = c & this.DM;
-			c >>= this.DB;
-		}
-		c += this.s;
-	} else {
-		c += this.s;
-		while (i < a.t) {
-			c += a[i];
-			r[i++] = c & this.DM;
-			c >>= this.DB;
-		}
-		c += a.s;
-	}
-	r.s = c < 0 ? -1 : 0;
-	if (c > 0) r[i++] = c;else if (c < -1) r[i++] = this.DV + c;
-	r.t = i;
-	r.clamp();
-}
-
-// (public) this + a
-function bnAdd(a) {
-	var r = nbi();
-
-	this.addTo(a, r);
-
-	return r;
-}
-
-// (public) this - a
-function bnSubtract(a) {
-	var r = nbi();
-
-	this.subTo(a, r);
-
-	return r;
-}
-
-// (public) this * a
-function bnMultiply(a) {
-	var r = nbi();
-
-	this.multiplyTo(a, r);
-
-	return r;
-}
-
-// (public) this / a
-function bnDivide(a) {
-	var r = nbi();
-
-	this.divRemTo(a, r, null);
-
-	return r;
-}
-
-// Montgomery reduction
-function Montgomery(m) {
-	this.m = m;
-	this.mp = m.invDigit();
-	this.mpl = this.mp & 0x7fff;
-	this.mph = this.mp >> 15;
-	this.um = (1 << m.DB - 15) - 1;
-	this.mt2 = 2 * m.t;
-}
-
-// xR mod m
-function montConvert(x) {
-	var r = nbi();
-	x.abs().dlShiftTo(this.m.t, r);
-	r.divRemTo(this.m, null, r);
-	if (x.s < 0 && r.compareTo(BigInteger.ZERO) > 0) this.m.subTo(r, r);
-	return r;
-}
-
-// x/R mod m
-function montRevert(x) {
-	var r = nbi();
-	x.copyTo(r);
-	this.reduce(r);
-	return r;
-}
-
-// x = x/R mod m (HAC 14.32)
-function montReduce(x) {
-	while (x.t <= this.mt2) {
-		// pad x so am has enough room later
-		x[x.t++] = 0;
-	}for (var i = 0; i < this.m.t; ++i) {
-		// faster way of calculating u0 = x[i]*mp mod DV
-		var j = x[i] & 0x7fff;
-		var u0 = j * this.mpl + ((j * this.mph + (x[i] >> 15) * this.mpl & this.um) << 15) & x.DM;
-		// use am to combine the multiply-shift-add into one call
-		j = i + this.m.t;
-		x[j] += this.m.am(0, u0, x, i, 0, this.m.t);
-		// propagate carry
-		while (x[j] >= x.DV) {
-			x[j] -= x.DV;
-			x[++j]++;
-		}
-	}
-	x.clamp();
-	x.drShiftTo(this.m.t, x);
-	if (x.compareTo(this.m) >= 0) x.subTo(this.m, x);
-}
-
-// r = "x^2/R mod m"; x != r
-function montSqrTo(x, r) {
-	x.squareTo(r);
-
-	this.reduce(r);
-}
-
-// r = "xy/R mod m"; x,y != r
-function montMulTo(x, y, r) {
-	x.multiplyTo(y, r);
-
-	this.reduce(r);
-}
-
-Montgomery.prototype.convert = montConvert;
-Montgomery.prototype.revert = montRevert;
-Montgomery.prototype.reduce = montReduce;
-Montgomery.prototype.mulTo = montMulTo;
-Montgomery.prototype.sqrTo = montSqrTo;
-
-// (public) this^e % m (HAC 14.85)
-function bnModPow(e, m, callback) {
-	var i = e.bitLength(),
-	    k,
-	    r = nbv(1),
-	    z = new Montgomery(m);
-	if (i <= 0) return r;else if (i < 18) k = 1;else if (i < 48) k = 3;else if (i < 144) k = 4;else if (i < 768) k = 5;else k = 6;
-
-	// precomputation
-	var g = new Array(),
-	    n = 3,
-	    k1 = k - 1,
-	    km = (1 << k) - 1;
-	g[1] = z.convert(this);
-	if (k > 1) {
-		var g2 = nbi();
-		z.sqrTo(g[1], g2);
-		while (n <= km) {
-			g[n] = nbi();
-			z.mulTo(g2, g[n - 2], g[n]);
-			n += 2;
-		}
-	}
-
-	var j = e.t - 1,
-	    w,
-	    is1 = true,
-	    r2 = nbi(),
-	    t;
-	i = nbits(e[j]) - 1;
-	while (j >= 0) {
-		if (i >= k1) w = e[j] >> i - k1 & km;else {
-			w = (e[j] & (1 << i + 1) - 1) << k1 - i;
-			if (j > 0) w |= e[j - 1] >> this.DB + i - k1;
-		}
-
-		n = k;
-		while ((w & 1) == 0) {
-			w >>= 1;
-			--n;
-		}
-		if ((i -= n) < 0) {
-			i += this.DB;
-			--j;
-		}
-		if (is1) {
-			// ret == 1, don't bother squaring or multiplying it
-			g[w].copyTo(r);
-			is1 = false;
-		} else {
-			while (n > 1) {
-				z.sqrTo(r, r2);
-				z.sqrTo(r2, r);
-				n -= 2;
-			}
-			if (n > 0) z.sqrTo(r, r2);else {
-				t = r;
-				r = r2;
-				r2 = t;
-			}
-			z.mulTo(r2, g[w], r);
-		}
-
-		while (j >= 0 && (e[j] & 1 << i) == 0) {
-			z.sqrTo(r, r2);
-			t = r;
-			r = r2;
-			r2 = t;
-			if (--i < 0) {
-				i = this.DB - 1;
-				--j;
-			}
-		}
-	}
-	var result = z.revert(r);
-	callback(null, result);
-	return result;
-}
-
-// protected
-BigInteger.prototype.copyTo = bnpCopyTo;
-BigInteger.prototype.fromInt = bnpFromInt;
-BigInteger.prototype.fromString = bnpFromString;
-BigInteger.prototype.clamp = bnpClamp;
-BigInteger.prototype.dlShiftTo = bnpDLShiftTo;
-BigInteger.prototype.drShiftTo = bnpDRShiftTo;
-BigInteger.prototype.lShiftTo = bnpLShiftTo;
-BigInteger.prototype.rShiftTo = bnpRShiftTo;
-BigInteger.prototype.subTo = bnpSubTo;
-BigInteger.prototype.multiplyTo = bnpMultiplyTo;
-BigInteger.prototype.squareTo = bnpSquareTo;
-BigInteger.prototype.divRemTo = bnpDivRemTo;
-BigInteger.prototype.invDigit = bnpInvDigit;
-BigInteger.prototype.addTo = bnpAddTo;
-
-// public
-BigInteger.prototype.toString = bnToString;
-BigInteger.prototype.negate = bnNegate;
-BigInteger.prototype.abs = bnAbs;
-BigInteger.prototype.compareTo = bnCompareTo;
-BigInteger.prototype.bitLength = bnBitLength;
-BigInteger.prototype.mod = bnMod;
-BigInteger.prototype.equals = bnEquals;
-BigInteger.prototype.add = bnAdd;
-BigInteger.prototype.subtract = bnSubtract;
-BigInteger.prototype.multiply = bnMultiply;
-BigInteger.prototype.divide = bnDivide;
-BigInteger.prototype.modPow = bnModPow;
-
-// "constants"
-BigInteger.ZERO = nbv(0);
-BigInteger.ONE = nbv(1);
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__CognitoJwtToken__ = __webpack_require__(8);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/*
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- *
- *     http://aws.amazon.com/asl/
- *
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
-/** @class */
-
-var CognitoAccessToken = function (_CognitoJwtToken) {
-  _inherits(CognitoAccessToken, _CognitoJwtToken);
-
-  /**
-   * Constructs a new CognitoAccessToken object
-   * @param {string=} AccessToken The JWT access token.
-   */
-  function CognitoAccessToken() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        AccessToken = _ref.AccessToken;
-
-    _classCallCheck(this, CognitoAccessToken);
-
-    return _possibleConstructorReturn(this, _CognitoJwtToken.call(this, AccessToken || ''));
-  }
-
-  return CognitoAccessToken;
-}(__WEBPACK_IMPORTED_MODULE_0__CognitoJwtToken__["a" /* default */]);
-
-/* harmony default export */ __webpack_exports__["a"] = (CognitoAccessToken);
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_buffer___ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_buffer____default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_buffer___);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/*!
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- *
- *     http://aws.amazon.com/asl/
- *
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
-/** @class */
-
-var CognitoJwtToken = function () {
-	/**
-  * Constructs a new CognitoJwtToken object
-  * @param {string=} token The JWT token.
-  */
-	function CognitoJwtToken(token) {
-		_classCallCheck(this, CognitoJwtToken);
-
-		// Assign object
-		this.jwtToken = token || '';
-		this.payload = this.decodePayload();
-	}
-
-	/**
-  * @returns {string} the record's token.
-  */
-
-
-	CognitoJwtToken.prototype.getJwtToken = function getJwtToken() {
-		return this.jwtToken;
-	};
-
-	/**
-  * @returns {int} the token's expiration (exp member).
-  */
-
-
-	CognitoJwtToken.prototype.getExpiration = function getExpiration() {
-		return this.payload.exp;
-	};
-
-	/**
-  * @returns {int} the token's "issued at" (iat member).
-  */
-
-
-	CognitoJwtToken.prototype.getIssuedAt = function getIssuedAt() {
-		return this.payload.iat;
-	};
-
-	/**
-  * @returns {object} the token's payload.
-  */
-
-
-	CognitoJwtToken.prototype.decodePayload = function decodePayload() {
-		var payload = this.jwtToken.split('.')[1];
-		try {
-			return JSON.parse(__WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(payload, 'base64').toString('utf8'));
-		} catch (err) {
-			return {};
-		}
-	};
-
-	return CognitoJwtToken;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (CognitoJwtToken);
-
-/***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__CognitoJwtToken__ = __webpack_require__(8);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/*!
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- *
- *     http://aws.amazon.com/asl/
- *
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
-/** @class */
-
-var CognitoIdToken = function (_CognitoJwtToken) {
-  _inherits(CognitoIdToken, _CognitoJwtToken);
-
-  /**
-   * Constructs a new CognitoIdToken object
-   * @param {string=} IdToken The JWT Id token
-   */
-  function CognitoIdToken() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        IdToken = _ref.IdToken;
-
-    _classCallCheck(this, CognitoIdToken);
-
-    return _possibleConstructorReturn(this, _CognitoJwtToken.call(this, IdToken || ''));
-  }
-
-  return CognitoIdToken;
-}(__WEBPACK_IMPORTED_MODULE_0__CognitoJwtToken__["a" /* default */]);
-
-/* harmony default export */ __webpack_exports__["a"] = (CognitoIdToken);
-
-/***/ }),
-/* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/*!
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- *
- *     http://aws.amazon.com/asl/
- *
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License.
- */
-
-/** @class */
-var CognitoRefreshToken = function () {
-  /**
-   * Constructs a new CognitoRefreshToken object
-   * @param {string=} RefreshToken The JWT refresh token.
-   */
-  function CognitoRefreshToken() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        RefreshToken = _ref.RefreshToken;
-
-    _classCallCheck(this, CognitoRefreshToken);
-
-    // Assign object
-    this.token = RefreshToken || '';
-  }
-
-  /**
-   * @returns {string} the record's token.
-   */
-
-
-  CognitoRefreshToken.prototype.getToken = function getToken() {
-    return this.token;
-  };
-
-  return CognitoRefreshToken;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (CognitoRefreshToken);
-
-/***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_buffer___ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_buffer____default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_buffer___);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_crypto_js_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_crypto_js_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_crypto_js_core__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_crypto_js_lib_typedarrays__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_crypto_js_lib_typedarrays___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_crypto_js_lib_typedarrays__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_crypto_js_enc_base64__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_crypto_js_enc_base64___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_crypto_js_enc_base64__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_crypto_js_hmac_sha256__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_crypto_js_hmac_sha256___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_crypto_js_hmac_sha256__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__BigInteger__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__AuthenticationHelper__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__CognitoAccessToken__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__CognitoIdToken__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__CognitoRefreshToken__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__CognitoUserSession__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__DateHelper__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__CognitoUserAttribute__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__StorageHelper__ = __webpack_require__(15);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/*!
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- *
- *     http://aws.amazon.com/asl/
- *
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
- // necessary for crypto js
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * @callback nodeCallback
- * @template T result
- * @param {*} err The operation failure reason, or null.
- * @param {T} result The operation result.
- */
-
-/**
- * @callback onFailure
- * @param {*} err Failure reason.
- */
-
-/**
- * @callback onSuccess
- * @template T result
- * @param {T} result The operation result.
- */
-
-/**
- * @callback mfaRequired
- * @param {*} details MFA challenge details.
- */
-
-/**
- * @callback customChallenge
- * @param {*} details Custom challenge details.
- */
-
-/**
- * @callback inputVerificationCode
- * @param {*} data Server response.
- */
-
-/**
- * @callback authSuccess
- * @param {CognitoUserSession} session The new session.
- * @param {bool=} userConfirmationNecessary User must be confirmed.
- */
-
-/** @class */
-
-var CognitoUser = function () {
-	/**
-  * Constructs a new CognitoUser object
-  * @param {object} data Creation options
-  * @param {string} data.Username The user's username.
-  * @param {CognitoUserPool} data.Pool Pool containing the user.
-  * @param {object} data.Storage Optional storage object.
-  */
-	function CognitoUser(data) {
-		_classCallCheck(this, CognitoUser);
-
-		if (data == null || data.Username == null || data.Pool == null) {
-			throw new Error('Username and pool information are required.');
-		}
-
-		this.username = data.Username || '';
-		this.pool = data.Pool;
-		this.Session = null;
-
-		this.client = data.Pool.client;
-
-		this.signInUserSession = null;
-		this.authenticationFlowType = 'USER_SRP_AUTH';
-
-		this.storage = data.Storage || new __WEBPACK_IMPORTED_MODULE_13__StorageHelper__["a" /* default */]().getStorage();
-
-		this.keyPrefix = 'CognitoIdentityServiceProvider.' + this.pool.getClientId();
-		this.userDataKey = this.keyPrefix + '.' + this.username + '.userData';
-	}
-
-	/**
-  * Sets the session for this user
-  * @param {CognitoUserSession} signInUserSession the session
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.setSignInUserSession = function setSignInUserSession(signInUserSession) {
-		this.clearCachedUserData();
-		this.signInUserSession = signInUserSession;
-		this.cacheTokens();
-	};
-
-	/**
-  * @returns {CognitoUserSession} the current session for this user
-  */
-
-
-	CognitoUser.prototype.getSignInUserSession = function getSignInUserSession() {
-		return this.signInUserSession;
-	};
-
-	/**
-  * @returns {string} the user's username
-  */
-
-
-	CognitoUser.prototype.getUsername = function getUsername() {
-		return this.username;
-	};
-
-	/**
-  * @returns {String} the authentication flow type
-  */
-
-
-	CognitoUser.prototype.getAuthenticationFlowType = function getAuthenticationFlowType() {
-		return this.authenticationFlowType;
-	};
-
-	/**
-  * sets authentication flow type
-  * @param {string} authenticationFlowType New value.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.setAuthenticationFlowType = function setAuthenticationFlowType(authenticationFlowType) {
-		this.authenticationFlowType = authenticationFlowType;
-	};
-
-	/**
-  * This is used for authenticating the user through the custom authentication flow.
-  * @param {AuthenticationDetails} authDetails Contains the authentication data
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {customChallenge} callback.customChallenge Custom challenge
-  *        response required to continue.
-  * @param {authSuccess} callback.onSuccess Called on success with the new session.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.initiateAuth = function initiateAuth(authDetails, callback) {
-		var _this = this;
-
-		var authParameters = authDetails.getAuthParameters();
-		authParameters.USERNAME = this.username;
-
-		var jsonReq = {
-			AuthFlow: 'CUSTOM_AUTH',
-			ClientId: this.pool.getClientId(),
-			AuthParameters: authParameters,
-			ClientMetadata: authDetails.getValidationData()
-		};
-		if (this.getUserContextData()) {
-			jsonReq.UserContextData = this.getUserContextData();
-		}
-
-		this.client.request('InitiateAuth', jsonReq, function (err, data) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-			var challengeName = data.ChallengeName;
-			var challengeParameters = data.ChallengeParameters;
-
-			if (challengeName === 'CUSTOM_CHALLENGE') {
-				_this.Session = data.Session;
-				return callback.customChallenge(challengeParameters);
-			}
-			_this.signInUserSession = _this.getCognitoUserSession(data.AuthenticationResult);
-			_this.cacheTokens();
-			return callback.onSuccess(_this.signInUserSession);
-		});
-	};
-
-	/**
-  * This is used for authenticating the user.
-  * stuff
-  * @param {AuthenticationDetails} authDetails Contains the authentication data
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {newPasswordRequired} callback.newPasswordRequired new
-  *        password and any required attributes are required to continue
-  * @param {mfaRequired} callback.mfaRequired MFA code
-  *        required to continue.
-  * @param {customChallenge} callback.customChallenge Custom challenge
-  *        response required to continue.
-  * @param {authSuccess} callback.onSuccess Called on success with the new session.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.authenticateUser = function authenticateUser(authDetails, callback) {
-		if (this.authenticationFlowType === 'USER_PASSWORD_AUTH') {
-			return this.authenticateUserPlainUsernamePassword(authDetails, callback);
-		} else if (this.authenticationFlowType === 'USER_SRP_AUTH' || this.authenticationFlowType === 'CUSTOM_AUTH') {
-			return this.authenticateUserDefaultAuth(authDetails, callback);
-		}
-		return callback.onFailure(new Error('Authentication flow type is invalid.'));
-	};
-
-	/**
-  * PRIVATE ONLY: This is an internal only method and should not
-  * be directly called by the consumers.
-  * It calls the AuthenticationHelper for SRP related
-  * stuff
-  * @param {AuthenticationDetails} authDetails Contains the authentication data
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {newPasswordRequired} callback.newPasswordRequired new
-  *        password and any required attributes are required to continue
-  * @param {mfaRequired} callback.mfaRequired MFA code
-  *        required to continue.
-  * @param {customChallenge} callback.customChallenge Custom challenge
-  *        response required to continue.
-  * @param {authSuccess} callback.onSuccess Called on success with the new session.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.authenticateUserDefaultAuth = function authenticateUserDefaultAuth(authDetails, callback) {
-		var _this2 = this;
-
-		var authenticationHelper = new __WEBPACK_IMPORTED_MODULE_6__AuthenticationHelper__["a" /* default */](this.pool.getUserPoolId().split('_')[1]);
-		var dateHelper = new __WEBPACK_IMPORTED_MODULE_11__DateHelper__["a" /* default */]();
-
-		var serverBValue = void 0;
-		var salt = void 0;
-		var authParameters = {};
-
-		if (this.deviceKey != null) {
-			authParameters.DEVICE_KEY = this.deviceKey;
-		}
-
-		authParameters.USERNAME = this.username;
-		authenticationHelper.getLargeAValue(function (errOnAValue, aValue) {
-			// getLargeAValue callback start
-			if (errOnAValue) {
-				callback.onFailure(errOnAValue);
-			}
-
-			authParameters.SRP_A = aValue.toString(16);
-
-			if (_this2.authenticationFlowType === 'CUSTOM_AUTH') {
-				authParameters.CHALLENGE_NAME = 'SRP_A';
-			}
-
-			var jsonReq = {
-				AuthFlow: _this2.authenticationFlowType,
-				ClientId: _this2.pool.getClientId(),
-				AuthParameters: authParameters,
-				ClientMetadata: authDetails.getValidationData()
-			};
-			if (_this2.getUserContextData(_this2.username)) {
-				jsonReq.UserContextData = _this2.getUserContextData(_this2.username);
-			}
-
-			_this2.client.request('InitiateAuth', jsonReq, function (err, data) {
-				if (err) {
-					return callback.onFailure(err);
-				}
-
-				var challengeParameters = data.ChallengeParameters;
-
-				_this2.username = challengeParameters.USER_ID_FOR_SRP;
-				serverBValue = new __WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */](challengeParameters.SRP_B, 16);
-				salt = new __WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */](challengeParameters.SALT, 16);
-				_this2.getCachedDeviceKeyAndPassword();
-
-				authenticationHelper.getPasswordAuthenticationKey(_this2.username, authDetails.getPassword(), serverBValue, salt, function (errOnHkdf, hkdf) {
-					// getPasswordAuthenticationKey callback start
-					if (errOnHkdf) {
-						callback.onFailure(errOnHkdf);
-					}
-
-					var dateNow = dateHelper.getNowString();
-
-					var message = __WEBPACK_IMPORTED_MODULE_1_crypto_js_core___default.a.lib.WordArray.create(__WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].concat([__WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(_this2.pool.getUserPoolId().split('_')[1], 'utf8'), __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(_this2.username, 'utf8'), __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(challengeParameters.SECRET_BLOCK, 'base64'), __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(dateNow, 'utf8')]));
-					var key = __WEBPACK_IMPORTED_MODULE_1_crypto_js_core___default.a.lib.WordArray.create(hkdf);
-					var signatureString = __WEBPACK_IMPORTED_MODULE_3_crypto_js_enc_base64___default.a.stringify(__WEBPACK_IMPORTED_MODULE_4_crypto_js_hmac_sha256___default()(message, key));
-
-					var challengeResponses = {};
-
-					challengeResponses.USERNAME = _this2.username;
-					challengeResponses.PASSWORD_CLAIM_SECRET_BLOCK = challengeParameters.SECRET_BLOCK;
-					challengeResponses.TIMESTAMP = dateNow;
-					challengeResponses.PASSWORD_CLAIM_SIGNATURE = signatureString;
-
-					if (_this2.deviceKey != null) {
-						challengeResponses.DEVICE_KEY = _this2.deviceKey;
-					}
-
-					var respondToAuthChallenge = function respondToAuthChallenge(challenge, challengeCallback) {
-						return _this2.client.request('RespondToAuthChallenge', challenge, function (errChallenge, dataChallenge) {
-							if (errChallenge && errChallenge.code === 'ResourceNotFoundException' && errChallenge.message.toLowerCase().indexOf('device') !== -1) {
-								challengeResponses.DEVICE_KEY = null;
-								_this2.deviceKey = null;
-								_this2.randomPassword = null;
-								_this2.deviceGroupKey = null;
-								_this2.clearCachedDeviceKeyAndPassword();
-								return respondToAuthChallenge(challenge, challengeCallback);
-							}
-							return challengeCallback(errChallenge, dataChallenge);
-						});
-					};
-
-					var jsonReqResp = {
-						ChallengeName: 'PASSWORD_VERIFIER',
-						ClientId: _this2.pool.getClientId(),
-						ChallengeResponses: challengeResponses,
-						Session: data.Session
-					};
-					if (_this2.getUserContextData()) {
-						jsonReqResp.UserContextData = _this2.getUserContextData();
-					}
-					respondToAuthChallenge(jsonReqResp, function (errAuthenticate, dataAuthenticate) {
-						if (errAuthenticate) {
-							return callback.onFailure(errAuthenticate);
-						}
-
-						return _this2.authenticateUserInternal(dataAuthenticate, authenticationHelper, callback);
-					});
-					return undefined;
-					// getPasswordAuthenticationKey callback end
-				});
-				return undefined;
-			});
-			// getLargeAValue callback end
-		});
-	};
-
-	/**
-  * PRIVATE ONLY: This is an internal only method and should not
-  * be directly called by the consumers.
-  * @param {AuthenticationDetails} authDetails Contains the authentication data.
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {mfaRequired} callback.mfaRequired MFA code
-  *        required to continue.
-  * @param {authSuccess} callback.onSuccess Called on success with the new session.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.authenticateUserPlainUsernamePassword = function authenticateUserPlainUsernamePassword(authDetails, callback) {
-		var _this3 = this;
-
-		var authParameters = {};
-		authParameters.USERNAME = this.username;
-		authParameters.PASSWORD = authDetails.getPassword();
-		if (!authParameters.PASSWORD) {
-			callback.onFailure(new Error('PASSWORD parameter is required'));
-			return;
-		}
-		var authenticationHelper = new __WEBPACK_IMPORTED_MODULE_6__AuthenticationHelper__["a" /* default */](this.pool.getUserPoolId().split('_')[1]);
-		this.getCachedDeviceKeyAndPassword();
-		if (this.deviceKey != null) {
-			authParameters.DEVICE_KEY = this.deviceKey;
-		}
-
-		var jsonReq = {
-			AuthFlow: 'USER_PASSWORD_AUTH',
-			ClientId: this.pool.getClientId(),
-			AuthParameters: authParameters,
-			ClientMetadata: authDetails.getValidationData()
-		};
-		if (this.getUserContextData(this.username)) {
-			jsonReq.UserContextData = this.getUserContextData(this.username);
-		}
-		// USER_PASSWORD_AUTH happens in a single round-trip: client sends userName and password,
-		// Cognito UserPools verifies password and returns tokens.
-		this.client.request('InitiateAuth', jsonReq, function (err, authResult) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-			return _this3.authenticateUserInternal(authResult, authenticationHelper, callback);
-		});
-	};
-
-	/**
-  * PRIVATE ONLY: This is an internal only method and should not
-  * be directly called by the consumers.
-  * @param {object} dataAuthenticate authentication data
-  * @param {object} authenticationHelper helper created
-  * @param {callback} callback passed on from caller
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.authenticateUserInternal = function authenticateUserInternal(dataAuthenticate, authenticationHelper, callback) {
-		var _this4 = this;
-
-		var challengeName = dataAuthenticate.ChallengeName;
-		var challengeParameters = dataAuthenticate.ChallengeParameters;
-
-		if (challengeName === 'SMS_MFA') {
-			this.Session = dataAuthenticate.Session;
-			return callback.mfaRequired(challengeName, challengeParameters);
-		}
-
-		if (challengeName === 'SELECT_MFA_TYPE') {
-			this.Session = dataAuthenticate.Session;
-			return callback.selectMFAType(challengeName, challengeParameters);
-		}
-
-		if (challengeName === 'MFA_SETUP') {
-			this.Session = dataAuthenticate.Session;
-			return callback.mfaSetup(challengeName, challengeParameters);
-		}
-
-		if (challengeName === 'SOFTWARE_TOKEN_MFA') {
-			this.Session = dataAuthenticate.Session;
-			return callback.totpRequired(challengeName, challengeParameters);
-		}
-
-		if (challengeName === 'CUSTOM_CHALLENGE') {
-			this.Session = dataAuthenticate.Session;
-			return callback.customChallenge(challengeParameters);
-		}
-
-		if (challengeName === 'NEW_PASSWORD_REQUIRED') {
-			this.Session = dataAuthenticate.Session;
-
-			var userAttributes = null;
-			var rawRequiredAttributes = null;
-			var requiredAttributes = [];
-			var userAttributesPrefix = authenticationHelper.getNewPasswordRequiredChallengeUserAttributePrefix();
-
-			if (challengeParameters) {
-				userAttributes = JSON.parse(dataAuthenticate.ChallengeParameters.userAttributes);
-				rawRequiredAttributes = JSON.parse(dataAuthenticate.ChallengeParameters.requiredAttributes);
-			}
-
-			if (rawRequiredAttributes) {
-				for (var i = 0; i < rawRequiredAttributes.length; i++) {
-					requiredAttributes[i] = rawRequiredAttributes[i].substr(userAttributesPrefix.length);
-				}
-			}
-			return callback.newPasswordRequired(userAttributes, requiredAttributes);
-		}
-
-		if (challengeName === 'DEVICE_SRP_AUTH') {
-			this.getDeviceResponse(callback);
-			return undefined;
-		}
-
-		this.signInUserSession = this.getCognitoUserSession(dataAuthenticate.AuthenticationResult);
-		this.challengeName = challengeName;
-		this.cacheTokens();
-
-		var newDeviceMetadata = dataAuthenticate.AuthenticationResult.NewDeviceMetadata;
-		if (newDeviceMetadata == null) {
-			return callback.onSuccess(this.signInUserSession);
-		}
-
-		authenticationHelper.generateHashDevice(dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceGroupKey, dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceKey, function (errGenHash) {
-			if (errGenHash) {
-				return callback.onFailure(errGenHash);
-			}
-
-			var deviceSecretVerifierConfig = {
-				Salt: __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(authenticationHelper.getSaltDevices(), 'hex').toString('base64'),
-				PasswordVerifier: __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(authenticationHelper.getVerifierDevices(), 'hex').toString('base64')
-			};
-
-			_this4.verifierDevices = deviceSecretVerifierConfig.PasswordVerifier;
-			_this4.deviceGroupKey = newDeviceMetadata.DeviceGroupKey;
-			_this4.randomPassword = authenticationHelper.getRandomPassword();
-
-			_this4.client.request('ConfirmDevice', {
-				DeviceKey: newDeviceMetadata.DeviceKey,
-				AccessToken: _this4.signInUserSession.getAccessToken().getJwtToken(),
-				DeviceSecretVerifierConfig: deviceSecretVerifierConfig,
-				DeviceName: navigator.userAgent
-			}, function (errConfirm, dataConfirm) {
-				if (errConfirm) {
-					return callback.onFailure(errConfirm);
-				}
-
-				_this4.deviceKey = dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceKey;
-				_this4.cacheDeviceKeyAndPassword();
-				if (dataConfirm.UserConfirmationNecessary === true) {
-					return callback.onSuccess(_this4.signInUserSession, dataConfirm.UserConfirmationNecessary);
-				}
-				return callback.onSuccess(_this4.signInUserSession);
-			});
-			return undefined;
-		});
-		return undefined;
-	};
-
-	/**
-  * This method is user to complete the NEW_PASSWORD_REQUIRED challenge.
-  * Pass the new password with any new user attributes to be updated.
-  * User attribute keys must be of format userAttributes.<attribute_name>.
-  * @param {string} newPassword new password for this user
-  * @param {object} requiredAttributeData map with values for all required attributes
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {mfaRequired} callback.mfaRequired MFA code required to continue.
-  * @param {customChallenge} callback.customChallenge Custom challenge
-  *         response required to continue.
-  * @param {authSuccess} callback.onSuccess Called on success with the new session.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.completeNewPasswordChallenge = function completeNewPasswordChallenge(newPassword, requiredAttributeData, callback) {
-		var _this5 = this;
-
-		if (!newPassword) {
-			return callback.onFailure(new Error('New password is required.'));
-		}
-		var authenticationHelper = new __WEBPACK_IMPORTED_MODULE_6__AuthenticationHelper__["a" /* default */](this.pool.getUserPoolId().split('_')[1]);
-		var userAttributesPrefix = authenticationHelper.getNewPasswordRequiredChallengeUserAttributePrefix();
-
-		var finalUserAttributes = {};
-		if (requiredAttributeData) {
-			Object.keys(requiredAttributeData).forEach(function (key) {
-				finalUserAttributes[userAttributesPrefix + key] = requiredAttributeData[key];
-			});
-		}
-
-		finalUserAttributes.NEW_PASSWORD = newPassword;
-		finalUserAttributes.USERNAME = this.username;
-		var jsonReq = {
-			ChallengeName: 'NEW_PASSWORD_REQUIRED',
-			ClientId: this.pool.getClientId(),
-			ChallengeResponses: finalUserAttributes,
-			Session: this.Session
-		};
-		if (this.getUserContextData()) {
-			jsonReq.UserContextData = this.getUserContextData();
-		}
-
-		this.client.request('RespondToAuthChallenge', jsonReq, function (errAuthenticate, dataAuthenticate) {
-			if (errAuthenticate) {
-				return callback.onFailure(errAuthenticate);
-			}
-			return _this5.authenticateUserInternal(dataAuthenticate, authenticationHelper, callback);
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used to get a session using device authentication. It is called at the end of user
-  * authentication
-  *
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {authSuccess} callback.onSuccess Called on success with the new session.
-  * @returns {void}
-  * @private
-  */
-
-
-	CognitoUser.prototype.getDeviceResponse = function getDeviceResponse(callback) {
-		var _this6 = this;
-
-		var authenticationHelper = new __WEBPACK_IMPORTED_MODULE_6__AuthenticationHelper__["a" /* default */](this.deviceGroupKey);
-		var dateHelper = new __WEBPACK_IMPORTED_MODULE_11__DateHelper__["a" /* default */]();
-
-		var authParameters = {};
-
-		authParameters.USERNAME = this.username;
-		authParameters.DEVICE_KEY = this.deviceKey;
-		authenticationHelper.getLargeAValue(function (errAValue, aValue) {
-			// getLargeAValue callback start
-			if (errAValue) {
-				callback.onFailure(errAValue);
-			}
-
-			authParameters.SRP_A = aValue.toString(16);
-
-			var jsonReq = {
-				ChallengeName: 'DEVICE_SRP_AUTH',
-				ClientId: _this6.pool.getClientId(),
-				ChallengeResponses: authParameters
-			};
-			if (_this6.getUserContextData()) {
-				jsonReq.UserContextData = _this6.getUserContextData();
-			}
-			_this6.client.request('RespondToAuthChallenge', jsonReq, function (err, data) {
-				if (err) {
-					return callback.onFailure(err);
-				}
-
-				var challengeParameters = data.ChallengeParameters;
-
-				var serverBValue = new __WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */](challengeParameters.SRP_B, 16);
-				var salt = new __WEBPACK_IMPORTED_MODULE_5__BigInteger__["a" /* default */](challengeParameters.SALT, 16);
-
-				authenticationHelper.getPasswordAuthenticationKey(_this6.deviceKey, _this6.randomPassword, serverBValue, salt, function (errHkdf, hkdf) {
-					// getPasswordAuthenticationKey callback start
-					if (errHkdf) {
-						return callback.onFailure(errHkdf);
-					}
-
-					var dateNow = dateHelper.getNowString();
-
-					var message = __WEBPACK_IMPORTED_MODULE_1_crypto_js_core___default.a.lib.WordArray.create(__WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].concat([__WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(_this6.deviceGroupKey, 'utf8'), __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(_this6.deviceKey, 'utf8'), __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(challengeParameters.SECRET_BLOCK, 'base64'), __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(dateNow, 'utf8')]));
-					var key = __WEBPACK_IMPORTED_MODULE_1_crypto_js_core___default.a.lib.WordArray.create(hkdf);
-					var signatureString = __WEBPACK_IMPORTED_MODULE_3_crypto_js_enc_base64___default.a.stringify(__WEBPACK_IMPORTED_MODULE_4_crypto_js_hmac_sha256___default()(message, key));
-
-					var challengeResponses = {};
-
-					challengeResponses.USERNAME = _this6.username;
-					challengeResponses.PASSWORD_CLAIM_SECRET_BLOCK = challengeParameters.SECRET_BLOCK;
-					challengeResponses.TIMESTAMP = dateNow;
-					challengeResponses.PASSWORD_CLAIM_SIGNATURE = signatureString;
-					challengeResponses.DEVICE_KEY = _this6.deviceKey;
-
-					var jsonReqResp = {
-						ChallengeName: 'DEVICE_PASSWORD_VERIFIER',
-						ClientId: _this6.pool.getClientId(),
-						ChallengeResponses: challengeResponses,
-						Session: data.Session
-					};
-					if (_this6.getUserContextData()) {
-						jsonReqResp.UserContextData = _this6.getUserContextData();
-					}
-
-					_this6.client.request('RespondToAuthChallenge', jsonReqResp, function (errAuthenticate, dataAuthenticate) {
-						if (errAuthenticate) {
-							return callback.onFailure(errAuthenticate);
-						}
-
-						_this6.signInUserSession = _this6.getCognitoUserSession(dataAuthenticate.AuthenticationResult);
-						_this6.cacheTokens();
-
-						return callback.onSuccess(_this6.signInUserSession);
-					});
-					return undefined;
-					// getPasswordAuthenticationKey callback end
-				});
-				return undefined;
-			});
-			// getLargeAValue callback end
-		});
-	};
-
-	/**
-  * This is used for a certain user to confirm the registration by using a confirmation code
-  * @param {string} confirmationCode Code entered by user.
-  * @param {bool} forceAliasCreation Allow migrating from an existing email / phone number.
-  * @param {nodeCallback<string>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.confirmRegistration = function confirmRegistration(confirmationCode, forceAliasCreation, callback) {
-		var jsonReq = {
-			ClientId: this.pool.getClientId(),
-			ConfirmationCode: confirmationCode,
-			Username: this.username,
-			ForceAliasCreation: forceAliasCreation
-		};
-		if (this.getUserContextData()) {
-			jsonReq.UserContextData = this.getUserContextData();
-		}
-		this.client.request('ConfirmSignUp', jsonReq, function (err) {
-			if (err) {
-				return callback(err, null);
-			}
-			return callback(null, 'SUCCESS');
-		});
-	};
-
-	/**
-  * This is used by the user once he has the responses to a custom challenge
-  * @param {string} answerChallenge The custom challenge answer.
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {customChallenge} callback.customChallenge
-  *    Custom challenge response required to continue.
-  * @param {authSuccess} callback.onSuccess Called on success with the new session.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.sendCustomChallengeAnswer = function sendCustomChallengeAnswer(answerChallenge, callback) {
-		var _this7 = this;
-
-		var challengeResponses = {};
-		challengeResponses.USERNAME = this.username;
-		challengeResponses.ANSWER = answerChallenge;
-
-		var authenticationHelper = new __WEBPACK_IMPORTED_MODULE_6__AuthenticationHelper__["a" /* default */](this.pool.getUserPoolId().split('_')[1]);
-		this.getCachedDeviceKeyAndPassword();
-		if (this.deviceKey != null) {
-			challengeResponses.DEVICE_KEY = this.deviceKey;
-		}
-
-		var jsonReq = {
-			ChallengeName: 'CUSTOM_CHALLENGE',
-			ChallengeResponses: challengeResponses,
-			ClientId: this.pool.getClientId(),
-			Session: this.Session
-		};
-		if (this.getUserContextData()) {
-			jsonReq.UserContextData = this.getUserContextData();
-		}
-		this.client.request('RespondToAuthChallenge', jsonReq, function (err, data) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-
-			return _this7.authenticateUserInternal(data, authenticationHelper, callback);
-		});
-	};
-
-	/**
-  * This is used by the user once he has an MFA code
-  * @param {string} confirmationCode The MFA code entered by the user.
-  * @param {object} callback Result callback map.
-  * @param {string} mfaType The mfa we are replying to.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {authSuccess} callback.onSuccess Called on success with the new session.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.sendMFACode = function sendMFACode(confirmationCode, callback, mfaType) {
-		var _this8 = this;
-
-		var challengeResponses = {};
-		challengeResponses.USERNAME = this.username;
-		challengeResponses.SMS_MFA_CODE = confirmationCode;
-		var mfaTypeSelection = mfaType || 'SMS_MFA';
-		if (mfaTypeSelection === 'SOFTWARE_TOKEN_MFA') {
-			challengeResponses.SOFTWARE_TOKEN_MFA_CODE = confirmationCode;
-		}
-
-		if (this.deviceKey != null) {
-			challengeResponses.DEVICE_KEY = this.deviceKey;
-		}
-
-		var jsonReq = {
-			ChallengeName: mfaTypeSelection,
-			ChallengeResponses: challengeResponses,
-			ClientId: this.pool.getClientId(),
-			Session: this.Session
-		};
-		if (this.getUserContextData()) {
-			jsonReq.UserContextData = this.getUserContextData();
-		}
-
-		this.client.request('RespondToAuthChallenge', jsonReq, function (err, dataAuthenticate) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-
-			var challengeName = dataAuthenticate.ChallengeName;
-
-			if (challengeName === 'DEVICE_SRP_AUTH') {
-				_this8.getDeviceResponse(callback);
-				return undefined;
-			}
-
-			_this8.signInUserSession = _this8.getCognitoUserSession(dataAuthenticate.AuthenticationResult);
-			_this8.cacheTokens();
-
-			if (dataAuthenticate.AuthenticationResult.NewDeviceMetadata == null) {
-				return callback.onSuccess(_this8.signInUserSession);
-			}
-
-			var authenticationHelper = new __WEBPACK_IMPORTED_MODULE_6__AuthenticationHelper__["a" /* default */](_this8.pool.getUserPoolId().split('_')[1]);
-			authenticationHelper.generateHashDevice(dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceGroupKey, dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceKey, function (errGenHash) {
-				if (errGenHash) {
-					return callback.onFailure(errGenHash);
-				}
-
-				var deviceSecretVerifierConfig = {
-					Salt: __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(authenticationHelper.getSaltDevices(), 'hex').toString('base64'),
-					PasswordVerifier: __WEBPACK_IMPORTED_MODULE_0_buffer___["Buffer"].from(authenticationHelper.getVerifierDevices(), 'hex').toString('base64')
-				};
-
-				_this8.verifierDevices = deviceSecretVerifierConfig.PasswordVerifier;
-				_this8.deviceGroupKey = dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceGroupKey;
-				_this8.randomPassword = authenticationHelper.getRandomPassword();
-
-				_this8.client.request('ConfirmDevice', {
-					DeviceKey: dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceKey,
-					AccessToken: _this8.signInUserSession.getAccessToken().getJwtToken(),
-					DeviceSecretVerifierConfig: deviceSecretVerifierConfig,
-					DeviceName: navigator.userAgent
-				}, function (errConfirm, dataConfirm) {
-					if (errConfirm) {
-						return callback.onFailure(errConfirm);
-					}
-
-					_this8.deviceKey = dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceKey;
-					_this8.cacheDeviceKeyAndPassword();
-					if (dataConfirm.UserConfirmationNecessary === true) {
-						return callback.onSuccess(_this8.signInUserSession, dataConfirm.UserConfirmationNecessary);
-					}
-					return callback.onSuccess(_this8.signInUserSession);
-				});
-				return undefined;
-			});
-			return undefined;
-		});
-	};
-
-	/**
-  * This is used by an authenticated user to change the current password
-  * @param {string} oldUserPassword The current password.
-  * @param {string} newUserPassword The requested new password.
-  * @param {nodeCallback<string>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.changePassword = function changePassword(oldUserPassword, newUserPassword, callback) {
-		if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
-			return callback(new Error('User is not authenticated'), null);
-		}
-
-		this.client.request('ChangePassword', {
-			PreviousPassword: oldUserPassword,
-			ProposedPassword: newUserPassword,
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
-		}, function (err) {
-			if (err) {
-				return callback(err, null);
-			}
-			return callback(null, 'SUCCESS');
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used by an authenticated user to enable MFA for itself
-  * @deprecated
-  * @param {nodeCallback<string>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.enableMFA = function enableMFA(callback) {
-		if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
-			return callback(new Error('User is not authenticated'), null);
-		}
-
-		var mfaOptions = [];
-		var mfaEnabled = {
-			DeliveryMedium: 'SMS',
-			AttributeName: 'phone_number'
-		};
-		mfaOptions.push(mfaEnabled);
-
-		this.client.request('SetUserSettings', {
-			MFAOptions: mfaOptions,
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
-		}, function (err) {
-			if (err) {
-				return callback(err, null);
-			}
-			return callback(null, 'SUCCESS');
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used by an authenticated user to enable MFA for itself
-  * @param {IMfaSettings} smsMfaSettings the sms mfa settings
-  * @param {IMFASettings} softwareTokenMfaSettings the software token mfa settings
-  * @param {nodeCallback<string>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.setUserMfaPreference = function setUserMfaPreference(smsMfaSettings, softwareTokenMfaSettings, callback) {
-		if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
-			return callback(new Error('User is not authenticated'), null);
-		}
-
-		this.client.request('SetUserMFAPreference', {
-			SMSMfaSettings: smsMfaSettings,
-			SoftwareTokenMfaSettings: softwareTokenMfaSettings,
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
-		}, function (err) {
-			if (err) {
-				return callback(err, null);
-			}
-			return callback(null, 'SUCCESS');
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used by an authenticated user to disable MFA for itself
-  * @deprecated
-  * @param {nodeCallback<string>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.disableMFA = function disableMFA(callback) {
-		if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
-			return callback(new Error('User is not authenticated'), null);
-		}
-
-		var mfaOptions = [];
-
-		this.client.request('SetUserSettings', {
-			MFAOptions: mfaOptions,
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
-		}, function (err) {
-			if (err) {
-				return callback(err, null);
-			}
-			return callback(null, 'SUCCESS');
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used by an authenticated user to delete itself
-  * @param {nodeCallback<string>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.deleteUser = function deleteUser(callback) {
-		var _this9 = this;
-
-		if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
-			return callback(new Error('User is not authenticated'), null);
-		}
-
-		this.client.request('DeleteUser', {
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
-		}, function (err) {
-			if (err) {
-				return callback(err, null);
-			}
-			_this9.clearCachedUser();
-			return callback(null, 'SUCCESS');
-		});
-		return undefined;
-	};
-
-	/**
-  * @typedef {CognitoUserAttribute | { Name:string, Value:string }} AttributeArg
-  */
-	/**
-  * This is used by an authenticated user to change a list of attributes
-  * @param {AttributeArg[]} attributes A list of the new user attributes.
-  * @param {nodeCallback<string>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.updateAttributes = function updateAttributes(attributes, callback) {
-		if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
-			return callback(new Error('User is not authenticated'), null);
-		}
-
-		this.client.request('UpdateUserAttributes', {
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
-			UserAttributes: attributes
-		}, function (err) {
-			if (err) {
-				return callback(err, null);
-			}
-			return callback(null, 'SUCCESS');
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used by an authenticated user to get a list of attributes
-  * @param {nodeCallback<CognitoUserAttribute[]>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.getUserAttributes = function getUserAttributes(callback) {
-		if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
-			return callback(new Error('User is not authenticated'), null);
-		}
-
-		this.client.request('GetUser', {
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
-		}, function (err, userData) {
-			if (err) {
-				return callback(err, null);
-			}
-
-			var attributeList = [];
-
-			for (var i = 0; i < userData.UserAttributes.length; i++) {
-				var attribute = {
-					Name: userData.UserAttributes[i].Name,
-					Value: userData.UserAttributes[i].Value
-				};
-				var userAttribute = new __WEBPACK_IMPORTED_MODULE_12__CognitoUserAttribute__["a" /* default */](attribute);
-				attributeList.push(userAttribute);
-			}
-
-			return callback(null, attributeList);
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used by an authenticated user to get the MFAOptions
-  * @param {nodeCallback<MFAOptions>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.getMFAOptions = function getMFAOptions(callback) {
-		if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
-			return callback(new Error('User is not authenticated'), null);
-		}
-
-		this.client.request('GetUser', {
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
-		}, function (err, userData) {
-			if (err) {
-				return callback(err, null);
-			}
-
-			return callback(null, userData.MFAOptions);
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used by an authenticated users to get the userData
-  * @param {nodeCallback<UserData>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.getUserData = function getUserData(callback, params) {
-		var _this10 = this;
-
-		if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
-			this.clearCachedUserData();
-			return callback(new Error('User is not authenticated'), null);
-		}
-
-		var bypassCache = params ? params.bypassCache : false;
-
-		var userData = this.storage.getItem(this.userDataKey);
-		// get the cached user data
-
-		if (!userData || bypassCache) {
-			this.client.request('GetUser', {
-				AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
-			}, function (err, latestUserData) {
-				if (err) {
-					return callback(err, null);
-				}
-				_this10.cacheUserData(latestUserData);
-				var refresh = _this10.signInUserSession.getRefreshToken();
-				if (refresh && refresh.getToken()) {
-					_this10.refreshSession(refresh, function (refreshError, data) {
-						if (refreshError) {
-							return callback(refreshError, null);
-						}
-						return callback(null, latestUserData);
-					});
-				} else {
-					return callback(null, latestUserData);
-				}
-			});
-		} else {
-			try {
-				return callback(null, JSON.parse(userData));
-			} catch (err) {
-				this.clearCachedUserData();
-				return callback(err, null);
-			}
-		}
-		return undefined;
-	};
-
-	/**
-  * This is used by an authenticated user to delete a list of attributes
-  * @param {string[]} attributeList Names of the attributes to delete.
-  * @param {nodeCallback<string>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.deleteAttributes = function deleteAttributes(attributeList, callback) {
-		if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
-			return callback(new Error('User is not authenticated'), null);
-		}
-
-		this.client.request('DeleteUserAttributes', {
-			UserAttributeNames: attributeList,
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
-		}, function (err) {
-			if (err) {
-				return callback(err, null);
-			}
-			return callback(null, 'SUCCESS');
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used by a user to resend a confirmation code
-  * @param {nodeCallback<string>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.resendConfirmationCode = function resendConfirmationCode(callback) {
-		var jsonReq = {
-			ClientId: this.pool.getClientId(),
-			Username: this.username
-		};
-
-		this.client.request('ResendConfirmationCode', jsonReq, function (err, result) {
-			if (err) {
-				return callback(err, null);
-			}
-			return callback(null, result);
-		});
-	};
-
-	/**
-  * This is used to get a session, either from the session object
-  * or from  the local storage, or by using a refresh token
-  *
-  * @param {nodeCallback<CognitoUserSession>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.getSession = function getSession(callback) {
-		if (this.username == null) {
-			return callback(new Error('Username is null. Cannot retrieve a new session'), null);
-		}
-
-		if (this.signInUserSession != null && this.signInUserSession.isValid()) {
-			return callback(null, this.signInUserSession);
-		}
-
-		var keyPrefix = 'CognitoIdentityServiceProvider.' + this.pool.getClientId() + '.' + this.username;
-		var idTokenKey = keyPrefix + '.idToken';
-		var accessTokenKey = keyPrefix + '.accessToken';
-		var refreshTokenKey = keyPrefix + '.refreshToken';
-		var clockDriftKey = keyPrefix + '.clockDrift';
-
-		if (this.storage.getItem(idTokenKey)) {
-			var idToken = new __WEBPACK_IMPORTED_MODULE_8__CognitoIdToken__["a" /* default */]({
-				IdToken: this.storage.getItem(idTokenKey)
-			});
-			var accessToken = new __WEBPACK_IMPORTED_MODULE_7__CognitoAccessToken__["a" /* default */]({
-				AccessToken: this.storage.getItem(accessTokenKey)
-			});
-			var refreshToken = new __WEBPACK_IMPORTED_MODULE_9__CognitoRefreshToken__["a" /* default */]({
-				RefreshToken: this.storage.getItem(refreshTokenKey)
-			});
-			var clockDrift = parseInt(this.storage.getItem(clockDriftKey), 0) || 0;
-
-			var sessionData = {
-				IdToken: idToken,
-				AccessToken: accessToken,
-				RefreshToken: refreshToken,
-				ClockDrift: clockDrift
-			};
-			var cachedSession = new __WEBPACK_IMPORTED_MODULE_10__CognitoUserSession__["a" /* default */](sessionData);
-			if (cachedSession.isValid()) {
-				this.signInUserSession = cachedSession;
-				return callback(null, this.signInUserSession);
-			}
-
-			if (!refreshToken.getToken()) {
-				return callback(new Error('Cannot retrieve a new session. Please authenticate.'), null);
-			}
-
-			this.refreshSession(refreshToken, callback);
-		} else {
-			callback(new Error('Local storage is missing an ID Token, Please authenticate'), null);
-		}
-
-		return undefined;
-	};
-
-	/**
-  * This uses the refreshToken to retrieve a new session
-  * @param {CognitoRefreshToken} refreshToken A previous session's refresh token.
-  * @param {nodeCallback<CognitoUserSession>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.refreshSession = function refreshSession(refreshToken, callback) {
-		var _this11 = this;
-
-		var authParameters = {};
-		authParameters.REFRESH_TOKEN = refreshToken.getToken();
-		var keyPrefix = 'CognitoIdentityServiceProvider.' + this.pool.getClientId();
-		var lastUserKey = keyPrefix + '.LastAuthUser';
-
-		if (this.storage.getItem(lastUserKey)) {
-			this.username = this.storage.getItem(lastUserKey);
-			var deviceKeyKey = keyPrefix + '.' + this.username + '.deviceKey';
-			this.deviceKey = this.storage.getItem(deviceKeyKey);
-			authParameters.DEVICE_KEY = this.deviceKey;
-		}
-
-		var jsonReq = {
-			ClientId: this.pool.getClientId(),
-			AuthFlow: 'REFRESH_TOKEN_AUTH',
-			AuthParameters: authParameters
-		};
-		if (this.getUserContextData()) {
-			jsonReq.UserContextData = this.getUserContextData();
-		}
-		this.client.request('InitiateAuth', jsonReq, function (err, authResult) {
-			if (err) {
-				if (err.code === 'NotAuthorizedException') {
-					_this11.clearCachedUser();
-				}
-				return callback(err, null);
-			}
-			if (authResult) {
-				var authenticationResult = authResult.AuthenticationResult;
-				if (!Object.prototype.hasOwnProperty.call(authenticationResult, 'RefreshToken')) {
-					authenticationResult.RefreshToken = refreshToken.getToken();
-				}
-				_this11.signInUserSession = _this11.getCognitoUserSession(authenticationResult);
-				_this11.cacheTokens();
-				return callback(null, _this11.signInUserSession);
-			}
-			return undefined;
-		});
-	};
-
-	/**
-  * This is used to save the session tokens to local storage
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.cacheTokens = function cacheTokens() {
-		var keyPrefix = 'CognitoIdentityServiceProvider.' + this.pool.getClientId();
-		var idTokenKey = keyPrefix + '.' + this.username + '.idToken';
-		var accessTokenKey = keyPrefix + '.' + this.username + '.accessToken';
-		var refreshTokenKey = keyPrefix + '.' + this.username + '.refreshToken';
-		var clockDriftKey = keyPrefix + '.' + this.username + '.clockDrift';
-		var lastUserKey = keyPrefix + '.LastAuthUser';
-
-		this.storage.setItem(idTokenKey, this.signInUserSession.getIdToken().getJwtToken());
-		this.storage.setItem(accessTokenKey, this.signInUserSession.getAccessToken().getJwtToken());
-		this.storage.setItem(refreshTokenKey, this.signInUserSession.getRefreshToken().getToken());
-		this.storage.setItem(clockDriftKey, '' + this.signInUserSession.getClockDrift());
-		this.storage.setItem(lastUserKey, this.username);
-	};
-
-	/**
-  * This is to cache user data
-  */
-
-
-	CognitoUser.prototype.cacheUserData = function cacheUserData(userData) {
-		this.storage.setItem(this.userDataKey, JSON.stringify(userData));
-	};
-
-	/**
-  * This is to remove cached user data
-  */
-
-
-	CognitoUser.prototype.clearCachedUserData = function clearCachedUserData() {
-		this.storage.removeItem(this.userDataKey);
-	};
-
-	CognitoUser.prototype.clearCachedUser = function clearCachedUser() {
-		this.clearCachedTokens();
-		this.clearCachedUserData();
-	};
-
-	/**
-  * This is used to cache the device key and device group and device password
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.cacheDeviceKeyAndPassword = function cacheDeviceKeyAndPassword() {
-		var keyPrefix = 'CognitoIdentityServiceProvider.' + this.pool.getClientId() + '.' + this.username;
-		var deviceKeyKey = keyPrefix + '.deviceKey';
-		var randomPasswordKey = keyPrefix + '.randomPasswordKey';
-		var deviceGroupKeyKey = keyPrefix + '.deviceGroupKey';
-
-		this.storage.setItem(deviceKeyKey, this.deviceKey);
-		this.storage.setItem(randomPasswordKey, this.randomPassword);
-		this.storage.setItem(deviceGroupKeyKey, this.deviceGroupKey);
-	};
-
-	/**
-  * This is used to get current device key and device group and device password
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.getCachedDeviceKeyAndPassword = function getCachedDeviceKeyAndPassword() {
-		var keyPrefix = 'CognitoIdentityServiceProvider.' + this.pool.getClientId() + '.' + this.username;
-		var deviceKeyKey = keyPrefix + '.deviceKey';
-		var randomPasswordKey = keyPrefix + '.randomPasswordKey';
-		var deviceGroupKeyKey = keyPrefix + '.deviceGroupKey';
-
-		if (this.storage.getItem(deviceKeyKey)) {
-			this.deviceKey = this.storage.getItem(deviceKeyKey);
-			this.randomPassword = this.storage.getItem(randomPasswordKey);
-			this.deviceGroupKey = this.storage.getItem(deviceGroupKeyKey);
-		}
-	};
-
-	/**
-  * This is used to clear the device key info from local storage
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.clearCachedDeviceKeyAndPassword = function clearCachedDeviceKeyAndPassword() {
-		var keyPrefix = 'CognitoIdentityServiceProvider.' + this.pool.getClientId() + '.' + this.username;
-		var deviceKeyKey = keyPrefix + '.deviceKey';
-		var randomPasswordKey = keyPrefix + '.randomPasswordKey';
-		var deviceGroupKeyKey = keyPrefix + '.deviceGroupKey';
-
-		this.storage.removeItem(deviceKeyKey);
-		this.storage.removeItem(randomPasswordKey);
-		this.storage.removeItem(deviceGroupKeyKey);
-	};
-
-	/**
-  * This is used to clear the session tokens from local storage
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.clearCachedTokens = function clearCachedTokens() {
-		var keyPrefix = 'CognitoIdentityServiceProvider.' + this.pool.getClientId();
-		var idTokenKey = keyPrefix + '.' + this.username + '.idToken';
-		var accessTokenKey = keyPrefix + '.' + this.username + '.accessToken';
-		var refreshTokenKey = keyPrefix + '.' + this.username + '.refreshToken';
-		var lastUserKey = keyPrefix + '.LastAuthUser';
-		var clockDriftKey = keyPrefix + '.' + this.username + '.clockDrift';
-
-		this.storage.removeItem(idTokenKey);
-		this.storage.removeItem(accessTokenKey);
-		this.storage.removeItem(refreshTokenKey);
-		this.storage.removeItem(lastUserKey);
-		this.storage.removeItem(clockDriftKey);
-	};
-
-	/**
-  * This is used to build a user session from tokens retrieved in the authentication result
-  * @param {object} authResult Successful auth response from server.
-  * @returns {CognitoUserSession} The new user session.
-  * @private
-  */
-
-
-	CognitoUser.prototype.getCognitoUserSession = function getCognitoUserSession(authResult) {
-		var idToken = new __WEBPACK_IMPORTED_MODULE_8__CognitoIdToken__["a" /* default */](authResult);
-		var accessToken = new __WEBPACK_IMPORTED_MODULE_7__CognitoAccessToken__["a" /* default */](authResult);
-		var refreshToken = new __WEBPACK_IMPORTED_MODULE_9__CognitoRefreshToken__["a" /* default */](authResult);
-
-		var sessionData = {
-			IdToken: idToken,
-			AccessToken: accessToken,
-			RefreshToken: refreshToken
-		};
-
-		return new __WEBPACK_IMPORTED_MODULE_10__CognitoUserSession__["a" /* default */](sessionData);
-	};
-
-	/**
-  * This is used to initiate a forgot password request
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {inputVerificationCode?} callback.inputVerificationCode
-  *    Optional callback raised instead of onSuccess with response data.
-  * @param {onSuccess} callback.onSuccess Called on success.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.forgotPassword = function forgotPassword(callback) {
-		var jsonReq = {
-			ClientId: this.pool.getClientId(),
-			Username: this.username
-		};
-		if (this.getUserContextData()) {
-			jsonReq.UserContextData = this.getUserContextData();
-		}
-		this.client.request('ForgotPassword', jsonReq, function (err, data) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-			if (typeof callback.inputVerificationCode === 'function') {
-				return callback.inputVerificationCode(data);
-			}
-			return callback.onSuccess(data);
-		});
-	};
-
-	/**
-  * This is used to confirm a new password using a confirmationCode
-  * @param {string} confirmationCode Code entered by user.
-  * @param {string} newPassword Confirm new password.
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {onSuccess<void>} callback.onSuccess Called on success.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.confirmPassword = function confirmPassword(confirmationCode, newPassword, callback) {
-		var jsonReq = {
-			ClientId: this.pool.getClientId(),
-			Username: this.username,
-			ConfirmationCode: confirmationCode,
-			Password: newPassword
-		};
-		if (this.getUserContextData()) {
-			jsonReq.UserContextData = this.getUserContextData();
-		}
-		this.client.request('ConfirmForgotPassword', jsonReq, function (err) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-			return callback.onSuccess();
-		});
-	};
-
-	/**
-  * This is used to initiate an attribute confirmation request
-  * @param {string} attributeName User attribute that needs confirmation.
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {inputVerificationCode} callback.inputVerificationCode Called on success.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.getAttributeVerificationCode = function getAttributeVerificationCode(attributeName, callback) {
-		if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
-			return callback.onFailure(new Error('User is not authenticated'));
-		}
-
-		this.client.request('GetUserAttributeVerificationCode', {
-			AttributeName: attributeName,
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
-		}, function (err, data) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-			if (typeof callback.inputVerificationCode === 'function') {
-				return callback.inputVerificationCode(data);
-			}
-			return callback.onSuccess();
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used to confirm an attribute using a confirmation code
-  * @param {string} attributeName Attribute being confirmed.
-  * @param {string} confirmationCode Code entered by user.
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {onSuccess<string>} callback.onSuccess Called on success.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.verifyAttribute = function verifyAttribute(attributeName, confirmationCode, callback) {
-		if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
-			return callback.onFailure(new Error('User is not authenticated'));
-		}
-
-		this.client.request('VerifyUserAttribute', {
-			AttributeName: attributeName,
-			Code: confirmationCode,
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
-		}, function (err) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-			return callback.onSuccess('SUCCESS');
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used to get the device information using the current device key
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {onSuccess<*>} callback.onSuccess Called on success with device data.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.getDevice = function getDevice(callback) {
-		if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
-			return callback.onFailure(new Error('User is not authenticated'));
-		}
-
-		this.client.request('GetDevice', {
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
-			DeviceKey: this.deviceKey
-		}, function (err, data) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-			return callback.onSuccess(data);
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used to forget a specific device
-  * @param {string} deviceKey Device key.
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {onSuccess<string>} callback.onSuccess Called on success.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.forgetSpecificDevice = function forgetSpecificDevice(deviceKey, callback) {
-		if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
-			return callback.onFailure(new Error('User is not authenticated'));
-		}
-
-		this.client.request('ForgetDevice', {
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
-			DeviceKey: deviceKey
-		}, function (err) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-			return callback.onSuccess('SUCCESS');
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used to forget the current device
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {onSuccess<string>} callback.onSuccess Called on success.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.forgetDevice = function forgetDevice(callback) {
-		var _this12 = this;
-
-		this.forgetSpecificDevice(this.deviceKey, {
-			onFailure: callback.onFailure,
-			onSuccess: function onSuccess(result) {
-				_this12.deviceKey = null;
-				_this12.deviceGroupKey = null;
-				_this12.randomPassword = null;
-				_this12.clearCachedDeviceKeyAndPassword();
-				return callback.onSuccess(result);
-			}
-		});
-	};
-
-	/**
-  * This is used to set the device status as remembered
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {onSuccess<string>} callback.onSuccess Called on success.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.setDeviceStatusRemembered = function setDeviceStatusRemembered(callback) {
-		if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
-			return callback.onFailure(new Error('User is not authenticated'));
-		}
-
-		this.client.request('UpdateDeviceStatus', {
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
-			DeviceKey: this.deviceKey,
-			DeviceRememberedStatus: 'remembered'
-		}, function (err) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-			return callback.onSuccess('SUCCESS');
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used to set the device status as not remembered
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {onSuccess<string>} callback.onSuccess Called on success.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.setDeviceStatusNotRemembered = function setDeviceStatusNotRemembered(callback) {
-		if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
-			return callback.onFailure(new Error('User is not authenticated'));
-		}
-
-		this.client.request('UpdateDeviceStatus', {
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
-			DeviceKey: this.deviceKey,
-			DeviceRememberedStatus: 'not_remembered'
-		}, function (err) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-			return callback.onSuccess('SUCCESS');
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used to list all devices for a user
-  *
-  * @param {int} limit the number of devices returned in a call
-  * @param {string} paginationToken the pagination token in case any was returned before
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {onSuccess<*>} callback.onSuccess Called on success with device list.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.listDevices = function listDevices(limit, paginationToken, callback) {
-		if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
-			return callback.onFailure(new Error('User is not authenticated'));
-		}
-
-		this.client.request('ListDevices', {
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
-			Limit: limit,
-			PaginationToken: paginationToken
-		}, function (err, data) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-			return callback.onSuccess(data);
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used to globally revoke all tokens issued to a user
-  * @param {object} callback Result callback map.
-  * @param {onFailure} callback.onFailure Called on any error.
-  * @param {onSuccess<string>} callback.onSuccess Called on success.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.globalSignOut = function globalSignOut(callback) {
-		var _this13 = this;
-
-		if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
-			return callback.onFailure(new Error('User is not authenticated'));
-		}
-
-		this.client.request('GlobalSignOut', {
-			AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
-		}, function (err) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-			_this13.clearCachedUser();
-			return callback.onSuccess('SUCCESS');
-		});
-		return undefined;
-	};
-
-	/**
-  * This is used for the user to signOut of the application and clear the cached tokens.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.signOut = function signOut() {
-		this.signInUserSession = null;
-		this.clearCachedUser();
-	};
-
-	/**
-  * This is used by a user trying to select a given MFA
-  * @param {string} answerChallenge the mfa the user wants
-  * @param {nodeCallback<string>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.sendMFASelectionAnswer = function sendMFASelectionAnswer(answerChallenge, callback) {
-		var _this14 = this;
-
-		var challengeResponses = {};
-		challengeResponses.USERNAME = this.username;
-		challengeResponses.ANSWER = answerChallenge;
-
-		var jsonReq = {
-			ChallengeName: 'SELECT_MFA_TYPE',
-			ChallengeResponses: challengeResponses,
-			ClientId: this.pool.getClientId(),
-			Session: this.Session
-		};
-		if (this.getUserContextData()) {
-			jsonReq.UserContextData = this.getUserContextData();
-		}
-		this.client.request('RespondToAuthChallenge', jsonReq, function (err, data) {
-			if (err) {
-				return callback.onFailure(err);
-			}
-			_this14.Session = data.Session;
-			if (answerChallenge === 'SMS_MFA') {
-				return callback.mfaRequired(data.challengeName, data.challengeParameters);
-			}
-			if (answerChallenge === 'SOFTWARE_TOKEN_MFA') {
-				return callback.totpRequired(data.challengeName, data.challengeParameters);
-			}
-			return undefined;
-		});
-	};
-
-	/**
-  * This returns the user context data for advanced security feature.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.getUserContextData = function getUserContextData() {
-		var pool = this.pool;
-		return pool.getUserContextData(this.username);
-	};
-
-	/**
-  * This is used by an authenticated or a user trying to authenticate to associate a TOTP MFA
-  * @param {nodeCallback<string>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.associateSoftwareToken = function associateSoftwareToken(callback) {
-		var _this15 = this;
-
-		if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
-			this.client.request('AssociateSoftwareToken', {
-				Session: this.Session
-			}, function (err, data) {
-				if (err) {
-					return callback.onFailure(err);
-				}
-				_this15.Session = data.Session;
-				return callback.associateSecretCode(data.SecretCode);
-			});
-		} else {
-			this.client.request('AssociateSoftwareToken', {
-				AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
-			}, function (err, data) {
-				if (err) {
-					return callback.onFailure(err);
-				}
-				return callback.associateSecretCode(data.SecretCode);
-			});
-		}
-	};
-
-	/**
-  * This is used by an authenticated or a user trying to authenticate to verify a TOTP MFA
-  * @param {string} totpCode The MFA code entered by the user.
-  * @param {string} friendlyDeviceName The device name we are assigning to the device.
-  * @param {nodeCallback<string>} callback Called on success or error.
-  * @returns {void}
-  */
-
-
-	CognitoUser.prototype.verifySoftwareToken = function verifySoftwareToken(totpCode, friendlyDeviceName, callback) {
-		var _this16 = this;
-
-		if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
-			this.client.request('VerifySoftwareToken', {
-				Session: this.Session,
-				UserCode: totpCode,
-				FriendlyDeviceName: friendlyDeviceName
-			}, function (err, data) {
-				if (err) {
-					return callback.onFailure(err);
-				}
-				_this16.Session = data.Session;
-				var challengeResponses = {};
-				challengeResponses.USERNAME = _this16.username;
-				var jsonReq = {
-					ChallengeName: 'MFA_SETUP',
-					ClientId: _this16.pool.getClientId(),
-					ChallengeResponses: challengeResponses,
-					Session: _this16.Session
-				};
-				if (_this16.getUserContextData()) {
-					jsonReq.UserContextData = _this16.getUserContextData();
-				}
-				_this16.client.request('RespondToAuthChallenge', jsonReq, function (errRespond, dataRespond) {
-					if (errRespond) {
-						return callback.onFailure(errRespond);
-					}
-					_this16.signInUserSession = _this16.getCognitoUserSession(dataRespond.AuthenticationResult);
-					_this16.cacheTokens();
-					return callback.onSuccess(_this16.signInUserSession);
-				});
-				return undefined;
-			});
-		} else {
-			this.client.request('VerifySoftwareToken', {
-				AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
-				UserCode: totpCode,
-				FriendlyDeviceName: friendlyDeviceName
-			}, function (err, data) {
-				if (err) {
-					return callback.onFailure(err);
-				}
-				return callback.onSuccess(data);
-			});
-		}
-	};
-
-	return CognitoUser;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (CognitoUser);
-
-/***/ }),
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/*!
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- *
- *     http://aws.amazon.com/asl/
- *
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License.
- */
-
-/** @class */
-var CognitoUserSession = function () {
-	/**
-  * Constructs a new CognitoUserSession object
-  * @param {CognitoIdToken} IdToken The session's Id token.
-  * @param {CognitoRefreshToken=} RefreshToken The session's refresh token.
-  * @param {CognitoAccessToken} AccessToken The session's access token.
-  * @param {int} ClockDrift The saved computer's clock drift or undefined to force calculation.
-  */
-	function CognitoUserSession() {
-		var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-		    IdToken = _ref.IdToken,
-		    RefreshToken = _ref.RefreshToken,
-		    AccessToken = _ref.AccessToken,
-		    ClockDrift = _ref.ClockDrift;
-
-		_classCallCheck(this, CognitoUserSession);
-
-		if (AccessToken == null || IdToken == null) {
-			throw new Error('Id token and Access Token must be present.');
-		}
-
-		this.idToken = IdToken;
-		this.refreshToken = RefreshToken;
-		this.accessToken = AccessToken;
-		this.clockDrift = ClockDrift === undefined ? this.calculateClockDrift() : ClockDrift;
-	}
-
-	/**
-  * @returns {CognitoIdToken} the session's Id token
-  */
-
-
-	CognitoUserSession.prototype.getIdToken = function getIdToken() {
-		return this.idToken;
-	};
-
-	/**
-  * @returns {CognitoRefreshToken} the session's refresh token
-  */
-
-
-	CognitoUserSession.prototype.getRefreshToken = function getRefreshToken() {
-		return this.refreshToken;
-	};
-
-	/**
-  * @returns {CognitoAccessToken} the session's access token
-  */
-
-
-	CognitoUserSession.prototype.getAccessToken = function getAccessToken() {
-		return this.accessToken;
-	};
-
-	/**
-  * @returns {int} the session's clock drift
-  */
-
-
-	CognitoUserSession.prototype.getClockDrift = function getClockDrift() {
-		return this.clockDrift;
-	};
-
-	/**
-  * @returns {int} the computer's clock drift
-  */
-
-
-	CognitoUserSession.prototype.calculateClockDrift = function calculateClockDrift() {
-		var now = Math.floor(new Date() / 1000);
-		var iat = Math.min(this.accessToken.getIssuedAt(), this.idToken.getIssuedAt());
-
-		return now - iat;
-	};
-
-	/**
-  * Checks to see if the session is still valid based on session expiry information found
-  * in tokens and the current time (adjusted with clock drift)
-  * @returns {boolean} if the session is still valid
-  */
-
-
-	CognitoUserSession.prototype.isValid = function isValid() {
-		var now = Math.floor(new Date() / 1000);
-		var adjusted = now - this.clockDrift;
-
-		return adjusted < this.accessToken.getExpiration() && adjusted < this.idToken.getExpiration();
-	};
-
-	return CognitoUserSession;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (CognitoUserSession);
-
-/***/ }),
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/*!
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- *
- *     http://aws.amazon.com/asl/
- *
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License.
- */
-
-var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-var weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-/** @class */
-
-var DateHelper = function () {
-	function DateHelper() {
-		_classCallCheck(this, DateHelper);
-	}
-
-	/**
-  * @returns {string} The current time in "ddd MMM D HH:mm:ss UTC YYYY" format.
-  */
-	DateHelper.prototype.getNowString = function getNowString() {
-		var now = new Date();
-
-		var weekDay = weekNames[now.getUTCDay()];
-		var month = monthNames[now.getUTCMonth()];
-		var day = now.getUTCDate();
-
-		var hours = now.getUTCHours();
-		if (hours < 10) {
-			hours = '0' + hours;
-		}
-
-		var minutes = now.getUTCMinutes();
-		if (minutes < 10) {
-			minutes = '0' + minutes;
-		}
-
-		var seconds = now.getUTCSeconds();
-		if (seconds < 10) {
-			seconds = '0' + seconds;
-		}
-
-		var year = now.getUTCFullYear();
-
-		// ddd MMM D HH:mm:ss UTC YYYY
-		var dateNow = weekDay + ' ' + month + ' ' + day + ' ' + hours + ':' + minutes + ':' + seconds + ' UTC ' + year;
-
-		return dateNow;
-	};
-
-	return DateHelper;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (DateHelper);
-
-/***/ }),
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/*!
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- *
- *     http://aws.amazon.com/asl/
- *
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License.
- */
-
-/** @class */
-var CognitoUserAttribute = function () {
-	/**
-  * Constructs a new CognitoUserAttribute object
-  * @param {string=} Name The record's name
-  * @param {string=} Value The record's value
-  */
-	function CognitoUserAttribute() {
-		var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-		    Name = _ref.Name,
-		    Value = _ref.Value;
-
-		_classCallCheck(this, CognitoUserAttribute);
-
-		this.Name = Name || '';
-		this.Value = Value || '';
-	}
-
-	/**
-  * @returns {string} the record's value.
-  */
-
-
-	CognitoUserAttribute.prototype.getValue = function getValue() {
-		return this.Value;
-	};
-
-	/**
-  * Sets the record's value.
-  * @param {string} value The new value.
-  * @returns {CognitoUserAttribute} The record for method chaining.
-  */
-
-
-	CognitoUserAttribute.prototype.setValue = function setValue(value) {
-		this.Value = value;
-		return this;
-	};
-
-	/**
-  * @returns {string} the record's name.
-  */
-
-
-	CognitoUserAttribute.prototype.getName = function getName() {
-		return this.Name;
-	};
-
-	/**
-  * Sets the record's name
-  * @param {string} name The new name.
-  * @returns {CognitoUserAttribute} The record for method chaining.
-  */
-
-
-	CognitoUserAttribute.prototype.setName = function setName(name) {
-		this.Name = name;
-		return this;
-	};
-
-	/**
-  * @returns {string} a string representation of the record.
-  */
-
-
-	CognitoUserAttribute.prototype.toString = function toString() {
-		return JSON.stringify(this);
-	};
-
-	/**
-  * @returns {object} a flat object representing the record.
-  */
-
-
-	CognitoUserAttribute.prototype.toJSON = function toJSON() {
-		return {
-			Name: this.Name,
-			Value: this.Value
-		};
-	};
-
-	return CognitoUserAttribute;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (CognitoUserAttribute);
-
-/***/ }),
-/* 15 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/*!
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- *
- *     http://aws.amazon.com/asl/
- *
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License.
- */
-
-var dataMemory = {};
-
-/** @class */
-
-var MemoryStorage = function () {
-	function MemoryStorage() {
-		_classCallCheck(this, MemoryStorage);
-	}
-
-	/**
-  * This is used to set a specific item in storage
-  * @param {string} key - the key for the item
-  * @param {object} value - the value
-  * @returns {string} value that was set
-  */
-	MemoryStorage.setItem = function setItem(key, value) {
-		dataMemory[key] = value;
-		return dataMemory[key];
-	};
-
-	/**
-  * This is used to get a specific key from storage
-  * @param {string} key - the key for the item
-  * This is used to clear the storage
-  * @returns {string} the data item
-  */
-
-
-	MemoryStorage.getItem = function getItem(key) {
-		return Object.prototype.hasOwnProperty.call(dataMemory, key) ? dataMemory[key] : undefined;
-	};
-
-	/**
-  * This is used to remove an item from storage
-  * @param {string} key - the key being set
-  * @returns {string} value - value that was deleted
-  */
-
-
-	MemoryStorage.removeItem = function removeItem(key) {
-		return delete dataMemory[key];
-	};
-
-	/**
-  * This is used to clear the storage
-  * @returns {string} nothing
-  */
-
-
-	MemoryStorage.clear = function clear() {
-		dataMemory = {};
-		return dataMemory;
-	};
-
-	return MemoryStorage;
-}();
-
-/** @class */
-
-
-var StorageHelper = function () {
-	/**
-  * This is used to get a storage object
-  * @returns {object} the storage
-  */
-	function StorageHelper() {
-		_classCallCheck(this, StorageHelper);
-
-		try {
-			this.storageWindow = window.localStorage;
-			this.storageWindow.setItem('aws.cognito.test-ls', 1);
-			this.storageWindow.removeItem('aws.cognito.test-ls');
-		} catch (exception) {
-			this.storageWindow = MemoryStorage;
-		}
-	}
-
-	/**
-  * This is used to return the storage
-  * @returns {object} the storage
-  */
-
-
-	StorageHelper.prototype.getStorage = function getStorage() {
-		return this.storageWindow;
-	};
-
-	return StorageHelper;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (StorageHelper);
-
-/***/ }),
-/* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__AuthenticationDetails__ = __webpack_require__(17);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "AuthenticationDetails", function() { return __WEBPACK_IMPORTED_MODULE_0__AuthenticationDetails__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__AuthenticationHelper__ = __webpack_require__(2);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "AuthenticationHelper", function() { return __WEBPACK_IMPORTED_MODULE_1__AuthenticationHelper__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__CognitoAccessToken__ = __webpack_require__(7);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "CognitoAccessToken", function() { return __WEBPACK_IMPORTED_MODULE_2__CognitoAccessToken__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__CognitoIdToken__ = __webpack_require__(9);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "CognitoIdToken", function() { return __WEBPACK_IMPORTED_MODULE_3__CognitoIdToken__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__CognitoRefreshToken__ = __webpack_require__(10);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "CognitoRefreshToken", function() { return __WEBPACK_IMPORTED_MODULE_4__CognitoRefreshToken__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__CognitoUser__ = __webpack_require__(11);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "CognitoUser", function() { return __WEBPACK_IMPORTED_MODULE_5__CognitoUser__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__CognitoUserAttribute__ = __webpack_require__(14);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "CognitoUserAttribute", function() { return __WEBPACK_IMPORTED_MODULE_6__CognitoUserAttribute__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__CognitoUserPool__ = __webpack_require__(24);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "CognitoUserPool", function() { return __WEBPACK_IMPORTED_MODULE_7__CognitoUserPool__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__CognitoUserSession__ = __webpack_require__(12);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "CognitoUserSession", function() { return __WEBPACK_IMPORTED_MODULE_8__CognitoUserSession__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__CookieStorage__ = __webpack_require__(27);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "CookieStorage", function() { return __WEBPACK_IMPORTED_MODULE_9__CookieStorage__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__DateHelper__ = __webpack_require__(13);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "DateHelper", function() { return __WEBPACK_IMPORTED_MODULE_10__DateHelper__["a"]; });
-/*!
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- *
- *     http://aws.amazon.com/asl/
- *
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/*!
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- *
- *     http://aws.amazon.com/asl/
- *
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License.
- */
-
-/** @class */
-var AuthenticationDetails = function () {
-	/**
-  * Constructs a new AuthenticationDetails object
-  * @param {object=} data Creation options.
-  * @param {string} data.Username User being authenticated.
-  * @param {string} data.Password Plain-text password to authenticate with.
-  * @param {(AttributeArg[])?} data.ValidationData Application extra metadata.
-  * @param {(AttributeArg[])?} data.AuthParamaters Authentication paramaters for custom auth.
-  */
-	function AuthenticationDetails(data) {
-		_classCallCheck(this, AuthenticationDetails);
-
-		var _ref = data || {},
-		    ValidationData = _ref.ValidationData,
-		    Username = _ref.Username,
-		    Password = _ref.Password,
-		    AuthParameters = _ref.AuthParameters;
-
-		this.validationData = ValidationData || {};
-		this.authParameters = AuthParameters || {};
-		this.username = Username;
-		this.password = Password;
-	}
-
-	/**
-  * @returns {string} the record's username
-  */
-
-
-	AuthenticationDetails.prototype.getUsername = function getUsername() {
-		return this.username;
-	};
-
-	/**
-  * @returns {string} the record's password
-  */
-
-
-	AuthenticationDetails.prototype.getPassword = function getPassword() {
-		return this.password;
-	};
-
-	/**
-  * @returns {Array} the record's validationData
-  */
-
-
-	AuthenticationDetails.prototype.getValidationData = function getValidationData() {
-		return this.validationData;
-	};
-
-	/**
-  * @returns {Array} the record's authParameters
-  */
-
-
-	AuthenticationDetails.prototype.getAuthParameters = function getAuthParameters() {
-		return this.authParameters;
-	};
-
-	return AuthenticationDetails;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (AuthenticationDetails);
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.byteLength = byteLength
-exports.toByteArray = toByteArray
-exports.fromByteArray = fromByteArray
-
-var lookup = []
-var revLookup = []
-var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array
-
-var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-for (var i = 0, len = code.length; i < len; ++i) {
-  lookup[i] = code[i]
-  revLookup[code.charCodeAt(i)] = i
-}
-
-// Support decoding URL-safe base64 strings, as Node.js does.
-// See: https://en.wikipedia.org/wiki/Base64#URL_applications
-revLookup['-'.charCodeAt(0)] = 62
-revLookup['_'.charCodeAt(0)] = 63
-
-function getLens (b64) {
-  var len = b64.length
-
-  if (len % 4 > 0) {
-    throw new Error('Invalid string. Length must be a multiple of 4')
-  }
-
-  // Trim off extra bytes after placeholder bytes are found
-  // See: https://github.com/beatgammit/base64-js/issues/42
-  var validLen = b64.indexOf('=')
-  if (validLen === -1) validLen = len
-
-  var placeHoldersLen = validLen === len
-    ? 0
-    : 4 - (validLen % 4)
-
-  return [validLen, placeHoldersLen]
-}
-
-// base64 is 4/3 + up to two characters of the original data
-function byteLength (b64) {
-  var lens = getLens(b64)
-  var validLen = lens[0]
-  var placeHoldersLen = lens[1]
-  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
-}
-
-function _byteLength (b64, validLen, placeHoldersLen) {
-  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
-}
-
-function toByteArray (b64) {
-  var tmp
-  var lens = getLens(b64)
-  var validLen = lens[0]
-  var placeHoldersLen = lens[1]
-
-  var arr = new Arr(_byteLength(b64, validLen, placeHoldersLen))
-
-  var curByte = 0
-
-  // if there are placeholders, only get up to the last complete 4 chars
-  var len = placeHoldersLen > 0
-    ? validLen - 4
-    : validLen
-
-  var i
-  for (i = 0; i < len; i += 4) {
-    tmp =
-      (revLookup[b64.charCodeAt(i)] << 18) |
-      (revLookup[b64.charCodeAt(i + 1)] << 12) |
-      (revLookup[b64.charCodeAt(i + 2)] << 6) |
-      revLookup[b64.charCodeAt(i + 3)]
-    arr[curByte++] = (tmp >> 16) & 0xFF
-    arr[curByte++] = (tmp >> 8) & 0xFF
-    arr[curByte++] = tmp & 0xFF
-  }
-
-  if (placeHoldersLen === 2) {
-    tmp =
-      (revLookup[b64.charCodeAt(i)] << 2) |
-      (revLookup[b64.charCodeAt(i + 1)] >> 4)
-    arr[curByte++] = tmp & 0xFF
-  }
-
-  if (placeHoldersLen === 1) {
-    tmp =
-      (revLookup[b64.charCodeAt(i)] << 10) |
-      (revLookup[b64.charCodeAt(i + 1)] << 4) |
-      (revLookup[b64.charCodeAt(i + 2)] >> 2)
-    arr[curByte++] = (tmp >> 8) & 0xFF
-    arr[curByte++] = tmp & 0xFF
-  }
-
-  return arr
-}
-
-function tripletToBase64 (num) {
-  return lookup[num >> 18 & 0x3F] +
-    lookup[num >> 12 & 0x3F] +
-    lookup[num >> 6 & 0x3F] +
-    lookup[num & 0x3F]
-}
-
-function encodeChunk (uint8, start, end) {
-  var tmp
-  var output = []
-  for (var i = start; i < end; i += 3) {
-    tmp =
-      ((uint8[i] << 16) & 0xFF0000) +
-      ((uint8[i + 1] << 8) & 0xFF00) +
-      (uint8[i + 2] & 0xFF)
-    output.push(tripletToBase64(tmp))
-  }
-  return output.join('')
-}
-
-function fromByteArray (uint8) {
-  var tmp
-  var len = uint8.length
-  var extraBytes = len % 3 // if we have 1 byte left, pad 2 bytes
-  var parts = []
-  var maxChunkLength = 16383 // must be multiple of 3
-
-  // go through the array every three bytes, we'll deal with trailing stuff later
-  for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
-    parts.push(encodeChunk(
-      uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)
-    ))
-  }
-
-  // pad the end with zeros, but make sure to not forget the extra bytes
-  if (extraBytes === 1) {
-    tmp = uint8[len - 1]
-    parts.push(
-      lookup[tmp >> 2] +
-      lookup[(tmp << 4) & 0x3F] +
-      '=='
-    )
-  } else if (extraBytes === 2) {
-    tmp = (uint8[len - 2] << 8) + uint8[len - 1]
-    parts.push(
-      lookup[tmp >> 10] +
-      lookup[(tmp >> 4) & 0x3F] +
-      lookup[(tmp << 2) & 0x3F] +
-      '='
-    )
-  }
-
-  return parts.join('')
-}
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports) {
-
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = (nBytes * 8) - mLen - 1
@@ -7121,8 +2593,9 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 21 */
-/***/ (function(module, exports) {
+
+/***/ 906:
+/***/ ((module) => {
 
 var toString = {}.toString;
 
@@ -7132,738 +2605,17 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
 
-;(function (root, factory) {
-	if (true) {
-		// CommonJS
-		module.exports = exports = factory(__webpack_require__(0));
-	}
-	else if (typeof define === "function" && define.amd) {
-		// AMD
-		define(["./core"], factory);
-	}
-	else {
-		// Global (browser)
-		factory(root.CryptoJS);
-	}
-}(this, function (CryptoJS) {
+/***/ 405:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-	(function () {
-	    // Shortcuts
-	    var C = CryptoJS;
-	    var C_lib = C.lib;
-	    var Base = C_lib.Base;
-	    var C_enc = C.enc;
-	    var Utf8 = C_enc.Utf8;
-	    var C_algo = C.algo;
+module.exports = self.fetch || (self.fetch = (__webpack_require__(677)["default"]) || __webpack_require__(677));
 
-	    /**
-	     * HMAC algorithm.
-	     */
-	    var HMAC = C_algo.HMAC = Base.extend({
-	        /**
-	         * Initializes a newly created HMAC.
-	         *
-	         * @param {Hasher} hasher The hash algorithm to use.
-	         * @param {WordArray|string} key The secret key.
-	         *
-	         * @example
-	         *
-	         *     var hmacHasher = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, key);
-	         */
-	        init: function (hasher, key) {
-	            // Init hasher
-	            hasher = this._hasher = new hasher.init();
-
-	            // Convert string to WordArray, else assume WordArray already
-	            if (typeof key == 'string') {
-	                key = Utf8.parse(key);
-	            }
-
-	            // Shortcuts
-	            var hasherBlockSize = hasher.blockSize;
-	            var hasherBlockSizeBytes = hasherBlockSize * 4;
-
-	            // Allow arbitrary length keys
-	            if (key.sigBytes > hasherBlockSizeBytes) {
-	                key = hasher.finalize(key);
-	            }
-
-	            // Clamp excess bits
-	            key.clamp();
-
-	            // Clone key for inner and outer pads
-	            var oKey = this._oKey = key.clone();
-	            var iKey = this._iKey = key.clone();
-
-	            // Shortcuts
-	            var oKeyWords = oKey.words;
-	            var iKeyWords = iKey.words;
-
-	            // XOR keys with pad constants
-	            for (var i = 0; i < hasherBlockSize; i++) {
-	                oKeyWords[i] ^= 0x5c5c5c5c;
-	                iKeyWords[i] ^= 0x36363636;
-	            }
-	            oKey.sigBytes = iKey.sigBytes = hasherBlockSizeBytes;
-
-	            // Set initial values
-	            this.reset();
-	        },
-
-	        /**
-	         * Resets this HMAC to its initial state.
-	         *
-	         * @example
-	         *
-	         *     hmacHasher.reset();
-	         */
-	        reset: function () {
-	            // Shortcut
-	            var hasher = this._hasher;
-
-	            // Reset
-	            hasher.reset();
-	            hasher.update(this._iKey);
-	        },
-
-	        /**
-	         * Updates this HMAC with a message.
-	         *
-	         * @param {WordArray|string} messageUpdate The message to append.
-	         *
-	         * @return {HMAC} This HMAC instance.
-	         *
-	         * @example
-	         *
-	         *     hmacHasher.update('message');
-	         *     hmacHasher.update(wordArray);
-	         */
-	        update: function (messageUpdate) {
-	            this._hasher.update(messageUpdate);
-
-	            // Chainable
-	            return this;
-	        },
-
-	        /**
-	         * Finalizes the HMAC computation.
-	         * Note that the finalize operation is effectively a destructive, read-once operation.
-	         *
-	         * @param {WordArray|string} messageUpdate (Optional) A final message update.
-	         *
-	         * @return {WordArray} The HMAC.
-	         *
-	         * @example
-	         *
-	         *     var hmac = hmacHasher.finalize();
-	         *     var hmac = hmacHasher.finalize('message');
-	         *     var hmac = hmacHasher.finalize(wordArray);
-	         */
-	        finalize: function (messageUpdate) {
-	            // Shortcut
-	            var hasher = this._hasher;
-
-	            // Compute HMAC
-	            var innerHash = hasher.finalize(messageUpdate);
-	            hasher.reset();
-	            var hmac = hasher.finalize(this._oKey.clone().concat(innerHash));
-
-	            return hmac;
-	        }
-	    });
-	}());
-
-
-}));
 
 /***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
 
-;(function (root, factory) {
-	if (true) {
-		// CommonJS
-		module.exports = exports = factory(__webpack_require__(0));
-	}
-	else if (typeof define === "function" && define.amd) {
-		// AMD
-		define(["./core"], factory);
-	}
-	else {
-		// Global (browser)
-		factory(root.CryptoJS);
-	}
-}(this, function (CryptoJS) {
-
-	(function () {
-	    // Shortcuts
-	    var C = CryptoJS;
-	    var C_lib = C.lib;
-	    var WordArray = C_lib.WordArray;
-	    var C_enc = C.enc;
-
-	    /**
-	     * Base64 encoding strategy.
-	     */
-	    var Base64 = C_enc.Base64 = {
-	        /**
-	         * Converts a word array to a Base64 string.
-	         *
-	         * @param {WordArray} wordArray The word array.
-	         *
-	         * @return {string} The Base64 string.
-	         *
-	         * @static
-	         *
-	         * @example
-	         *
-	         *     var base64String = CryptoJS.enc.Base64.stringify(wordArray);
-	         */
-	        stringify: function (wordArray) {
-	            // Shortcuts
-	            var words = wordArray.words;
-	            var sigBytes = wordArray.sigBytes;
-	            var map = this._map;
-
-	            // Clamp excess bits
-	            wordArray.clamp();
-
-	            // Convert
-	            var base64Chars = [];
-	            for (var i = 0; i < sigBytes; i += 3) {
-	                var byte1 = (words[i >>> 2]       >>> (24 - (i % 4) * 8))       & 0xff;
-	                var byte2 = (words[(i + 1) >>> 2] >>> (24 - ((i + 1) % 4) * 8)) & 0xff;
-	                var byte3 = (words[(i + 2) >>> 2] >>> (24 - ((i + 2) % 4) * 8)) & 0xff;
-
-	                var triplet = (byte1 << 16) | (byte2 << 8) | byte3;
-
-	                for (var j = 0; (j < 4) && (i + j * 0.75 < sigBytes); j++) {
-	                    base64Chars.push(map.charAt((triplet >>> (6 * (3 - j))) & 0x3f));
-	                }
-	            }
-
-	            // Add padding
-	            var paddingChar = map.charAt(64);
-	            if (paddingChar) {
-	                while (base64Chars.length % 4) {
-	                    base64Chars.push(paddingChar);
-	                }
-	            }
-
-	            return base64Chars.join('');
-	        },
-
-	        /**
-	         * Converts a Base64 string to a word array.
-	         *
-	         * @param {string} base64Str The Base64 string.
-	         *
-	         * @return {WordArray} The word array.
-	         *
-	         * @static
-	         *
-	         * @example
-	         *
-	         *     var wordArray = CryptoJS.enc.Base64.parse(base64String);
-	         */
-	        parse: function (base64Str) {
-	            // Shortcuts
-	            var base64StrLength = base64Str.length;
-	            var map = this._map;
-	            var reverseMap = this._reverseMap;
-
-	            if (!reverseMap) {
-	                    reverseMap = this._reverseMap = [];
-	                    for (var j = 0; j < map.length; j++) {
-	                        reverseMap[map.charCodeAt(j)] = j;
-	                    }
-	            }
-
-	            // Ignore padding
-	            var paddingChar = map.charAt(64);
-	            if (paddingChar) {
-	                var paddingIndex = base64Str.indexOf(paddingChar);
-	                if (paddingIndex !== -1) {
-	                    base64StrLength = paddingIndex;
-	                }
-	            }
-
-	            // Convert
-	            return parseLoop(base64Str, base64StrLength, reverseMap);
-
-	        },
-
-	        _map: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
-	    };
-
-	    function parseLoop(base64Str, base64StrLength, reverseMap) {
-	      var words = [];
-	      var nBytes = 0;
-	      for (var i = 0; i < base64StrLength; i++) {
-	          if (i % 4) {
-	              var bits1 = reverseMap[base64Str.charCodeAt(i - 1)] << ((i % 4) * 2);
-	              var bits2 = reverseMap[base64Str.charCodeAt(i)] >>> (6 - (i % 4) * 2);
-	              words[nBytes >>> 2] |= (bits1 | bits2) << (24 - (nBytes % 4) * 8);
-	              nBytes++;
-	          }
-	      }
-	      return WordArray.create(words, nBytes);
-	    }
-	}());
-
-
-	return CryptoJS.enc.Base64;
-
-}));
-
-/***/ }),
-/* 24 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Client__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__CognitoUser__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__StorageHelper__ = __webpack_require__(15);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/*!
- * Copyright 2016 Amazon.com,
- * Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Amazon Software License (the "License").
- * You may not use this file except in compliance with the
- * License. A copy of the License is located at
- *
- *     http://aws.amazon.com/asl/
- *
- * or in the "license" file accompanying this file. This file is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, express or implied. See the License
- * for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
-
-
-/** @class */
-
-var CognitoUserPool = function () {
-	/**
-  * Constructs a new CognitoUserPool object
-  * @param {object} data Creation options.
-  * @param {string} data.UserPoolId Cognito user pool id.
-  * @param {string} data.ClientId User pool application client id.
-  * @param {object} data.Storage Optional storage object.
-  * @param {boolean} data.AdvancedSecurityDataCollectionFlag Optional:
-  *        boolean flag indicating if the data collection is enabled
-  *        to support cognito advanced security features. By default, this
-  *        flag is set to true.
-  */
-	function CognitoUserPool(data) {
-		_classCallCheck(this, CognitoUserPool);
-
-		var _ref = data || {},
-		    UserPoolId = _ref.UserPoolId,
-		    ClientId = _ref.ClientId,
-		    endpoint = _ref.endpoint,
-		    AdvancedSecurityDataCollectionFlag = _ref.AdvancedSecurityDataCollectionFlag;
-
-		if (!UserPoolId || !ClientId) {
-			throw new Error('Both UserPoolId and ClientId are required.');
-		}
-		if (!/^[\w-]+_.+$/.test(UserPoolId)) {
-			throw new Error('Invalid UserPoolId format.');
-		}
-		var region = UserPoolId.split('_')[0];
-
-		this.userPoolId = UserPoolId;
-		this.clientId = ClientId;
-
-		this.client = new __WEBPACK_IMPORTED_MODULE_0__Client__["a" /* default */](region, endpoint);
-
-		/**
-   * By default, AdvancedSecurityDataCollectionFlag is set to true,
-   * if no input value is provided.
-   */
-		this.advancedSecurityDataCollectionFlag = AdvancedSecurityDataCollectionFlag !== false;
-
-		this.storage = data.Storage || new __WEBPACK_IMPORTED_MODULE_2__StorageHelper__["a" /* default */]().getStorage();
-	}
-
-	/**
-  * @returns {string} the user pool id
-  */
-
-
-	CognitoUserPool.prototype.getUserPoolId = function getUserPoolId() {
-		return this.userPoolId;
-	};
-
-	/**
-  * @returns {string} the client id
-  */
-
-
-	CognitoUserPool.prototype.getClientId = function getClientId() {
-		return this.clientId;
-	};
-
-	/**
-  * @typedef {object} SignUpResult
-  * @property {CognitoUser} user New user.
-  * @property {bool} userConfirmed If the user is already confirmed.
-  */
-	/**
-  * method for signing up a user
-  * @param {string} username User's username.
-  * @param {string} password Plain-text initial password entered by user.
-  * @param {(AttributeArg[])=} userAttributes New user attributes.
-  * @param {(AttributeArg[])=} validationData Application metadata.
-  * @param {nodeCallback<SignUpResult>} callback Called on error or with the new user.
-  * @returns {void}
-  */
-
-
-	CognitoUserPool.prototype.signUp = function signUp(username, password, userAttributes, validationData, callback) {
-		var _this = this;
-
-		var jsonReq = {
-			ClientId: this.clientId,
-			Username: username,
-			Password: password,
-			UserAttributes: userAttributes,
-			ValidationData: validationData
-		};
-		if (this.getUserContextData(username)) {
-			jsonReq.UserContextData = this.getUserContextData(username);
-		}
-		this.client.request('SignUp', jsonReq, function (err, data) {
-			if (err) {
-				return callback(err, null);
-			}
-
-			var cognitoUser = {
-				Username: username,
-				Pool: _this,
-				Storage: _this.storage
-			};
-
-			var returnData = {
-				user: new __WEBPACK_IMPORTED_MODULE_1__CognitoUser__["a" /* default */](cognitoUser),
-				userConfirmed: data.UserConfirmed,
-				userSub: data.UserSub,
-				codeDeliveryDetails: data.CodeDeliveryDetails
-			};
-
-			return callback(null, returnData);
-		});
-	};
-
-	/**
-  * method for getting the current user of the application from the local storage
-  *
-  * @returns {CognitoUser} the user retrieved from storage
-  */
-
-
-	CognitoUserPool.prototype.getCurrentUser = function getCurrentUser() {
-		var lastUserKey = 'CognitoIdentityServiceProvider.' + this.clientId + '.LastAuthUser';
-
-		var lastAuthUser = this.storage.getItem(lastUserKey);
-		if (lastAuthUser) {
-			var cognitoUser = {
-				Username: lastAuthUser,
-				Pool: this,
-				Storage: this.storage
-			};
-
-			return new __WEBPACK_IMPORTED_MODULE_1__CognitoUser__["a" /* default */](cognitoUser);
-		}
-
-		return null;
-	};
-
-	/**
-  * This method returns the encoded data string used for cognito advanced security feature.
-  * This would be generated only when developer has included the JS used for collecting the
-  * data on their client. Please refer to documentation to know more about using AdvancedSecurity
-  * features
-  * @param {string} username the username for the context data
-  * @returns {string} the user context data
-  **/
-
-
-	CognitoUserPool.prototype.getUserContextData = function getUserContextData(username) {
-		if (typeof AmazonCognitoAdvancedSecurityData === 'undefined') {
-			return undefined;
-		}
-		/* eslint-disable */
-		var amazonCognitoAdvancedSecurityDataConst = AmazonCognitoAdvancedSecurityData;
-		/* eslint-enable */
-
-		if (this.advancedSecurityDataCollectionFlag) {
-			var advancedSecurityData = amazonCognitoAdvancedSecurityDataConst.getData(username, this.userPoolId, this.clientId);
-			if (advancedSecurityData) {
-				var userContextData = {
-					EncodedData: advancedSecurityData
-				};
-				return userContextData;
-			}
-		}
-		return {};
-	};
-
-	return CognitoUserPool;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (CognitoUserPool);
-
-/***/ }),
-/* 25 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__UserAgent__ = __webpack_require__(26);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-/** @class */
-
-var Client = function () {
-	/**
-  * Constructs a new AWS Cognito Identity Provider client object
-  * @param {string} region AWS region
-  * @param {string} endpoint endpoint
-  */
-	function Client(region, endpoint) {
-		_classCallCheck(this, Client);
-
-		this.endpoint = endpoint || 'https://cognito-idp.' + region + '.amazonaws.com/';
-		this.userAgent = __WEBPACK_IMPORTED_MODULE_0__UserAgent__["a" /* default */].prototype.userAgent || 'aws-amplify/0.1.x js';
-	}
-
-	/**
-  * Makes an unauthenticated request on AWS Cognito Identity Provider API
-  * using fetch
-  * @param {string} operation API operation
-  * @param {object} params Input parameters
-  * @param {function} callback Callback called when a response is returned
-  * @returns {void}
-  */
-
-
-	Client.prototype.request = function request(operation, params, callback) {
-		var headers = {
-			'Content-Type': 'application/x-amz-json-1.1',
-			'X-Amz-Target': 'AWSCognitoIdentityProviderService.' + operation,
-			'X-Amz-User-Agent': this.userAgent
-		};
-
-		var options = {
-			headers: headers,
-			method: 'POST',
-			mode: 'cors',
-			cache: 'no-cache',
-			body: JSON.stringify(params)
-		};
-
-		var response = void 0;
-		var responseJsonData = void 0;
-
-		fetch(this.endpoint, options).then(function (resp) {
-			response = resp;
-			return resp;
-		}, function (err) {
-			// If error happens here, the request failed
-			// if it is TypeError throw network error
-			if (err instanceof TypeError) {
-				throw new Error('Network error');
-			}
-			throw err;
-		}).then(function (resp) {
-			return resp.json().catch(function () {
-				return {};
-			});
-		}).then(function (data) {
-			// return parsed body stream
-			if (response.ok) return callback(null, data);
-			responseJsonData = data;
-
-			// Taken from aws-sdk-js/lib/protocol/json.js
-			// eslint-disable-next-line no-underscore-dangle
-			var code = (data.__type || data.code).split('#').pop();
-			var error = {
-				code: code,
-				name: code,
-				message: data.message || data.Message || null
-			};
-			return callback(error);
-		}).catch(function (err) {
-			// first check if we have a service error
-			if (response && response.headers && response.headers.get('x-amzn-errortype')) {
-				try {
-					var code = response.headers.get('x-amzn-errortype').split(':')[0];
-					var error = {
-						code: code,
-						name: code,
-						statusCode: response.status,
-						message: response.status ? response.status.toString() : null
-					};
-					return callback(error);
-				} catch (ex) {
-					return callback(err);
-				}
-				// otherwise check if error is Network error
-			} else if (err instanceof Error && err.message === 'Network error') {
-				var _error = {
-					code: 'NetworkError',
-					name: err.name,
-					message: err.message
-				};
-				return callback(_error);
-			} else {
-				return callback(err);
-			}
-		});
-	};
-
-	return Client;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (Client);
-
-/***/ }),
-/* 26 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-// class for defining the amzn user-agent
-/* harmony default export */ __webpack_exports__["a"] = (UserAgent);
-// constructor
-function UserAgent() {}
-// public
-UserAgent.prototype.userAgent = 'aws-amplify/0.1.x js';
-
-/***/ }),
-/* 27 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_js_cookie__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_js_cookie___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_js_cookie__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-/** @class */
-
-var CookieStorage = function () {
-	/**
-  * Constructs a new CookieStorage object
-  * @param {object} data Creation options.
-  * @param {string} data.domain Cookies domain (mandatory).
-  * @param {string} data.path Cookies path (default: '/')
-  * @param {integer} data.expires Cookie expiration (in days, default: 365)
-  * @param {boolean} data.secure Cookie secure flag (default: true)
-  */
-	function CookieStorage(data) {
-		_classCallCheck(this, CookieStorage);
-
-		if (data.domain) {
-			this.domain = data.domain;
-		} else {
-			throw new Error('The domain of cookieStorage can not be undefined.');
-		}
-		if (data.path) {
-			this.path = data.path;
-		} else {
-			this.path = '/';
-		}
-		if (Object.prototype.hasOwnProperty.call(data, 'expires')) {
-			this.expires = data.expires;
-		} else {
-			this.expires = 365;
-		}
-		if (Object.prototype.hasOwnProperty.call(data, 'secure')) {
-			this.secure = data.secure;
-		} else {
-			this.secure = true;
-		}
-	}
-
-	/**
-  * This is used to set a specific item in storage
-  * @param {string} key - the key for the item
-  * @param {object} value - the value
-  * @returns {string} value that was set
-  */
-
-
-	CookieStorage.prototype.setItem = function setItem(key, value) {
-		__WEBPACK_IMPORTED_MODULE_0_js_cookie__["set"](key, value, {
-			path: this.path,
-			expires: this.expires,
-			domain: this.domain,
-			secure: this.secure
-		});
-		return __WEBPACK_IMPORTED_MODULE_0_js_cookie__["get"](key);
-	};
-
-	/**
-  * This is used to get a specific key from storage
-  * @param {string} key - the key for the item
-  * This is used to clear the storage
-  * @returns {string} the data item
-  */
-
-
-	CookieStorage.prototype.getItem = function getItem(key) {
-		return __WEBPACK_IMPORTED_MODULE_0_js_cookie__["get"](key);
-	};
-
-	/**
-  * This is used to remove an item from storage
-  * @param {string} key - the key being set
-  * @returns {string} value - value that was deleted
-  */
-
-
-	CookieStorage.prototype.removeItem = function removeItem(key) {
-		return __WEBPACK_IMPORTED_MODULE_0_js_cookie__["remove"](key, {
-			path: this.path,
-			domain: this.domain,
-			secure: this.secure
-		});
-	};
-
-	/**
-  * This is used to clear the storage
-  * @returns {string} nothing
-  */
-
-
-	CookieStorage.prototype.clear = function clear() {
-		var cookies = __WEBPACK_IMPORTED_MODULE_0_js_cookie__["get"]();
-		var index = void 0;
-		for (index = 0; index < cookies.length; ++index) {
-			__WEBPACK_IMPORTED_MODULE_0_js_cookie__["remove"](cookies[index]);
-		}
-		return {};
-	};
-
-	return CookieStorage;
-}();
-
-/* harmony default export */ __webpack_exports__["a"] = (CookieStorage);
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ 34:
+/***/ ((module, exports, __webpack_require__) => {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
  * JavaScript Cookie v2.2.1
@@ -7876,10 +2628,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 	var registeredInModuleLoader;
 	if (true) {
 		!(__WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
-				__WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+		(__WEBPACK_AMD_DEFINE_FACTORY__.call(exports, __webpack_require__, exports, module)) :
+		__WEBPACK_AMD_DEFINE_FACTORY__),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 		registeredInModuleLoader = true;
 	}
 	if (true) {
@@ -8034,6 +2786,5656 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 }));
 
 
+/***/ }),
+
+/***/ 163:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   __assign: () => (/* binding */ __assign),
+/* harmony export */   __asyncDelegator: () => (/* binding */ __asyncDelegator),
+/* harmony export */   __asyncGenerator: () => (/* binding */ __asyncGenerator),
+/* harmony export */   __asyncValues: () => (/* binding */ __asyncValues),
+/* harmony export */   __await: () => (/* binding */ __await),
+/* harmony export */   __awaiter: () => (/* binding */ __awaiter),
+/* harmony export */   __classPrivateFieldGet: () => (/* binding */ __classPrivateFieldGet),
+/* harmony export */   __classPrivateFieldSet: () => (/* binding */ __classPrivateFieldSet),
+/* harmony export */   __createBinding: () => (/* binding */ __createBinding),
+/* harmony export */   __decorate: () => (/* binding */ __decorate),
+/* harmony export */   __exportStar: () => (/* binding */ __exportStar),
+/* harmony export */   __extends: () => (/* binding */ __extends),
+/* harmony export */   __generator: () => (/* binding */ __generator),
+/* harmony export */   __importDefault: () => (/* binding */ __importDefault),
+/* harmony export */   __importStar: () => (/* binding */ __importStar),
+/* harmony export */   __makeTemplateObject: () => (/* binding */ __makeTemplateObject),
+/* harmony export */   __metadata: () => (/* binding */ __metadata),
+/* harmony export */   __param: () => (/* binding */ __param),
+/* harmony export */   __read: () => (/* binding */ __read),
+/* harmony export */   __rest: () => (/* binding */ __rest),
+/* harmony export */   __spread: () => (/* binding */ __spread),
+/* harmony export */   __spreadArrays: () => (/* binding */ __spreadArrays),
+/* harmony export */   __values: () => (/* binding */ __values)
+/* harmony export */ });
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    }
+    return __assign.apply(this, arguments);
+}
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+function __createBinding(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}
+
+function __exportStar(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+
+function __values(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
+
+function __await(v) {
+    return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+    var i, p;
+    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+}
+
+function __asyncValues(o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
+
+function __makeTemplateObject(cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result.default = mod;
+    return result;
+}
+
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+function __classPrivateFieldGet(receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
+}
+
+
+/***/ }),
+
+/***/ 677:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* export default binding */ __WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__(e,n){return n=n||{},new Promise(function(t,r){var s=new XMLHttpRequest,o=[],u=[],i={},a=function(){return{ok:2==(s.status/100|0),statusText:s.statusText,status:s.status,url:s.responseURL,text:function(){return Promise.resolve(s.responseText)},json:function(){return Promise.resolve(s.responseText).then(JSON.parse)},blob:function(){return Promise.resolve(new Blob([s.response]))},clone:a,headers:{keys:function(){return o},entries:function(){return u},get:function(e){return i[e.toLowerCase()]},has:function(e){return e.toLowerCase()in i}}}};for(var l in s.open(n.method||"get",e,!0),s.onload=function(){s.getAllResponseHeaders().replace(/^(.*?):[^\S\n]*([\s\S]*?)$/gm,function(e,n,t){o.push(n=n.toLowerCase()),u.push([n,t]),i[n]=i[n]?i[n]+","+t:t}),t(a())},s.onerror=r,s.withCredentials="include"==n.credentials,n.headers)s.setRequestHeader(l,n.headers[l]);s.send(n.body||null)})}
+//# sourceMappingURL=unfetch.module.js.map
+
+
+/***/ }),
+
+/***/ 100:
+/***/ ((module) => {
+
+"use strict";
+if(typeof __WEBPACK_EXTERNAL_MODULE__100__ === 'undefined') { var e = new Error("Cannot find module 'crypto'"); e.code = 'MODULE_NOT_FOUND'; throw e; }
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__100__;
+
 /***/ })
-/******/ ]);
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, {
+  AuthenticationDetails: () => (/* reexport */ AuthenticationDetails),
+  AuthenticationHelper: () => (/* reexport */ AuthenticationHelper),
+  CognitoAccessToken: () => (/* reexport */ CognitoAccessToken),
+  CognitoIdToken: () => (/* reexport */ CognitoIdToken),
+  CognitoRefreshToken: () => (/* reexport */ CognitoRefreshToken),
+  CognitoUser: () => (/* reexport */ CognitoUser),
+  CognitoUserAttribute: () => (/* reexport */ CognitoUserAttribute),
+  CognitoUserPool: () => (/* reexport */ CognitoUserPool),
+  CognitoUserSession: () => (/* reexport */ CognitoUserSession),
+  CookieStorage: () => (/* reexport */ CookieStorage),
+  DateHelper: () => (/* reexport */ DateHelper),
+  WordArray: () => (/* reexport */ WordArray),
+  appendToCognitoUserAgent: () => (/* reexport */ appendToCognitoUserAgent)
+});
+
+;// CONCATENATED MODULE: ./src/AuthenticationDetails.js
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, _typeof(obj);
+}
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function _toPropertyKey(arg) {
+  var key = _toPrimitive(arg, "string");
+  return _typeof(key) === "symbol" ? key : String(key);
+}
+function _toPrimitive(input, hint) {
+  if (_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/** @class */
+var AuthenticationDetails = /*#__PURE__*/function () {
+  /**
+   * Constructs a new AuthenticationDetails object
+   * @param {object=} data Creation options.
+   * @param {string} data.Username User being authenticated.
+   * @param {string} data.Password Plain-text password to authenticate with.
+   * @param {(AttributeArg[])?} data.ValidationData Application extra metadata.
+   * @param {(AttributeArg[])?} data.AuthParamaters Authentication paramaters for custom auth.
+   */
+  function AuthenticationDetails(data) {
+    _classCallCheck(this, AuthenticationDetails);
+    var _ref = data || {},
+      ValidationData = _ref.ValidationData,
+      Username = _ref.Username,
+      Password = _ref.Password,
+      AuthParameters = _ref.AuthParameters,
+      ClientMetadata = _ref.ClientMetadata;
+    this.validationData = ValidationData || {};
+    this.authParameters = AuthParameters || {};
+    this.clientMetadata = ClientMetadata || {};
+    this.username = Username;
+    this.password = Password;
+  }
+
+  /**
+   * @returns {string} the record's username
+   */
+  _createClass(AuthenticationDetails, [{
+    key: "getUsername",
+    value: function getUsername() {
+      return this.username;
+    }
+
+    /**
+     * @returns {string} the record's password
+     */
+  }, {
+    key: "getPassword",
+    value: function getPassword() {
+      return this.password;
+    }
+
+    /**
+     * @returns {Array} the record's validationData
+     */
+  }, {
+    key: "getValidationData",
+    value: function getValidationData() {
+      return this.validationData;
+    }
+
+    /**
+     * @returns {Array} the record's authParameters
+     */
+  }, {
+    key: "getAuthParameters",
+    value: function getAuthParameters() {
+      return this.authParameters;
+    }
+
+    /**
+     * @returns {ClientMetadata} the clientMetadata for a Lambda trigger
+     */
+  }, {
+    key: "getClientMetadata",
+    value: function getClientMetadata() {
+      return this.clientMetadata;
+    }
+  }]);
+  return AuthenticationDetails;
+}();
+
+// EXTERNAL MODULE: ../../node_modules/buffer/index.js
+var buffer = __webpack_require__(834);
+;// CONCATENATED MODULE: ./src/utils/cryptoSecureRandomInt.js
+var cryptoSecureRandomInt_crypto;
+
+// Native crypto from window (Browser)
+if (typeof window !== 'undefined' && window.crypto) {
+  cryptoSecureRandomInt_crypto = window.crypto;
+}
+
+// Native (experimental IE 11) crypto from window (Browser)
+if (!cryptoSecureRandomInt_crypto && typeof window !== 'undefined' && window.msCrypto) {
+  cryptoSecureRandomInt_crypto = window.msCrypto;
+}
+
+// Native crypto from global (NodeJS)
+if (!cryptoSecureRandomInt_crypto && typeof __webpack_require__.g !== 'undefined' && __webpack_require__.g.crypto) {
+  cryptoSecureRandomInt_crypto = __webpack_require__.g.crypto;
+}
+
+// Native crypto import via require (NodeJS)
+if (!cryptoSecureRandomInt_crypto && "function" === 'function') {
+  try {
+    cryptoSecureRandomInt_crypto = __webpack_require__(100);
+  } catch (err) {}
+}
+
+/*
+ * Cryptographically secure pseudorandom number generator
+ * As Math.random() is cryptographically not safe to use
+ */
+function cryptoSecureRandomInt() {
+  if (cryptoSecureRandomInt_crypto) {
+    // Use getRandomValues method (Browser)
+    if (typeof cryptoSecureRandomInt_crypto.getRandomValues === 'function') {
+      try {
+        return cryptoSecureRandomInt_crypto.getRandomValues(new Uint32Array(1))[0];
+      } catch (err) {}
+    }
+
+    // Use randomBytes method (NodeJS)
+    if (typeof cryptoSecureRandomInt_crypto.randomBytes === 'function') {
+      try {
+        return cryptoSecureRandomInt_crypto.randomBytes(4).readInt32LE();
+      } catch (err) {}
+    }
+  }
+  throw new Error('Native crypto module could not be used to get secure random number.');
+}
+;// CONCATENATED MODULE: ./src/utils/WordArray.js
+function WordArray_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return WordArray_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, WordArray_typeof(obj);
+}
+function WordArray_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function WordArray_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, WordArray_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function WordArray_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) WordArray_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) WordArray_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function WordArray_toPropertyKey(arg) {
+  var key = WordArray_toPrimitive(arg, "string");
+  return WordArray_typeof(key) === "symbol" ? key : String(key);
+}
+function WordArray_toPrimitive(input, hint) {
+  if (WordArray_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (WordArray_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+
+
+/**
+ * Hex encoding strategy.
+ * Converts a word array to a hex string.
+ * @param {WordArray} wordArray The word array.
+ * @return {string} The hex string.
+ * @static
+ */
+function hexStringify(wordArray) {
+  // Shortcuts
+  var words = wordArray.words;
+  var sigBytes = wordArray.sigBytes;
+
+  // Convert
+  var hexChars = [];
+  for (var i = 0; i < sigBytes; i++) {
+    var bite = words[i >>> 2] >>> 24 - i % 4 * 8 & 0xff;
+    hexChars.push((bite >>> 4).toString(16));
+    hexChars.push((bite & 0x0f).toString(16));
+  }
+  return hexChars.join('');
+}
+var WordArray = /*#__PURE__*/function () {
+  function WordArray(words, sigBytes) {
+    WordArray_classCallCheck(this, WordArray);
+    words = this.words = words || [];
+    if (sigBytes != undefined) {
+      this.sigBytes = sigBytes;
+    } else {
+      this.sigBytes = words.length * 4;
+    }
+  }
+  WordArray_createClass(WordArray, [{
+    key: "random",
+    value: function random(nBytes) {
+      var words = [];
+      for (var i = 0; i < nBytes; i += 4) {
+        words.push(cryptoSecureRandomInt());
+      }
+      return new WordArray(words, nBytes);
+    }
+  }, {
+    key: "toString",
+    value: function toString() {
+      return hexStringify(this);
+    }
+  }]);
+  return WordArray;
+}();
+
+// EXTERNAL MODULE: ../../node_modules/@aws-crypto/sha256-js/build/index.js
+var build = __webpack_require__(387);
+;// CONCATENATED MODULE: ./src/BigInteger.js
+// A small implementation of BigInteger based on http://www-cs-students.stanford.edu/~tjw/jsbn/
+//
+// All public methods have been removed except the following:
+//   new BigInteger(a, b) (only radix 2, 4, 8, 16 and 32 supported)
+//   toString (only radix 2, 4, 8, 16 and 32 supported)
+//   negate
+//   abs
+//   compareTo
+//   bitLength
+//   mod
+//   equals
+//   add
+//   subtract
+//   multiply
+//   divide
+//   modPow
+
+/* harmony default export */ const BigInteger = (BigInteger_BigInteger);
+
+/*
+ * Copyright (c) 2003-2005  Tom Wu
+ * All Rights Reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * IN NO EVENT SHALL TOM WU BE LIABLE FOR ANY SPECIAL, INCIDENTAL,
+ * INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER
+ * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER OR NOT ADVISED OF
+ * THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF LIABILITY, ARISING OUT
+ * OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ *
+ * In addition, the following condition applies:
+ *
+ * All redistributions must retain an intact copy of this copyright notice
+ * and disclaimer.
+ */
+
+// (public) Constructor
+function BigInteger_BigInteger(a, b) {
+  if (a != null) this.fromString(a, b);
+}
+
+// return new, unset BigInteger
+function nbi() {
+  return new BigInteger_BigInteger(null);
+}
+
+// Bits per digit
+var dbits;
+
+// JavaScript engine analysis
+var canary = 0xdeadbeefcafe;
+var j_lm = (canary & 0xffffff) == 0xefcafe;
+
+// am: Compute w_j += (x*this_i), propagate carries,
+// c is initial carry, returns final carry.
+// c < 3*dvalue, x < 2*dvalue, this_i < dvalue
+// We need to select the fastest one that works in this environment.
+
+// am1: use a single mult and divide to get the high bits,
+// max digit bits should be 26 because
+// max internal value = 2*dvalue^2-2*dvalue (< 2^53)
+function am1(i, x, w, j, c, n) {
+  while (--n >= 0) {
+    var v = x * this[i++] + w[j] + c;
+    c = Math.floor(v / 0x4000000);
+    w[j++] = v & 0x3ffffff;
+  }
+  return c;
+}
+// am2 avoids a big mult-and-extract completely.
+// Max digit bits should be <= 30 because we do bitwise ops
+// on values up to 2*hdvalue^2-hdvalue-1 (< 2^31)
+function am2(i, x, w, j, c, n) {
+  var xl = x & 0x7fff,
+    xh = x >> 15;
+  while (--n >= 0) {
+    var l = this[i] & 0x7fff;
+    var h = this[i++] >> 15;
+    var m = xh * l + h * xl;
+    l = xl * l + ((m & 0x7fff) << 15) + w[j] + (c & 0x3fffffff);
+    c = (l >>> 30) + (m >>> 15) + xh * h + (c >>> 30);
+    w[j++] = l & 0x3fffffff;
+  }
+  return c;
+}
+// Alternately, set max digit bits to 28 since some
+// browsers slow down when dealing with 32-bit numbers.
+function am3(i, x, w, j, c, n) {
+  var xl = x & 0x3fff,
+    xh = x >> 14;
+  while (--n >= 0) {
+    var l = this[i] & 0x3fff;
+    var h = this[i++] >> 14;
+    var m = xh * l + h * xl;
+    l = xl * l + ((m & 0x3fff) << 14) + w[j] + c;
+    c = (l >> 28) + (m >> 14) + xh * h;
+    w[j++] = l & 0xfffffff;
+  }
+  return c;
+}
+var inBrowser = typeof navigator !== 'undefined';
+if (inBrowser && j_lm && navigator.appName == 'Microsoft Internet Explorer') {
+  BigInteger_BigInteger.prototype.am = am2;
+  dbits = 30;
+} else if (inBrowser && j_lm && navigator.appName != 'Netscape') {
+  BigInteger_BigInteger.prototype.am = am1;
+  dbits = 26;
+} else {
+  // Mozilla/Netscape seems to prefer am3
+  BigInteger_BigInteger.prototype.am = am3;
+  dbits = 28;
+}
+BigInteger_BigInteger.prototype.DB = dbits;
+BigInteger_BigInteger.prototype.DM = (1 << dbits) - 1;
+BigInteger_BigInteger.prototype.DV = 1 << dbits;
+var BI_FP = 52;
+BigInteger_BigInteger.prototype.FV = Math.pow(2, BI_FP);
+BigInteger_BigInteger.prototype.F1 = BI_FP - dbits;
+BigInteger_BigInteger.prototype.F2 = 2 * dbits - BI_FP;
+
+// Digit conversions
+var BI_RM = '0123456789abcdefghijklmnopqrstuvwxyz';
+var BI_RC = new Array();
+var rr, vv;
+rr = '0'.charCodeAt(0);
+for (vv = 0; vv <= 9; ++vv) BI_RC[rr++] = vv;
+rr = 'a'.charCodeAt(0);
+for (vv = 10; vv < 36; ++vv) BI_RC[rr++] = vv;
+rr = 'A'.charCodeAt(0);
+for (vv = 10; vv < 36; ++vv) BI_RC[rr++] = vv;
+function int2char(n) {
+  return BI_RM.charAt(n);
+}
+function intAt(s, i) {
+  var c = BI_RC[s.charCodeAt(i)];
+  return c == null ? -1 : c;
+}
+
+// (protected) copy this to r
+function bnpCopyTo(r) {
+  for (var i = this.t - 1; i >= 0; --i) r[i] = this[i];
+  r.t = this.t;
+  r.s = this.s;
+}
+
+// (protected) set from integer value x, -DV <= x < DV
+function bnpFromInt(x) {
+  this.t = 1;
+  this.s = x < 0 ? -1 : 0;
+  if (x > 0) this[0] = x;else if (x < -1) this[0] = x + this.DV;else this.t = 0;
+}
+
+// return bigint initialized to value
+function nbv(i) {
+  var r = nbi();
+  r.fromInt(i);
+  return r;
+}
+
+// (protected) set from string and radix
+function bnpFromString(s, b) {
+  var k;
+  if (b == 16) k = 4;else if (b == 8) k = 3;else if (b == 2) k = 1;else if (b == 32) k = 5;else if (b == 4) k = 2;else throw new Error('Only radix 2, 4, 8, 16, 32 are supported');
+  this.t = 0;
+  this.s = 0;
+  var i = s.length,
+    mi = false,
+    sh = 0;
+  while (--i >= 0) {
+    var x = intAt(s, i);
+    if (x < 0) {
+      if (s.charAt(i) == '-') mi = true;
+      continue;
+    }
+    mi = false;
+    if (sh == 0) this[this.t++] = x;else if (sh + k > this.DB) {
+      this[this.t - 1] |= (x & (1 << this.DB - sh) - 1) << sh;
+      this[this.t++] = x >> this.DB - sh;
+    } else this[this.t - 1] |= x << sh;
+    sh += k;
+    if (sh >= this.DB) sh -= this.DB;
+  }
+  this.clamp();
+  if (mi) BigInteger_BigInteger.ZERO.subTo(this, this);
+}
+
+// (protected) clamp off excess high words
+function bnpClamp() {
+  var c = this.s & this.DM;
+  while (this.t > 0 && this[this.t - 1] == c) --this.t;
+}
+
+// (public) return string representation in given radix
+function bnToString(b) {
+  if (this.s < 0) return '-' + this.negate().toString(b);
+  var k;
+  if (b == 16) k = 4;else if (b == 8) k = 3;else if (b == 2) k = 1;else if (b == 32) k = 5;else if (b == 4) k = 2;else throw new Error('Only radix 2, 4, 8, 16, 32 are supported');
+  var km = (1 << k) - 1,
+    d,
+    m = false,
+    r = '',
+    i = this.t;
+  var p = this.DB - i * this.DB % k;
+  if (i-- > 0) {
+    if (p < this.DB && (d = this[i] >> p) > 0) {
+      m = true;
+      r = int2char(d);
+    }
+    while (i >= 0) {
+      if (p < k) {
+        d = (this[i] & (1 << p) - 1) << k - p;
+        d |= this[--i] >> (p += this.DB - k);
+      } else {
+        d = this[i] >> (p -= k) & km;
+        if (p <= 0) {
+          p += this.DB;
+          --i;
+        }
+      }
+      if (d > 0) m = true;
+      if (m) r += int2char(d);
+    }
+  }
+  return m ? r : '0';
+}
+
+// (public) -this
+function bnNegate() {
+  var r = nbi();
+  BigInteger_BigInteger.ZERO.subTo(this, r);
+  return r;
+}
+
+// (public) |this|
+function bnAbs() {
+  return this.s < 0 ? this.negate() : this;
+}
+
+// (public) return + if this > a, - if this < a, 0 if equal
+function bnCompareTo(a) {
+  var r = this.s - a.s;
+  if (r != 0) return r;
+  var i = this.t;
+  r = i - a.t;
+  if (r != 0) return this.s < 0 ? -r : r;
+  while (--i >= 0) if ((r = this[i] - a[i]) != 0) return r;
+  return 0;
+}
+
+// returns bit length of the integer x
+function nbits(x) {
+  var r = 1,
+    t;
+  if ((t = x >>> 16) != 0) {
+    x = t;
+    r += 16;
+  }
+  if ((t = x >> 8) != 0) {
+    x = t;
+    r += 8;
+  }
+  if ((t = x >> 4) != 0) {
+    x = t;
+    r += 4;
+  }
+  if ((t = x >> 2) != 0) {
+    x = t;
+    r += 2;
+  }
+  if ((t = x >> 1) != 0) {
+    x = t;
+    r += 1;
+  }
+  return r;
+}
+
+// (public) return the number of bits in "this"
+function bnBitLength() {
+  if (this.t <= 0) return 0;
+  return this.DB * (this.t - 1) + nbits(this[this.t - 1] ^ this.s & this.DM);
+}
+
+// (protected) r = this << n*DB
+function bnpDLShiftTo(n, r) {
+  var i;
+  for (i = this.t - 1; i >= 0; --i) r[i + n] = this[i];
+  for (i = n - 1; i >= 0; --i) r[i] = 0;
+  r.t = this.t + n;
+  r.s = this.s;
+}
+
+// (protected) r = this >> n*DB
+function bnpDRShiftTo(n, r) {
+  for (var i = n; i < this.t; ++i) r[i - n] = this[i];
+  r.t = Math.max(this.t - n, 0);
+  r.s = this.s;
+}
+
+// (protected) r = this << n
+function bnpLShiftTo(n, r) {
+  var bs = n % this.DB;
+  var cbs = this.DB - bs;
+  var bm = (1 << cbs) - 1;
+  var ds = Math.floor(n / this.DB),
+    c = this.s << bs & this.DM,
+    i;
+  for (i = this.t - 1; i >= 0; --i) {
+    r[i + ds + 1] = this[i] >> cbs | c;
+    c = (this[i] & bm) << bs;
+  }
+  for (i = ds - 1; i >= 0; --i) r[i] = 0;
+  r[ds] = c;
+  r.t = this.t + ds + 1;
+  r.s = this.s;
+  r.clamp();
+}
+
+// (protected) r = this >> n
+function bnpRShiftTo(n, r) {
+  r.s = this.s;
+  var ds = Math.floor(n / this.DB);
+  if (ds >= this.t) {
+    r.t = 0;
+    return;
+  }
+  var bs = n % this.DB;
+  var cbs = this.DB - bs;
+  var bm = (1 << bs) - 1;
+  r[0] = this[ds] >> bs;
+  for (var i = ds + 1; i < this.t; ++i) {
+    r[i - ds - 1] |= (this[i] & bm) << cbs;
+    r[i - ds] = this[i] >> bs;
+  }
+  if (bs > 0) r[this.t - ds - 1] |= (this.s & bm) << cbs;
+  r.t = this.t - ds;
+  r.clamp();
+}
+
+// (protected) r = this - a
+function bnpSubTo(a, r) {
+  var i = 0,
+    c = 0,
+    m = Math.min(a.t, this.t);
+  while (i < m) {
+    c += this[i] - a[i];
+    r[i++] = c & this.DM;
+    c >>= this.DB;
+  }
+  if (a.t < this.t) {
+    c -= a.s;
+    while (i < this.t) {
+      c += this[i];
+      r[i++] = c & this.DM;
+      c >>= this.DB;
+    }
+    c += this.s;
+  } else {
+    c += this.s;
+    while (i < a.t) {
+      c -= a[i];
+      r[i++] = c & this.DM;
+      c >>= this.DB;
+    }
+    c -= a.s;
+  }
+  r.s = c < 0 ? -1 : 0;
+  if (c < -1) r[i++] = this.DV + c;else if (c > 0) r[i++] = c;
+  r.t = i;
+  r.clamp();
+}
+
+// (protected) r = this * a, r != this,a (HAC 14.12)
+// "this" should be the larger one if appropriate.
+function bnpMultiplyTo(a, r) {
+  var x = this.abs(),
+    y = a.abs();
+  var i = x.t;
+  r.t = i + y.t;
+  while (--i >= 0) r[i] = 0;
+  for (i = 0; i < y.t; ++i) r[i + x.t] = x.am(0, y[i], r, i, 0, x.t);
+  r.s = 0;
+  r.clamp();
+  if (this.s != a.s) BigInteger_BigInteger.ZERO.subTo(r, r);
+}
+
+// (protected) r = this^2, r != this (HAC 14.16)
+function bnpSquareTo(r) {
+  var x = this.abs();
+  var i = r.t = 2 * x.t;
+  while (--i >= 0) r[i] = 0;
+  for (i = 0; i < x.t - 1; ++i) {
+    var c = x.am(i, x[i], r, 2 * i, 0, 1);
+    if ((r[i + x.t] += x.am(i + 1, 2 * x[i], r, 2 * i + 1, c, x.t - i - 1)) >= x.DV) {
+      r[i + x.t] -= x.DV;
+      r[i + x.t + 1] = 1;
+    }
+  }
+  if (r.t > 0) r[r.t - 1] += x.am(i, x[i], r, 2 * i, 0, 1);
+  r.s = 0;
+  r.clamp();
+}
+
+// (protected) divide this by m, quotient and remainder to q, r (HAC 14.20)
+// r != q, this != m.  q or r may be null.
+function bnpDivRemTo(m, q, r) {
+  var pm = m.abs();
+  if (pm.t <= 0) return;
+  var pt = this.abs();
+  if (pt.t < pm.t) {
+    if (q != null) q.fromInt(0);
+    if (r != null) this.copyTo(r);
+    return;
+  }
+  if (r == null) r = nbi();
+  var y = nbi(),
+    ts = this.s,
+    ms = m.s;
+  var nsh = this.DB - nbits(pm[pm.t - 1]);
+  // normalize modulus
+  if (nsh > 0) {
+    pm.lShiftTo(nsh, y);
+    pt.lShiftTo(nsh, r);
+  } else {
+    pm.copyTo(y);
+    pt.copyTo(r);
+  }
+  var ys = y.t;
+  var y0 = y[ys - 1];
+  if (y0 == 0) return;
+  var yt = y0 * (1 << this.F1) + (ys > 1 ? y[ys - 2] >> this.F2 : 0);
+  var d1 = this.FV / yt,
+    d2 = (1 << this.F1) / yt,
+    e = 1 << this.F2;
+  var i = r.t,
+    j = i - ys,
+    t = q == null ? nbi() : q;
+  y.dlShiftTo(j, t);
+  if (r.compareTo(t) >= 0) {
+    r[r.t++] = 1;
+    r.subTo(t, r);
+  }
+  BigInteger_BigInteger.ONE.dlShiftTo(ys, t);
+  t.subTo(y, y);
+  // "negative" y so we can replace sub with am later
+  while (y.t < ys) y[y.t++] = 0;
+  while (--j >= 0) {
+    // Estimate quotient digit
+    var qd = r[--i] == y0 ? this.DM : Math.floor(r[i] * d1 + (r[i - 1] + e) * d2);
+    if ((r[i] += y.am(0, qd, r, j, 0, ys)) < qd) {
+      // Try it out
+      y.dlShiftTo(j, t);
+      r.subTo(t, r);
+      while (r[i] < --qd) r.subTo(t, r);
+    }
+  }
+  if (q != null) {
+    r.drShiftTo(ys, q);
+    if (ts != ms) BigInteger_BigInteger.ZERO.subTo(q, q);
+  }
+  r.t = ys;
+  r.clamp();
+  if (nsh > 0) r.rShiftTo(nsh, r);
+  // Denormalize remainder
+  if (ts < 0) BigInteger_BigInteger.ZERO.subTo(r, r);
+}
+
+// (public) this mod a
+function bnMod(a) {
+  var r = nbi();
+  this.abs().divRemTo(a, null, r);
+  if (this.s < 0 && r.compareTo(BigInteger_BigInteger.ZERO) > 0) a.subTo(r, r);
+  return r;
+}
+
+// (protected) return "-1/this % 2^DB"; useful for Mont. reduction
+// justification:
+//         xy == 1 (mod m)
+//         xy =  1+km
+//   xy(2-xy) = (1+km)(1-km)
+// x[y(2-xy)] = 1-k^2m^2
+// x[y(2-xy)] == 1 (mod m^2)
+// if y is 1/x mod m, then y(2-xy) is 1/x mod m^2
+// should reduce x and y(2-xy) by m^2 at each step to keep size bounded.
+// JS multiply "overflows" differently from C/C++, so care is needed here.
+function bnpInvDigit() {
+  if (this.t < 1) return 0;
+  var x = this[0];
+  if ((x & 1) == 0) return 0;
+  var y = x & 3;
+  // y == 1/x mod 2^2
+  y = y * (2 - (x & 0xf) * y) & 0xf;
+  // y == 1/x mod 2^4
+  y = y * (2 - (x & 0xff) * y) & 0xff;
+  // y == 1/x mod 2^8
+  y = y * (2 - ((x & 0xffff) * y & 0xffff)) & 0xffff;
+  // y == 1/x mod 2^16
+  // last step - calculate inverse mod DV directly;
+  // assumes 16 < DB <= 32 and assumes ability to handle 48-bit ints
+  y = y * (2 - x * y % this.DV) % this.DV;
+  // y == 1/x mod 2^dbits
+  // we really want the negative inverse, and -DV < y < DV
+  return y > 0 ? this.DV - y : -y;
+}
+function bnEquals(a) {
+  return this.compareTo(a) == 0;
+}
+
+// (protected) r = this + a
+function bnpAddTo(a, r) {
+  var i = 0,
+    c = 0,
+    m = Math.min(a.t, this.t);
+  while (i < m) {
+    c += this[i] + a[i];
+    r[i++] = c & this.DM;
+    c >>= this.DB;
+  }
+  if (a.t < this.t) {
+    c += a.s;
+    while (i < this.t) {
+      c += this[i];
+      r[i++] = c & this.DM;
+      c >>= this.DB;
+    }
+    c += this.s;
+  } else {
+    c += this.s;
+    while (i < a.t) {
+      c += a[i];
+      r[i++] = c & this.DM;
+      c >>= this.DB;
+    }
+    c += a.s;
+  }
+  r.s = c < 0 ? -1 : 0;
+  if (c > 0) r[i++] = c;else if (c < -1) r[i++] = this.DV + c;
+  r.t = i;
+  r.clamp();
+}
+
+// (public) this + a
+function bnAdd(a) {
+  var r = nbi();
+  this.addTo(a, r);
+  return r;
+}
+
+// (public) this - a
+function bnSubtract(a) {
+  var r = nbi();
+  this.subTo(a, r);
+  return r;
+}
+
+// (public) this * a
+function bnMultiply(a) {
+  var r = nbi();
+  this.multiplyTo(a, r);
+  return r;
+}
+
+// (public) this / a
+function bnDivide(a) {
+  var r = nbi();
+  this.divRemTo(a, r, null);
+  return r;
+}
+
+// Montgomery reduction
+function Montgomery(m) {
+  this.m = m;
+  this.mp = m.invDigit();
+  this.mpl = this.mp & 0x7fff;
+  this.mph = this.mp >> 15;
+  this.um = (1 << m.DB - 15) - 1;
+  this.mt2 = 2 * m.t;
+}
+
+// xR mod m
+function montConvert(x) {
+  var r = nbi();
+  x.abs().dlShiftTo(this.m.t, r);
+  r.divRemTo(this.m, null, r);
+  if (x.s < 0 && r.compareTo(BigInteger_BigInteger.ZERO) > 0) this.m.subTo(r, r);
+  return r;
+}
+
+// x/R mod m
+function montRevert(x) {
+  var r = nbi();
+  x.copyTo(r);
+  this.reduce(r);
+  return r;
+}
+
+// x = x/R mod m (HAC 14.32)
+function montReduce(x) {
+  while (x.t <= this.mt2)
+  // pad x so am has enough room later
+  x[x.t++] = 0;
+  for (var i = 0; i < this.m.t; ++i) {
+    // faster way of calculating u0 = x[i]*mp mod DV
+    var j = x[i] & 0x7fff;
+    var u0 = j * this.mpl + ((j * this.mph + (x[i] >> 15) * this.mpl & this.um) << 15) & x.DM;
+    // use am to combine the multiply-shift-add into one call
+    j = i + this.m.t;
+    x[j] += this.m.am(0, u0, x, i, 0, this.m.t);
+    // propagate carry
+    while (x[j] >= x.DV) {
+      x[j] -= x.DV;
+      x[++j]++;
+    }
+  }
+  x.clamp();
+  x.drShiftTo(this.m.t, x);
+  if (x.compareTo(this.m) >= 0) x.subTo(this.m, x);
+}
+
+// r = "x^2/R mod m"; x != r
+function montSqrTo(x, r) {
+  x.squareTo(r);
+  this.reduce(r);
+}
+
+// r = "xy/R mod m"; x,y != r
+function montMulTo(x, y, r) {
+  x.multiplyTo(y, r);
+  this.reduce(r);
+}
+Montgomery.prototype.convert = montConvert;
+Montgomery.prototype.revert = montRevert;
+Montgomery.prototype.reduce = montReduce;
+Montgomery.prototype.mulTo = montMulTo;
+Montgomery.prototype.sqrTo = montSqrTo;
+
+// (public) this^e % m (HAC 14.85)
+function bnModPow(e, m, callback) {
+  var i = e.bitLength(),
+    k,
+    r = nbv(1),
+    z = new Montgomery(m);
+  if (i <= 0) return r;else if (i < 18) k = 1;else if (i < 48) k = 3;else if (i < 144) k = 4;else if (i < 768) k = 5;else k = 6;
+
+  // precomputation
+  var g = new Array(),
+    n = 3,
+    k1 = k - 1,
+    km = (1 << k) - 1;
+  g[1] = z.convert(this);
+  if (k > 1) {
+    var g2 = nbi();
+    z.sqrTo(g[1], g2);
+    while (n <= km) {
+      g[n] = nbi();
+      z.mulTo(g2, g[n - 2], g[n]);
+      n += 2;
+    }
+  }
+  var j = e.t - 1,
+    w,
+    is1 = true,
+    r2 = nbi(),
+    t;
+  i = nbits(e[j]) - 1;
+  while (j >= 0) {
+    if (i >= k1) w = e[j] >> i - k1 & km;else {
+      w = (e[j] & (1 << i + 1) - 1) << k1 - i;
+      if (j > 0) w |= e[j - 1] >> this.DB + i - k1;
+    }
+    n = k;
+    while ((w & 1) == 0) {
+      w >>= 1;
+      --n;
+    }
+    if ((i -= n) < 0) {
+      i += this.DB;
+      --j;
+    }
+    if (is1) {
+      // ret == 1, don't bother squaring or multiplying it
+      g[w].copyTo(r);
+      is1 = false;
+    } else {
+      while (n > 1) {
+        z.sqrTo(r, r2);
+        z.sqrTo(r2, r);
+        n -= 2;
+      }
+      if (n > 0) z.sqrTo(r, r2);else {
+        t = r;
+        r = r2;
+        r2 = t;
+      }
+      z.mulTo(r2, g[w], r);
+    }
+    while (j >= 0 && (e[j] & 1 << i) == 0) {
+      z.sqrTo(r, r2);
+      t = r;
+      r = r2;
+      r2 = t;
+      if (--i < 0) {
+        i = this.DB - 1;
+        --j;
+      }
+    }
+  }
+  var result = z.revert(r);
+  callback(null, result);
+  return result;
+}
+
+// protected
+BigInteger_BigInteger.prototype.copyTo = bnpCopyTo;
+BigInteger_BigInteger.prototype.fromInt = bnpFromInt;
+BigInteger_BigInteger.prototype.fromString = bnpFromString;
+BigInteger_BigInteger.prototype.clamp = bnpClamp;
+BigInteger_BigInteger.prototype.dlShiftTo = bnpDLShiftTo;
+BigInteger_BigInteger.prototype.drShiftTo = bnpDRShiftTo;
+BigInteger_BigInteger.prototype.lShiftTo = bnpLShiftTo;
+BigInteger_BigInteger.prototype.rShiftTo = bnpRShiftTo;
+BigInteger_BigInteger.prototype.subTo = bnpSubTo;
+BigInteger_BigInteger.prototype.multiplyTo = bnpMultiplyTo;
+BigInteger_BigInteger.prototype.squareTo = bnpSquareTo;
+BigInteger_BigInteger.prototype.divRemTo = bnpDivRemTo;
+BigInteger_BigInteger.prototype.invDigit = bnpInvDigit;
+BigInteger_BigInteger.prototype.addTo = bnpAddTo;
+
+// public
+BigInteger_BigInteger.prototype.toString = bnToString;
+BigInteger_BigInteger.prototype.negate = bnNegate;
+BigInteger_BigInteger.prototype.abs = bnAbs;
+BigInteger_BigInteger.prototype.compareTo = bnCompareTo;
+BigInteger_BigInteger.prototype.bitLength = bnBitLength;
+BigInteger_BigInteger.prototype.mod = bnMod;
+BigInteger_BigInteger.prototype.equals = bnEquals;
+BigInteger_BigInteger.prototype.add = bnAdd;
+BigInteger_BigInteger.prototype.subtract = bnSubtract;
+BigInteger_BigInteger.prototype.multiply = bnMultiply;
+BigInteger_BigInteger.prototype.divide = bnDivide;
+BigInteger_BigInteger.prototype.modPow = bnModPow;
+
+// "constants"
+BigInteger_BigInteger.ZERO = nbv(0);
+BigInteger_BigInteger.ONE = nbv(1);
+;// CONCATENATED MODULE: ./src/AuthenticationHelper.js
+function AuthenticationHelper_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return AuthenticationHelper_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, AuthenticationHelper_typeof(obj);
+}
+function AuthenticationHelper_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function AuthenticationHelper_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, AuthenticationHelper_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function AuthenticationHelper_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) AuthenticationHelper_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) AuthenticationHelper_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function AuthenticationHelper_toPropertyKey(arg) {
+  var key = AuthenticationHelper_toPrimitive(arg, "string");
+  return AuthenticationHelper_typeof(key) === "symbol" ? key : String(key);
+}
+function AuthenticationHelper_toPrimitive(input, hint) {
+  if (AuthenticationHelper_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (AuthenticationHelper_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+
+
+
+
+/**
+ * Returns a Buffer with a sequence of random nBytes
+ *
+ * @param {number} nBytes
+ * @returns {Buffer} fixed-length sequence of random bytes
+ */
+
+function randomBytes(nBytes) {
+  return buffer/* Buffer */.lW.from(new WordArray().random(nBytes).toString(), 'hex');
+}
+
+
+/**
+ * Tests if a hex string has it most significant bit set (case-insensitive regex)
+ */
+var HEX_MSB_REGEX = /^[89a-f]/i;
+var initN = 'FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD1' + '29024E088A67CC74020BBEA63B139B22514A08798E3404DD' + 'EF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245' + 'E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7ED' + 'EE386BFB5A899FA5AE9F24117C4B1FE649286651ECE45B3D' + 'C2007CB8A163BF0598DA48361C55D39A69163FA8FD24CF5F' + '83655D23DCA3AD961C62F356208552BB9ED529077096966D' + '670C354E4ABC9804F1746C08CA18217C32905E462E36CE3B' + 'E39E772C180E86039B2783A2EC07A28FB5C55DF06F4C52C9' + 'DE2BCBF6955817183995497CEA956AE515D2261898FA0510' + '15728E5A8AAAC42DAD33170D04507A33A85521ABDF1CBA64' + 'ECFB850458DBEF0A8AEA71575D060C7DB3970F85A6E1E4C7' + 'ABF5AE8CDB0933D71E8C94E04A25619DCEE3D2261AD2EE6B' + 'F12FFA06D98A0864D87602733EC86A64521F2B18177B200C' + 'BBE117577A615D6C770988C0BAD946E208E24FA074E5AB31' + '43DB5BFCE0FD108E4B82D120A93AD2CAFFFFFFFFFFFFFFFF';
+var newPasswordRequiredChallengeUserAttributePrefix = 'userAttributes.';
+
+/** @class */
+var AuthenticationHelper = /*#__PURE__*/function () {
+  /**
+   * Constructs a new AuthenticationHelper object
+   * @param {string} PoolName Cognito user pool name.
+   */
+  function AuthenticationHelper(PoolName) {
+    AuthenticationHelper_classCallCheck(this, AuthenticationHelper);
+    this.N = new BigInteger(initN, 16);
+    this.g = new BigInteger('2', 16);
+    this.k = new BigInteger(this.hexHash("".concat(this.padHex(this.N)).concat(this.padHex(this.g))), 16);
+    this.smallAValue = this.generateRandomSmallA();
+    this.getLargeAValue(function () {});
+    this.infoBits = buffer/* Buffer */.lW.from('Caldera Derived Key', 'utf8');
+    this.poolName = PoolName;
+  }
+
+  /**
+   * @returns {BigInteger} small A, a random number
+   */
+  AuthenticationHelper_createClass(AuthenticationHelper, [{
+    key: "getSmallAValue",
+    value: function getSmallAValue() {
+      return this.smallAValue;
+    }
+
+    /**
+     * @param {nodeCallback<BigInteger>} callback Called with (err, largeAValue)
+     * @returns {void}
+     */
+  }, {
+    key: "getLargeAValue",
+    value: function getLargeAValue(callback) {
+      var _this = this;
+      if (this.largeAValue) {
+        callback(null, this.largeAValue);
+      } else {
+        this.calculateA(this.smallAValue, function (err, largeAValue) {
+          if (err) {
+            callback(err, null);
+          }
+          _this.largeAValue = largeAValue;
+          callback(null, _this.largeAValue);
+        });
+      }
+    }
+
+    /**
+     * helper function to generate a random big integer
+     * @returns {BigInteger} a random value.
+     * @private
+     */
+  }, {
+    key: "generateRandomSmallA",
+    value: function generateRandomSmallA() {
+      // This will be interpreted as a postive 128-bit integer
+      var hexRandom = randomBytes(128).toString('hex');
+      var randomBigInt = new BigInteger(hexRandom, 16);
+
+      // There is no need to do randomBigInt.mod(this.N - 1) as N (3072-bit) is > 128 bytes (1024-bit)
+
+      return randomBigInt;
+    }
+
+    /**
+     * helper function to generate a random string
+     * @returns {string} a random value.
+     * @private
+     */
+  }, {
+    key: "generateRandomString",
+    value: function generateRandomString() {
+      return randomBytes(40).toString('base64');
+    }
+
+    /**
+     * @returns {string} Generated random value included in password hash.
+     */
+  }, {
+    key: "getRandomPassword",
+    value: function getRandomPassword() {
+      return this.randomPassword;
+    }
+
+    /**
+     * @returns {string} Generated random value included in devices hash.
+     */
+  }, {
+    key: "getSaltDevices",
+    value: function getSaltDevices() {
+      return this.SaltToHashDevices;
+    }
+
+    /**
+     * @returns {string} Value used to verify devices.
+     */
+  }, {
+    key: "getVerifierDevices",
+    value: function getVerifierDevices() {
+      return this.verifierDevices;
+    }
+
+    /**
+     * Generate salts and compute verifier.
+     * @param {string} deviceGroupKey Devices to generate verifier for.
+     * @param {string} username User to generate verifier for.
+     * @param {nodeCallback<null>} callback Called with (err, null)
+     * @returns {void}
+     */
+  }, {
+    key: "generateHashDevice",
+    value: function generateHashDevice(deviceGroupKey, username, callback) {
+      var _this2 = this;
+      this.randomPassword = this.generateRandomString();
+      var combinedString = "".concat(deviceGroupKey).concat(username, ":").concat(this.randomPassword);
+      var hashedString = this.hash(combinedString);
+      var hexRandom = randomBytes(16).toString('hex');
+
+      // The random hex will be unambiguously represented as a postive integer
+      this.SaltToHashDevices = this.padHex(new BigInteger(hexRandom, 16));
+      this.g.modPow(new BigInteger(this.hexHash(this.SaltToHashDevices + hashedString), 16), this.N, function (err, verifierDevicesNotPadded) {
+        if (err) {
+          callback(err, null);
+        }
+        _this2.verifierDevices = _this2.padHex(verifierDevicesNotPadded);
+        callback(null, null);
+      });
+    }
+
+    /**
+     * Calculate the client's public value A = g^a%N
+     * with the generated random number a
+     * @param {BigInteger} a Randomly generated small A.
+     * @param {nodeCallback<BigInteger>} callback Called with (err, largeAValue)
+     * @returns {void}
+     * @private
+     */
+  }, {
+    key: "calculateA",
+    value: function calculateA(a, callback) {
+      var _this3 = this;
+      this.g.modPow(a, this.N, function (err, A) {
+        if (err) {
+          callback(err, null);
+        }
+        if (A.mod(_this3.N).equals(BigInteger.ZERO)) {
+          callback(new Error('Illegal paramater. A mod N cannot be 0.'), null);
+        }
+        callback(null, A);
+      });
+    }
+
+    /**
+     * Calculate the client's value U which is the hash of A and B
+     * @param {BigInteger} A Large A value.
+     * @param {BigInteger} B Server B value.
+     * @returns {BigInteger} Computed U value.
+     * @private
+     */
+  }, {
+    key: "calculateU",
+    value: function calculateU(A, B) {
+      this.UHexHash = this.hexHash(this.padHex(A) + this.padHex(B));
+      var finalU = new BigInteger(this.UHexHash, 16);
+      return finalU;
+    }
+
+    /**
+     * Calculate a hash from a bitArray
+     * @param {Buffer} buf Value to hash.
+     * @returns {String} Hex-encoded hash.
+     * @private
+     */
+  }, {
+    key: "hash",
+    value: function hash(buf) {
+      var awsCryptoHash = new build.Sha256();
+      awsCryptoHash.update(buf);
+      var resultFromAWSCrypto = awsCryptoHash.digestSync();
+      var hashHex = buffer/* Buffer */.lW.from(resultFromAWSCrypto).toString('hex');
+      return new Array(64 - hashHex.length).join('0') + hashHex;
+    }
+
+    /**
+     * Calculate a hash from a hex string
+     * @param {String} hexStr Value to hash.
+     * @returns {String} Hex-encoded hash.
+     * @private
+     */
+  }, {
+    key: "hexHash",
+    value: function hexHash(hexStr) {
+      return this.hash(buffer/* Buffer */.lW.from(hexStr, 'hex'));
+    }
+
+    /**
+     * Standard hkdf algorithm
+     * @param {Buffer} ikm Input key material.
+     * @param {Buffer} salt Salt value.
+     * @returns {Buffer} Strong key material.
+     * @private
+     */
+  }, {
+    key: "computehkdf",
+    value: function computehkdf(ikm, salt) {
+      var infoBitsBuffer = buffer/* Buffer */.lW.concat([this.infoBits, buffer/* Buffer */.lW.from(String.fromCharCode(1), 'utf8')]);
+      var awsCryptoHash = new build.Sha256(salt);
+      awsCryptoHash.update(ikm);
+      var resultFromAWSCryptoPrk = awsCryptoHash.digestSync();
+      var awsCryptoHashHmac = new build.Sha256(resultFromAWSCryptoPrk);
+      awsCryptoHashHmac.update(infoBitsBuffer);
+      var resultFromAWSCryptoHmac = awsCryptoHashHmac.digestSync();
+      var hashHexFromAWSCrypto = resultFromAWSCryptoHmac;
+      var currentHex = hashHexFromAWSCrypto.slice(0, 16);
+      return currentHex;
+    }
+
+    /**
+     * Calculates the final hkdf based on computed S value, and computed U value and the key
+     * @param {String} username Username.
+     * @param {String} password Password.
+     * @param {BigInteger} serverBValue Server B value.
+     * @param {BigInteger} salt Generated salt.
+     * @param {nodeCallback<Buffer>} callback Called with (err, hkdfValue)
+     * @returns {void}
+     */
+  }, {
+    key: "getPasswordAuthenticationKey",
+    value: function getPasswordAuthenticationKey(username, password, serverBValue, salt, callback) {
+      var _this4 = this;
+      if (serverBValue.mod(this.N).equals(BigInteger.ZERO)) {
+        throw new Error('B cannot be zero.');
+      }
+      this.UValue = this.calculateU(this.largeAValue, serverBValue);
+      if (this.UValue.equals(BigInteger.ZERO)) {
+        throw new Error('U cannot be zero.');
+      }
+      var usernamePassword = "".concat(this.poolName).concat(username, ":").concat(password);
+      var usernamePasswordHash = this.hash(usernamePassword);
+      var xValue = new BigInteger(this.hexHash(this.padHex(salt) + usernamePasswordHash), 16);
+      this.calculateS(xValue, serverBValue, function (err, sValue) {
+        if (err) {
+          callback(err, null);
+        }
+        var hkdf = _this4.computehkdf(buffer/* Buffer */.lW.from(_this4.padHex(sValue), 'hex'), buffer/* Buffer */.lW.from(_this4.padHex(_this4.UValue), 'hex'));
+        callback(null, hkdf);
+      });
+    }
+
+    /**
+     * Calculates the S value used in getPasswordAuthenticationKey
+     * @param {BigInteger} xValue Salted password hash value.
+     * @param {BigInteger} serverBValue Server B value.
+     * @param {nodeCallback<string>} callback Called on success or error.
+     * @returns {void}
+     */
+  }, {
+    key: "calculateS",
+    value: function calculateS(xValue, serverBValue, callback) {
+      var _this5 = this;
+      this.g.modPow(xValue, this.N, function (err, gModPowXN) {
+        if (err) {
+          callback(err, null);
+        }
+        var intValue2 = serverBValue.subtract(_this5.k.multiply(gModPowXN));
+        intValue2.modPow(_this5.smallAValue.add(_this5.UValue.multiply(xValue)), _this5.N, function (err2, result) {
+          if (err2) {
+            callback(err2, null);
+          }
+          callback(null, result.mod(_this5.N));
+        });
+      });
+    }
+
+    /**
+     * Return constant newPasswordRequiredChallengeUserAttributePrefix
+     * @return {newPasswordRequiredChallengeUserAttributePrefix} constant prefix value
+     */
+  }, {
+    key: "getNewPasswordRequiredChallengeUserAttributePrefix",
+    value: function getNewPasswordRequiredChallengeUserAttributePrefix() {
+      return newPasswordRequiredChallengeUserAttributePrefix;
+    }
+
+    /**
+     * Returns an unambiguous, even-length hex string of the two's complement encoding of an integer.
+     *
+     * It is compatible with the hex encoding of Java's BigInteger's toByteArray(), wich returns a
+     * byte array containing the two's-complement representation of a BigInteger. The array contains
+     * the minimum number of bytes required to represent the BigInteger, including at least one sign bit.
+     *
+     * Examples showing how ambiguity is avoided by left padding with:
+     * 	"00" (for positive values where the most-significant-bit is set)
+     *  "FF" (for negative values where the most-significant-bit is set)
+     *
+     * padHex(bigInteger.fromInt(-236))  === "FF14"
+     * padHex(bigInteger.fromInt(20))    === "14"
+     *
+     * padHex(bigInteger.fromInt(-200))  === "FF38"
+     * padHex(bigInteger.fromInt(56))    === "38"
+     *
+     * padHex(bigInteger.fromInt(-20))   === "EC"
+     * padHex(bigInteger.fromInt(236))   === "00EC"
+     *
+     * padHex(bigInteger.fromInt(-56))   === "C8"
+     * padHex(bigInteger.fromInt(200))   === "00C8"
+     *
+     * @param {BigInteger} bigInt Number to encode.
+     * @returns {String} even-length hex string of the two's complement encoding.
+     */
+  }, {
+    key: "padHex",
+    value: function padHex(bigInt) {
+      if (!(bigInt instanceof BigInteger)) {
+        throw new Error('Not a BigInteger');
+      }
+      var isNegative = bigInt.compareTo(BigInteger.ZERO) < 0;
+
+      /* Get a hex string for abs(bigInt) */
+      var hexStr = bigInt.abs().toString(16);
+
+      /* Pad hex to even length if needed */
+      hexStr = hexStr.length % 2 !== 0 ? "0".concat(hexStr) : hexStr;
+
+      /* Prepend "00" if the most significant bit is set */
+      hexStr = HEX_MSB_REGEX.test(hexStr) ? "00".concat(hexStr) : hexStr;
+      if (isNegative) {
+        /* Flip the bits of the representation */
+        var invertedNibbles = hexStr.split('').map(function (x) {
+          var invertedNibble = ~parseInt(x, 16) & 0xf;
+          return '0123456789ABCDEF'.charAt(invertedNibble);
+        }).join('');
+
+        /* After flipping the bits, add one to get the 2's complement representation */
+        var flippedBitsBI = new BigInteger(invertedNibbles, 16).add(BigInteger.ONE);
+        hexStr = flippedBitsBI.toString(16);
+
+        /*
+        For hex strings starting with 'FF8', 'FF' can be dropped, e.g. 0xFFFF80=0xFF80=0x80=-128
+        		Any sequence of '1' bits on the left can always be substituted with a single '1' bit
+        without changing the represented value.
+        		This only happens in the case when the input is 80...00
+        */
+        if (hexStr.toUpperCase().startsWith('FF8')) {
+          hexStr = hexStr.substring(2);
+        }
+      }
+      return hexStr;
+    }
+  }]);
+  return AuthenticationHelper;
+}();
+
+;// CONCATENATED MODULE: ./src/CognitoJwtToken.js
+function CognitoJwtToken_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return CognitoJwtToken_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, CognitoJwtToken_typeof(obj);
+}
+function CognitoJwtToken_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function CognitoJwtToken_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, CognitoJwtToken_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function CognitoJwtToken_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) CognitoJwtToken_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) CognitoJwtToken_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function CognitoJwtToken_toPropertyKey(arg) {
+  var key = CognitoJwtToken_toPrimitive(arg, "string");
+  return CognitoJwtToken_typeof(key) === "symbol" ? key : String(key);
+}
+function CognitoJwtToken_toPrimitive(input, hint) {
+  if (CognitoJwtToken_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (CognitoJwtToken_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+
+
+/** @class */
+var CognitoJwtToken = /*#__PURE__*/function () {
+  /**
+   * Constructs a new CognitoJwtToken object
+   * @param {string=} token The JWT token.
+   */
+  function CognitoJwtToken(token) {
+    CognitoJwtToken_classCallCheck(this, CognitoJwtToken);
+    // Assign object
+    this.jwtToken = token || '';
+    this.payload = this.decodePayload();
+  }
+
+  /**
+   * @returns {string} the record's token.
+   */
+  CognitoJwtToken_createClass(CognitoJwtToken, [{
+    key: "getJwtToken",
+    value: function getJwtToken() {
+      return this.jwtToken;
+    }
+
+    /**
+     * @returns {int} the token's expiration (exp member).
+     */
+  }, {
+    key: "getExpiration",
+    value: function getExpiration() {
+      return this.payload.exp;
+    }
+
+    /**
+     * @returns {int} the token's "issued at" (iat member).
+     */
+  }, {
+    key: "getIssuedAt",
+    value: function getIssuedAt() {
+      return this.payload.iat;
+    }
+
+    /**
+     * @returns {object} the token's payload.
+     */
+  }, {
+    key: "decodePayload",
+    value: function decodePayload() {
+      var payload = this.jwtToken.split('.')[1];
+      try {
+        return JSON.parse(buffer/* Buffer */.lW.from(payload, 'base64').toString('utf8'));
+      } catch (err) {
+        return {};
+      }
+    }
+  }]);
+  return CognitoJwtToken;
+}();
+
+;// CONCATENATED MODULE: ./src/CognitoAccessToken.js
+function CognitoAccessToken_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return CognitoAccessToken_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, CognitoAccessToken_typeof(obj);
+}
+function CognitoAccessToken_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, CognitoAccessToken_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function CognitoAccessToken_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) CognitoAccessToken_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) CognitoAccessToken_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function CognitoAccessToken_toPropertyKey(arg) {
+  var key = CognitoAccessToken_toPrimitive(arg, "string");
+  return CognitoAccessToken_typeof(key) === "symbol" ? key : String(key);
+}
+function CognitoAccessToken_toPrimitive(input, hint) {
+  if (CognitoAccessToken_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (CognitoAccessToken_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+function CognitoAccessToken_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  Object.defineProperty(subClass, "prototype", {
+    writable: false
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+  return _setPrototypeOf(o, p);
+}
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf(Derived),
+      result;
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+    return _possibleConstructorReturn(this, result);
+  };
+}
+function _possibleConstructorReturn(self, call) {
+  if (call && (CognitoAccessToken_typeof(call) === "object" || typeof call === "function")) {
+    return call;
+  } else if (call !== void 0) {
+    throw new TypeError("Derived constructors may only return object or undefined");
+  }
+  return _assertThisInitialized(self);
+}
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+  return self;
+}
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+  try {
+    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+
+
+/** @class */
+var CognitoAccessToken = /*#__PURE__*/function (_CognitoJwtToken) {
+  _inherits(CognitoAccessToken, _CognitoJwtToken);
+  var _super = _createSuper(CognitoAccessToken);
+  /**
+   * Constructs a new CognitoAccessToken object
+   * @param {string=} AccessToken The JWT access token.
+   */
+  function CognitoAccessToken() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      AccessToken = _ref.AccessToken;
+    CognitoAccessToken_classCallCheck(this, CognitoAccessToken);
+    return _super.call(this, AccessToken || '');
+  }
+  return CognitoAccessToken_createClass(CognitoAccessToken);
+}(CognitoJwtToken);
+
+;// CONCATENATED MODULE: ./src/CognitoIdToken.js
+function CognitoIdToken_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return CognitoIdToken_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, CognitoIdToken_typeof(obj);
+}
+function CognitoIdToken_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, CognitoIdToken_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function CognitoIdToken_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) CognitoIdToken_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) CognitoIdToken_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function CognitoIdToken_toPropertyKey(arg) {
+  var key = CognitoIdToken_toPrimitive(arg, "string");
+  return CognitoIdToken_typeof(key) === "symbol" ? key : String(key);
+}
+function CognitoIdToken_toPrimitive(input, hint) {
+  if (CognitoIdToken_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (CognitoIdToken_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+function CognitoIdToken_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function CognitoIdToken_inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  Object.defineProperty(subClass, "prototype", {
+    writable: false
+  });
+  if (superClass) CognitoIdToken_setPrototypeOf(subClass, superClass);
+}
+function CognitoIdToken_setPrototypeOf(o, p) {
+  CognitoIdToken_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+  return CognitoIdToken_setPrototypeOf(o, p);
+}
+function CognitoIdToken_createSuper(Derived) {
+  var hasNativeReflectConstruct = CognitoIdToken_isNativeReflectConstruct();
+  return function _createSuperInternal() {
+    var Super = CognitoIdToken_getPrototypeOf(Derived),
+      result;
+    if (hasNativeReflectConstruct) {
+      var NewTarget = CognitoIdToken_getPrototypeOf(this).constructor;
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+    return CognitoIdToken_possibleConstructorReturn(this, result);
+  };
+}
+function CognitoIdToken_possibleConstructorReturn(self, call) {
+  if (call && (CognitoIdToken_typeof(call) === "object" || typeof call === "function")) {
+    return call;
+  } else if (call !== void 0) {
+    throw new TypeError("Derived constructors may only return object or undefined");
+  }
+  return CognitoIdToken_assertThisInitialized(self);
+}
+function CognitoIdToken_assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+  return self;
+}
+function CognitoIdToken_isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+  try {
+    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+function CognitoIdToken_getPrototypeOf(o) {
+  CognitoIdToken_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return CognitoIdToken_getPrototypeOf(o);
+}
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+
+
+/** @class */
+var CognitoIdToken = /*#__PURE__*/function (_CognitoJwtToken) {
+  CognitoIdToken_inherits(CognitoIdToken, _CognitoJwtToken);
+  var _super = CognitoIdToken_createSuper(CognitoIdToken);
+  /**
+   * Constructs a new CognitoIdToken object
+   * @param {string=} IdToken The JWT Id token
+   */
+  function CognitoIdToken() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      IdToken = _ref.IdToken;
+    CognitoIdToken_classCallCheck(this, CognitoIdToken);
+    return _super.call(this, IdToken || '');
+  }
+  return CognitoIdToken_createClass(CognitoIdToken);
+}(CognitoJwtToken);
+
+;// CONCATENATED MODULE: ./src/CognitoRefreshToken.js
+function CognitoRefreshToken_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return CognitoRefreshToken_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, CognitoRefreshToken_typeof(obj);
+}
+function CognitoRefreshToken_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function CognitoRefreshToken_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, CognitoRefreshToken_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function CognitoRefreshToken_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) CognitoRefreshToken_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) CognitoRefreshToken_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function CognitoRefreshToken_toPropertyKey(arg) {
+  var key = CognitoRefreshToken_toPrimitive(arg, "string");
+  return CognitoRefreshToken_typeof(key) === "symbol" ? key : String(key);
+}
+function CognitoRefreshToken_toPrimitive(input, hint) {
+  if (CognitoRefreshToken_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (CognitoRefreshToken_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/** @class */
+var CognitoRefreshToken = /*#__PURE__*/function () {
+  /**
+   * Constructs a new CognitoRefreshToken object
+   * @param {string=} RefreshToken The JWT refresh token.
+   */
+  function CognitoRefreshToken() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      RefreshToken = _ref.RefreshToken;
+    CognitoRefreshToken_classCallCheck(this, CognitoRefreshToken);
+    // Assign object
+    this.token = RefreshToken || '';
+  }
+
+  /**
+   * @returns {string} the record's token.
+   */
+  CognitoRefreshToken_createClass(CognitoRefreshToken, [{
+    key: "getToken",
+    value: function getToken() {
+      return this.token;
+    }
+  }]);
+  return CognitoRefreshToken;
+}();
+
+;// CONCATENATED MODULE: ./src/Platform/version.js
+// generated by genversion
+var version = '5.0.4';
+;// CONCATENATED MODULE: ./src/Platform/index.js
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+var BASE_USER_AGENT = "aws-amplify/".concat(version);
+var Platform = {
+  userAgent: BASE_USER_AGENT,
+  isReactNative: typeof navigator !== 'undefined' && navigator.product === 'ReactNative'
+};
+var getUserAgent = function getUserAgent() {
+  return Platform.userAgent;
+};
+
+/**
+ * @deprecated use named import
+ */
+/* harmony default export */ const src_Platform = ((/* unused pure expression or super */ null && (Platform)));
+;// CONCATENATED MODULE: ./src/CognitoUserSession.js
+function CognitoUserSession_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return CognitoUserSession_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, CognitoUserSession_typeof(obj);
+}
+function CognitoUserSession_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function CognitoUserSession_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, CognitoUserSession_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function CognitoUserSession_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) CognitoUserSession_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) CognitoUserSession_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function CognitoUserSession_toPropertyKey(arg) {
+  var key = CognitoUserSession_toPrimitive(arg, "string");
+  return CognitoUserSession_typeof(key) === "symbol" ? key : String(key);
+}
+function CognitoUserSession_toPrimitive(input, hint) {
+  if (CognitoUserSession_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (CognitoUserSession_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/** @class */
+var CognitoUserSession = /*#__PURE__*/function () {
+  /**
+   * Constructs a new CognitoUserSession object
+   * @param {CognitoIdToken} IdToken The session's Id token.
+   * @param {CognitoRefreshToken=} RefreshToken The session's refresh token.
+   * @param {CognitoAccessToken} AccessToken The session's access token.
+   * @param {int} ClockDrift The saved computer's clock drift or undefined to force calculation.
+   */
+  function CognitoUserSession() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      IdToken = _ref.IdToken,
+      RefreshToken = _ref.RefreshToken,
+      AccessToken = _ref.AccessToken,
+      ClockDrift = _ref.ClockDrift;
+    CognitoUserSession_classCallCheck(this, CognitoUserSession);
+    if (AccessToken == null || IdToken == null) {
+      throw new Error('Id token and Access Token must be present.');
+    }
+    this.idToken = IdToken;
+    this.refreshToken = RefreshToken;
+    this.accessToken = AccessToken;
+    this.clockDrift = ClockDrift === undefined ? this.calculateClockDrift() : ClockDrift;
+  }
+
+  /**
+   * @returns {CognitoIdToken} the session's Id token
+   */
+  CognitoUserSession_createClass(CognitoUserSession, [{
+    key: "getIdToken",
+    value: function getIdToken() {
+      return this.idToken;
+    }
+
+    /**
+     * @returns {CognitoRefreshToken} the session's refresh token
+     */
+  }, {
+    key: "getRefreshToken",
+    value: function getRefreshToken() {
+      return this.refreshToken;
+    }
+
+    /**
+     * @returns {CognitoAccessToken} the session's access token
+     */
+  }, {
+    key: "getAccessToken",
+    value: function getAccessToken() {
+      return this.accessToken;
+    }
+
+    /**
+     * @returns {int} the session's clock drift
+     */
+  }, {
+    key: "getClockDrift",
+    value: function getClockDrift() {
+      return this.clockDrift;
+    }
+
+    /**
+     * @returns {int} the computer's clock drift
+     */
+  }, {
+    key: "calculateClockDrift",
+    value: function calculateClockDrift() {
+      var now = Math.floor(new Date() / 1000);
+      var iat = Math.min(this.accessToken.getIssuedAt(), this.idToken.getIssuedAt());
+      return now - iat;
+    }
+
+    /**
+     * Checks to see if the session is still valid based on session expiry information found
+     * in tokens and the current time (adjusted with clock drift)
+     * @returns {boolean} if the session is still valid
+     */
+  }, {
+    key: "isValid",
+    value: function isValid() {
+      var now = Math.floor(new Date() / 1000);
+      var adjusted = now - this.clockDrift;
+      return adjusted < this.accessToken.getExpiration() && adjusted < this.idToken.getExpiration();
+    }
+  }]);
+  return CognitoUserSession;
+}();
+
+;// CONCATENATED MODULE: ./src/DateHelper.js
+function DateHelper_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return DateHelper_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, DateHelper_typeof(obj);
+}
+function DateHelper_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function DateHelper_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, DateHelper_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function DateHelper_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) DateHelper_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) DateHelper_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function DateHelper_toPropertyKey(arg) {
+  var key = DateHelper_toPrimitive(arg, "string");
+  return DateHelper_typeof(key) === "symbol" ? key : String(key);
+}
+function DateHelper_toPrimitive(input, hint) {
+  if (DateHelper_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (DateHelper_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+var weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+/** @class */
+var DateHelper = /*#__PURE__*/function () {
+  function DateHelper() {
+    DateHelper_classCallCheck(this, DateHelper);
+  }
+  DateHelper_createClass(DateHelper, [{
+    key: "getNowString",
+    value:
+    /**
+     * @returns {string} The current time in "ddd MMM D HH:mm:ss UTC YYYY" format.
+     */
+    function getNowString() {
+      var now = new Date();
+      var weekDay = weekNames[now.getUTCDay()];
+      var month = monthNames[now.getUTCMonth()];
+      var day = now.getUTCDate();
+      var hours = now.getUTCHours();
+      if (hours < 10) {
+        hours = "0".concat(hours);
+      }
+      var minutes = now.getUTCMinutes();
+      if (minutes < 10) {
+        minutes = "0".concat(minutes);
+      }
+      var seconds = now.getUTCSeconds();
+      if (seconds < 10) {
+        seconds = "0".concat(seconds);
+      }
+      var year = now.getUTCFullYear();
+
+      // ddd MMM D HH:mm:ss UTC YYYY
+      var dateNow = "".concat(weekDay, " ").concat(month, " ").concat(day, " ").concat(hours, ":").concat(minutes, ":").concat(seconds, " UTC ").concat(year);
+      return dateNow;
+    }
+  }]);
+  return DateHelper;
+}();
+
+;// CONCATENATED MODULE: ./src/CognitoUserAttribute.js
+function CognitoUserAttribute_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return CognitoUserAttribute_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, CognitoUserAttribute_typeof(obj);
+}
+function CognitoUserAttribute_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function CognitoUserAttribute_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, CognitoUserAttribute_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function CognitoUserAttribute_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) CognitoUserAttribute_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) CognitoUserAttribute_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function CognitoUserAttribute_toPropertyKey(arg) {
+  var key = CognitoUserAttribute_toPrimitive(arg, "string");
+  return CognitoUserAttribute_typeof(key) === "symbol" ? key : String(key);
+}
+function CognitoUserAttribute_toPrimitive(input, hint) {
+  if (CognitoUserAttribute_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (CognitoUserAttribute_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/** @class */
+var CognitoUserAttribute = /*#__PURE__*/function () {
+  /**
+   * Constructs a new CognitoUserAttribute object
+   * @param {string=} Name The record's name
+   * @param {string=} Value The record's value
+   */
+  function CognitoUserAttribute() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      Name = _ref.Name,
+      Value = _ref.Value;
+    CognitoUserAttribute_classCallCheck(this, CognitoUserAttribute);
+    this.Name = Name || '';
+    this.Value = Value || '';
+  }
+
+  /**
+   * @returns {string} the record's value.
+   */
+  CognitoUserAttribute_createClass(CognitoUserAttribute, [{
+    key: "getValue",
+    value: function getValue() {
+      return this.Value;
+    }
+
+    /**
+     * Sets the record's value.
+     * @param {string} value The new value.
+     * @returns {CognitoUserAttribute} The record for method chaining.
+     */
+  }, {
+    key: "setValue",
+    value: function setValue(value) {
+      this.Value = value;
+      return this;
+    }
+
+    /**
+     * @returns {string} the record's name.
+     */
+  }, {
+    key: "getName",
+    value: function getName() {
+      return this.Name;
+    }
+
+    /**
+     * Sets the record's name
+     * @param {string} name The new name.
+     * @returns {CognitoUserAttribute} The record for method chaining.
+     */
+  }, {
+    key: "setName",
+    value: function setName(name) {
+      this.Name = name;
+      return this;
+    }
+
+    /**
+     * @returns {string} a string representation of the record.
+     */
+  }, {
+    key: "toString",
+    value: function toString() {
+      return JSON.stringify(this);
+    }
+
+    /**
+     * @returns {object} a flat object representing the record.
+     */
+  }, {
+    key: "toJSON",
+    value: function toJSON() {
+      return {
+        Name: this.Name,
+        Value: this.Value
+      };
+    }
+  }]);
+  return CognitoUserAttribute;
+}();
+
+;// CONCATENATED MODULE: ./src/StorageHelper.js
+function StorageHelper_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return StorageHelper_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, StorageHelper_typeof(obj);
+}
+function StorageHelper_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function StorageHelper_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, StorageHelper_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function StorageHelper_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) StorageHelper_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) StorageHelper_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function StorageHelper_toPropertyKey(arg) {
+  var key = StorageHelper_toPrimitive(arg, "string");
+  return StorageHelper_typeof(key) === "symbol" ? key : String(key);
+}
+function StorageHelper_toPrimitive(input, hint) {
+  if (StorageHelper_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (StorageHelper_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+var dataMemory = {};
+
+/** @class */
+var MemoryStorage = /*#__PURE__*/function () {
+  function MemoryStorage() {
+    StorageHelper_classCallCheck(this, MemoryStorage);
+  }
+  StorageHelper_createClass(MemoryStorage, null, [{
+    key: "setItem",
+    value:
+    /**
+     * This is used to set a specific item in storage
+     * @param {string} key - the key for the item
+     * @param {object} value - the value
+     * @returns {string} value that was set
+     */
+    function setItem(key, value) {
+      dataMemory[key] = value;
+      return dataMemory[key];
+    }
+
+    /**
+     * This is used to get a specific key from storage
+     * @param {string} key - the key for the item
+     * This is used to clear the storage
+     * @returns {string} the data item
+     */
+  }, {
+    key: "getItem",
+    value: function getItem(key) {
+      return Object.prototype.hasOwnProperty.call(dataMemory, key) ? dataMemory[key] : undefined;
+    }
+
+    /**
+     * This is used to remove an item from storage
+     * @param {string} key - the key being set
+     * @returns {boolean} return true
+     */
+  }, {
+    key: "removeItem",
+    value: function removeItem(key) {
+      return delete dataMemory[key];
+    }
+
+    /**
+     * This is used to clear the storage
+     * @returns {string} nothing
+     */
+  }, {
+    key: "clear",
+    value: function clear() {
+      dataMemory = {};
+      return dataMemory;
+    }
+  }]);
+  return MemoryStorage;
+}();
+
+/** @class */
+var StorageHelper = /*#__PURE__*/function () {
+  /**
+   * This is used to get a storage object
+   * @returns {object} the storage
+   */
+  function StorageHelper() {
+    StorageHelper_classCallCheck(this, StorageHelper);
+    try {
+      this.storageWindow = window.localStorage;
+      this.storageWindow.setItem('aws.cognito.test-ls', 1);
+      this.storageWindow.removeItem('aws.cognito.test-ls');
+    } catch (exception) {
+      this.storageWindow = MemoryStorage;
+    }
+  }
+
+  /**
+   * This is used to return the storage
+   * @returns {object} the storage
+   */
+  StorageHelper_createClass(StorageHelper, [{
+    key: "getStorage",
+    value: function getStorage() {
+      return this.storageWindow;
+    }
+  }]);
+  return StorageHelper;
+}();
+
+;// CONCATENATED MODULE: ./src/CognitoUser.js
+function CognitoUser_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return CognitoUser_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, CognitoUser_typeof(obj);
+}
+function CognitoUser_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function CognitoUser_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, CognitoUser_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function CognitoUser_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) CognitoUser_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) CognitoUser_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function CognitoUser_toPropertyKey(arg) {
+  var key = CognitoUser_toPrimitive(arg, "string");
+  return CognitoUser_typeof(key) === "symbol" ? key : String(key);
+}
+function CognitoUser_toPrimitive(input, hint) {
+  if (CognitoUser_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (CognitoUser_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @callback nodeCallback
+ * @template T result
+ * @param {*} err The operation failure reason, or null.
+ * @param {T} result The operation result.
+ */
+
+/**
+ * @callback onFailure
+ * @param {*} err Failure reason.
+ */
+
+/**
+ * @callback onSuccess
+ * @template T result
+ * @param {T} result The operation result.
+ */
+
+/**
+ * @callback mfaRequired
+ * @param {*} details MFA challenge details.
+ */
+
+/**
+ * @callback customChallenge
+ * @param {*} details Custom challenge details.
+ */
+
+/**
+ * @callback inputVerificationCode
+ * @param {*} data Server response.
+ */
+
+/**
+ * @callback authSuccess
+ * @param {CognitoUserSession} session The new session.
+ * @param {bool=} userConfirmationNecessary User must be confirmed.
+ */
+
+var isNavigatorAvailable = typeof navigator !== 'undefined';
+var userAgent = isNavigatorAvailable ? Platform.isReactNative ? 'react-native' : navigator.userAgent : 'nodejs';
+
+/** @class */
+var CognitoUser = /*#__PURE__*/function () {
+  /**
+   * Constructs a new CognitoUser object
+   * @param {object} data Creation options
+   * @param {string} data.Username The user's username.
+   * @param {CognitoUserPool} data.Pool Pool containing the user.
+   * @param {object} data.Storage Optional storage object.
+   */
+  function CognitoUser(data) {
+    CognitoUser_classCallCheck(this, CognitoUser);
+    if (data == null || data.Username == null || data.Pool == null) {
+      throw new Error('Username and Pool information are required.');
+    }
+    this.username = data.Username || '';
+    this.pool = data.Pool;
+    this.Session = null;
+    this.client = data.Pool.client;
+    this.signInUserSession = null;
+    this.authenticationFlowType = 'USER_SRP_AUTH';
+    this.storage = data.Storage || new StorageHelper().getStorage();
+    this.keyPrefix = "CognitoIdentityServiceProvider.".concat(this.pool.getClientId());
+    this.userDataKey = "".concat(this.keyPrefix, ".").concat(this.username, ".userData");
+  }
+
+  /**
+   * Sets the session for this user
+   * @param {CognitoUserSession} signInUserSession the session
+   * @returns {void}
+   */
+  CognitoUser_createClass(CognitoUser, [{
+    key: "setSignInUserSession",
+    value: function setSignInUserSession(signInUserSession) {
+      this.clearCachedUserData();
+      this.signInUserSession = signInUserSession;
+      this.cacheTokens();
+    }
+
+    /**
+     * @returns {CognitoUserSession} the current session for this user
+     */
+  }, {
+    key: "getSignInUserSession",
+    value: function getSignInUserSession() {
+      return this.signInUserSession;
+    }
+
+    /**
+     * @returns {string} the user's username
+     */
+  }, {
+    key: "getUsername",
+    value: function getUsername() {
+      return this.username;
+    }
+
+    /**
+     * @returns {String} the authentication flow type
+     */
+  }, {
+    key: "getAuthenticationFlowType",
+    value: function getAuthenticationFlowType() {
+      return this.authenticationFlowType;
+    }
+
+    /**
+     * sets authentication flow type
+     * @param {string} authenticationFlowType New value.
+     * @returns {void}
+     */
+  }, {
+    key: "setAuthenticationFlowType",
+    value: function setAuthenticationFlowType(authenticationFlowType) {
+      this.authenticationFlowType = authenticationFlowType;
+    }
+
+    /**
+     * This is used for authenticating the user through the custom authentication flow.
+     * @param {AuthenticationDetails} authDetails Contains the authentication data
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {customChallenge} callback.customChallenge Custom challenge
+     *        response required to continue.
+     * @param {authSuccess} callback.onSuccess Called on success with the new session.
+     * @returns {void}
+     */
+  }, {
+    key: "initiateAuth",
+    value: function initiateAuth(authDetails, callback) {
+      var _this = this;
+      var authParameters = authDetails.getAuthParameters();
+      authParameters.USERNAME = this.username;
+      var clientMetaData = Object.keys(authDetails.getValidationData()).length !== 0 ? authDetails.getValidationData() : authDetails.getClientMetadata();
+      var jsonReq = {
+        AuthFlow: 'CUSTOM_AUTH',
+        ClientId: this.pool.getClientId(),
+        AuthParameters: authParameters,
+        ClientMetadata: clientMetaData
+      };
+      if (this.getUserContextData()) {
+        jsonReq.UserContextData = this.getUserContextData();
+      }
+      this.client.request('InitiateAuth', jsonReq, function (err, data) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        var challengeName = data.ChallengeName;
+        var challengeParameters = data.ChallengeParameters;
+        if (challengeName === 'CUSTOM_CHALLENGE') {
+          _this.Session = data.Session;
+          return callback.customChallenge(challengeParameters);
+        }
+        _this.signInUserSession = _this.getCognitoUserSession(data.AuthenticationResult);
+        _this.cacheTokens();
+        return callback.onSuccess(_this.signInUserSession);
+      });
+    }
+
+    /**
+     * This is used for authenticating the user.
+     * stuff
+     * @param {AuthenticationDetails} authDetails Contains the authentication data
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {newPasswordRequired} callback.newPasswordRequired new
+     *        password and any required attributes are required to continue
+     * @param {mfaRequired} callback.mfaRequired MFA code
+     *        required to continue.
+     * @param {customChallenge} callback.customChallenge Custom challenge
+     *        response required to continue.
+     * @param {authSuccess} callback.onSuccess Called on success with the new session.
+     * @returns {void}
+     */
+  }, {
+    key: "authenticateUser",
+    value: function authenticateUser(authDetails, callback) {
+      if (this.authenticationFlowType === 'USER_PASSWORD_AUTH') {
+        return this.authenticateUserPlainUsernamePassword(authDetails, callback);
+      } else if (this.authenticationFlowType === 'USER_SRP_AUTH' || this.authenticationFlowType === 'CUSTOM_AUTH') {
+        return this.authenticateUserDefaultAuth(authDetails, callback);
+      }
+      return callback.onFailure(new Error('Authentication flow type is invalid.'));
+    }
+
+    /**
+     * PRIVATE ONLY: This is an internal only method and should not
+     * be directly called by the consumers.
+     * It calls the AuthenticationHelper for SRP related
+     * stuff
+     * @param {AuthenticationDetails} authDetails Contains the authentication data
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {newPasswordRequired} callback.newPasswordRequired new
+     *        password and any required attributes are required to continue
+     * @param {mfaRequired} callback.mfaRequired MFA code
+     *        required to continue.
+     * @param {customChallenge} callback.customChallenge Custom challenge
+     *        response required to continue.
+     * @param {authSuccess} callback.onSuccess Called on success with the new session.
+     * @returns {void}
+     */
+  }, {
+    key: "authenticateUserDefaultAuth",
+    value: function authenticateUserDefaultAuth(authDetails, callback) {
+      var _this2 = this;
+      var authenticationHelper = new AuthenticationHelper(this.pool.getUserPoolName());
+      var dateHelper = new DateHelper();
+      var serverBValue;
+      var salt;
+      var authParameters = {};
+      if (this.deviceKey != null) {
+        authParameters.DEVICE_KEY = this.deviceKey;
+      }
+      authParameters.USERNAME = this.username;
+      authenticationHelper.getLargeAValue(function (errOnAValue, aValue) {
+        // getLargeAValue callback start
+        if (errOnAValue) {
+          callback.onFailure(errOnAValue);
+        }
+        authParameters.SRP_A = aValue.toString(16);
+        if (_this2.authenticationFlowType === 'CUSTOM_AUTH') {
+          authParameters.CHALLENGE_NAME = 'SRP_A';
+        }
+        var clientMetaData = Object.keys(authDetails.getValidationData()).length !== 0 ? authDetails.getValidationData() : authDetails.getClientMetadata();
+        var jsonReq = {
+          AuthFlow: _this2.authenticationFlowType,
+          ClientId: _this2.pool.getClientId(),
+          AuthParameters: authParameters,
+          ClientMetadata: clientMetaData
+        };
+        if (_this2.getUserContextData(_this2.username)) {
+          jsonReq.UserContextData = _this2.getUserContextData(_this2.username);
+        }
+        _this2.client.request('InitiateAuth', jsonReq, function (err, data) {
+          if (err) {
+            return callback.onFailure(err);
+          }
+          var challengeParameters = data.ChallengeParameters;
+          _this2.username = challengeParameters.USER_ID_FOR_SRP;
+          _this2.userDataKey = "".concat(_this2.keyPrefix, ".").concat(_this2.username, ".userData");
+          serverBValue = new BigInteger(challengeParameters.SRP_B, 16);
+          salt = new BigInteger(challengeParameters.SALT, 16);
+          _this2.getCachedDeviceKeyAndPassword();
+          authenticationHelper.getPasswordAuthenticationKey(_this2.username, authDetails.getPassword(), serverBValue, salt, function (errOnHkdf, hkdf) {
+            // getPasswordAuthenticationKey callback start
+            if (errOnHkdf) {
+              callback.onFailure(errOnHkdf);
+            }
+            var dateNow = dateHelper.getNowString();
+            var concatBuffer = buffer/* Buffer */.lW.concat([buffer/* Buffer */.lW.from(_this2.pool.getUserPoolName(), 'utf8'), buffer/* Buffer */.lW.from(_this2.username, 'utf8'), buffer/* Buffer */.lW.from(challengeParameters.SECRET_BLOCK, 'base64'), buffer/* Buffer */.lW.from(dateNow, 'utf8')]);
+            var awsCryptoHash = new build.Sha256(hkdf);
+            awsCryptoHash.update(concatBuffer);
+            var resultFromAWSCrypto = awsCryptoHash.digestSync();
+            var signatureString = buffer/* Buffer */.lW.from(resultFromAWSCrypto).toString('base64');
+            var challengeResponses = {};
+            challengeResponses.USERNAME = _this2.username;
+            challengeResponses.PASSWORD_CLAIM_SECRET_BLOCK = challengeParameters.SECRET_BLOCK;
+            challengeResponses.TIMESTAMP = dateNow;
+            challengeResponses.PASSWORD_CLAIM_SIGNATURE = signatureString;
+            if (_this2.deviceKey != null) {
+              challengeResponses.DEVICE_KEY = _this2.deviceKey;
+            }
+            var respondToAuthChallenge = function respondToAuthChallenge(challenge, challengeCallback) {
+              return _this2.client.request('RespondToAuthChallenge', challenge, function (errChallenge, dataChallenge) {
+                if (errChallenge && errChallenge.code === 'ResourceNotFoundException' && errChallenge.message.toLowerCase().indexOf('device') !== -1) {
+                  challengeResponses.DEVICE_KEY = null;
+                  _this2.deviceKey = null;
+                  _this2.randomPassword = null;
+                  _this2.deviceGroupKey = null;
+                  _this2.clearCachedDeviceKeyAndPassword();
+                  return respondToAuthChallenge(challenge, challengeCallback);
+                }
+                return challengeCallback(errChallenge, dataChallenge);
+              });
+            };
+            var jsonReqResp = {
+              ChallengeName: 'PASSWORD_VERIFIER',
+              ClientId: _this2.pool.getClientId(),
+              ChallengeResponses: challengeResponses,
+              Session: data.Session,
+              ClientMetadata: clientMetaData
+            };
+            if (_this2.getUserContextData()) {
+              jsonReqResp.UserContextData = _this2.getUserContextData();
+            }
+            respondToAuthChallenge(jsonReqResp, function (errAuthenticate, dataAuthenticate) {
+              if (errAuthenticate) {
+                return callback.onFailure(errAuthenticate);
+              }
+              return _this2.authenticateUserInternal(dataAuthenticate, authenticationHelper, callback);
+            });
+            return undefined;
+            // getPasswordAuthenticationKey callback end
+          });
+
+          return undefined;
+        });
+        // getLargeAValue callback end
+      });
+    }
+
+    /**
+     * PRIVATE ONLY: This is an internal only method and should not
+     * be directly called by the consumers.
+     * @param {AuthenticationDetails} authDetails Contains the authentication data.
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {mfaRequired} callback.mfaRequired MFA code
+     *        required to continue.
+     * @param {authSuccess} callback.onSuccess Called on success with the new session.
+     * @returns {void}
+     */
+  }, {
+    key: "authenticateUserPlainUsernamePassword",
+    value: function authenticateUserPlainUsernamePassword(authDetails, callback) {
+      var _this3 = this;
+      var authParameters = {};
+      authParameters.USERNAME = this.username;
+      authParameters.PASSWORD = authDetails.getPassword();
+      if (!authParameters.PASSWORD) {
+        callback.onFailure(new Error('PASSWORD parameter is required'));
+        return;
+      }
+      var authenticationHelper = new AuthenticationHelper(this.pool.getUserPoolName());
+      this.getCachedDeviceKeyAndPassword();
+      if (this.deviceKey != null) {
+        authParameters.DEVICE_KEY = this.deviceKey;
+      }
+      var clientMetaData = Object.keys(authDetails.getValidationData()).length !== 0 ? authDetails.getValidationData() : authDetails.getClientMetadata();
+      var jsonReq = {
+        AuthFlow: 'USER_PASSWORD_AUTH',
+        ClientId: this.pool.getClientId(),
+        AuthParameters: authParameters,
+        ClientMetadata: clientMetaData
+      };
+      if (this.getUserContextData(this.username)) {
+        jsonReq.UserContextData = this.getUserContextData(this.username);
+      }
+      // USER_PASSWORD_AUTH happens in a single round-trip: client sends userName and password,
+      // Cognito UserPools verifies password and returns tokens.
+      this.client.request('InitiateAuth', jsonReq, function (err, authResult) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        return _this3.authenticateUserInternal(authResult, authenticationHelper, callback);
+      });
+    }
+
+    /**
+     * PRIVATE ONLY: This is an internal only method and should not
+     * be directly called by the consumers.
+     * @param {object} dataAuthenticate authentication data
+     * @param {object} authenticationHelper helper created
+     * @param {callback} callback passed on from caller
+     * @returns {void}
+     */
+  }, {
+    key: "authenticateUserInternal",
+    value: function authenticateUserInternal(dataAuthenticate, authenticationHelper, callback) {
+      var _this4 = this;
+      var challengeName = dataAuthenticate.ChallengeName;
+      var challengeParameters = dataAuthenticate.ChallengeParameters;
+      if (challengeName === 'SMS_MFA') {
+        this.Session = dataAuthenticate.Session;
+        return callback.mfaRequired(challengeName, challengeParameters);
+      }
+      if (challengeName === 'SELECT_MFA_TYPE') {
+        this.Session = dataAuthenticate.Session;
+        return callback.selectMFAType(challengeName, challengeParameters);
+      }
+      if (challengeName === 'MFA_SETUP') {
+        this.Session = dataAuthenticate.Session;
+        return callback.mfaSetup(challengeName, challengeParameters);
+      }
+      if (challengeName === 'SOFTWARE_TOKEN_MFA') {
+        this.Session = dataAuthenticate.Session;
+        return callback.totpRequired(challengeName, challengeParameters);
+      }
+      if (challengeName === 'CUSTOM_CHALLENGE') {
+        this.Session = dataAuthenticate.Session;
+        return callback.customChallenge(challengeParameters);
+      }
+      if (challengeName === 'NEW_PASSWORD_REQUIRED') {
+        this.Session = dataAuthenticate.Session;
+        var userAttributes = null;
+        var rawRequiredAttributes = null;
+        var requiredAttributes = [];
+        var userAttributesPrefix = authenticationHelper.getNewPasswordRequiredChallengeUserAttributePrefix();
+        if (challengeParameters) {
+          userAttributes = JSON.parse(dataAuthenticate.ChallengeParameters.userAttributes);
+          rawRequiredAttributes = JSON.parse(dataAuthenticate.ChallengeParameters.requiredAttributes);
+        }
+        if (rawRequiredAttributes) {
+          for (var i = 0; i < rawRequiredAttributes.length; i++) {
+            requiredAttributes[i] = rawRequiredAttributes[i].substr(userAttributesPrefix.length);
+          }
+        }
+        return callback.newPasswordRequired(userAttributes, requiredAttributes);
+      }
+      if (challengeName === 'DEVICE_SRP_AUTH') {
+        this.Session = dataAuthenticate.Session;
+        this.getDeviceResponse(callback);
+        return undefined;
+      }
+      this.signInUserSession = this.getCognitoUserSession(dataAuthenticate.AuthenticationResult);
+      this.challengeName = challengeName;
+      this.cacheTokens();
+      var newDeviceMetadata = dataAuthenticate.AuthenticationResult.NewDeviceMetadata;
+      if (newDeviceMetadata == null) {
+        return callback.onSuccess(this.signInUserSession);
+      }
+      authenticationHelper.generateHashDevice(dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceGroupKey, dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceKey, function (errGenHash) {
+        if (errGenHash) {
+          return callback.onFailure(errGenHash);
+        }
+        var deviceSecretVerifierConfig = {
+          Salt: buffer/* Buffer */.lW.from(authenticationHelper.getSaltDevices(), 'hex').toString('base64'),
+          PasswordVerifier: buffer/* Buffer */.lW.from(authenticationHelper.getVerifierDevices(), 'hex').toString('base64')
+        };
+        _this4.verifierDevices = deviceSecretVerifierConfig.PasswordVerifier;
+        _this4.deviceGroupKey = newDeviceMetadata.DeviceGroupKey;
+        _this4.randomPassword = authenticationHelper.getRandomPassword();
+        _this4.client.request('ConfirmDevice', {
+          DeviceKey: newDeviceMetadata.DeviceKey,
+          AccessToken: _this4.signInUserSession.getAccessToken().getJwtToken(),
+          DeviceSecretVerifierConfig: deviceSecretVerifierConfig,
+          DeviceName: userAgent
+        }, function (errConfirm, dataConfirm) {
+          if (errConfirm) {
+            return callback.onFailure(errConfirm);
+          }
+          _this4.deviceKey = dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceKey;
+          _this4.cacheDeviceKeyAndPassword();
+          if (dataConfirm.UserConfirmationNecessary === true) {
+            return callback.onSuccess(_this4.signInUserSession, dataConfirm.UserConfirmationNecessary);
+          }
+          return callback.onSuccess(_this4.signInUserSession);
+        });
+        return undefined;
+      });
+      return undefined;
+    }
+
+    /**
+     * This method is user to complete the NEW_PASSWORD_REQUIRED challenge.
+     * Pass the new password with any new user attributes to be updated.
+     * User attribute keys must be of format userAttributes.<attribute_name>.
+     * @param {string} newPassword new password for this user
+     * @param {object} requiredAttributeData map with values for all required attributes
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {mfaRequired} callback.mfaRequired MFA code required to continue.
+     * @param {customChallenge} callback.customChallenge Custom challenge
+     *         response required to continue.
+     * @param {authSuccess} callback.onSuccess Called on success with the new session.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     */
+  }, {
+    key: "completeNewPasswordChallenge",
+    value: function completeNewPasswordChallenge(newPassword, requiredAttributeData, callback, clientMetadata) {
+      var _this5 = this;
+      if (!newPassword) {
+        return callback.onFailure(new Error('New password is required.'));
+      }
+      var authenticationHelper = new AuthenticationHelper(this.pool.getUserPoolName());
+      var userAttributesPrefix = authenticationHelper.getNewPasswordRequiredChallengeUserAttributePrefix();
+      var finalUserAttributes = {};
+      if (requiredAttributeData) {
+        Object.keys(requiredAttributeData).forEach(function (key) {
+          finalUserAttributes[userAttributesPrefix + key] = requiredAttributeData[key];
+        });
+      }
+      finalUserAttributes.NEW_PASSWORD = newPassword;
+      finalUserAttributes.USERNAME = this.username;
+      var jsonReq = {
+        ChallengeName: 'NEW_PASSWORD_REQUIRED',
+        ClientId: this.pool.getClientId(),
+        ChallengeResponses: finalUserAttributes,
+        Session: this.Session,
+        ClientMetadata: clientMetadata
+      };
+      if (this.getUserContextData()) {
+        jsonReq.UserContextData = this.getUserContextData();
+      }
+      this.client.request('RespondToAuthChallenge', jsonReq, function (errAuthenticate, dataAuthenticate) {
+        if (errAuthenticate) {
+          return callback.onFailure(errAuthenticate);
+        }
+        return _this5.authenticateUserInternal(dataAuthenticate, authenticationHelper, callback);
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used to get a session using device authentication. It is called at the end of user
+     * authentication
+     *
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {authSuccess} callback.onSuccess Called on success with the new session.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     * @private
+     */
+  }, {
+    key: "getDeviceResponse",
+    value: function getDeviceResponse(callback, clientMetadata) {
+      var _this6 = this;
+      var authenticationHelper = new AuthenticationHelper(this.deviceGroupKey);
+      var dateHelper = new DateHelper();
+      var authParameters = {};
+      authParameters.USERNAME = this.username;
+      authParameters.DEVICE_KEY = this.deviceKey;
+      authenticationHelper.getLargeAValue(function (errAValue, aValue) {
+        // getLargeAValue callback start
+        if (errAValue) {
+          callback.onFailure(errAValue);
+        }
+        authParameters.SRP_A = aValue.toString(16);
+        var jsonReq = {
+          ChallengeName: 'DEVICE_SRP_AUTH',
+          ClientId: _this6.pool.getClientId(),
+          ChallengeResponses: authParameters,
+          ClientMetadata: clientMetadata,
+          Session: _this6.Session
+        };
+        if (_this6.getUserContextData()) {
+          jsonReq.UserContextData = _this6.getUserContextData();
+        }
+        _this6.client.request('RespondToAuthChallenge', jsonReq, function (err, data) {
+          if (err) {
+            return callback.onFailure(err);
+          }
+          var challengeParameters = data.ChallengeParameters;
+          var serverBValue = new BigInteger(challengeParameters.SRP_B, 16);
+          var salt = new BigInteger(challengeParameters.SALT, 16);
+          authenticationHelper.getPasswordAuthenticationKey(_this6.deviceKey, _this6.randomPassword, serverBValue, salt, function (errHkdf, hkdf) {
+            // getPasswordAuthenticationKey callback start
+            if (errHkdf) {
+              return callback.onFailure(errHkdf);
+            }
+            var dateNow = dateHelper.getNowString();
+            var concatBuffer = buffer/* Buffer */.lW.concat([buffer/* Buffer */.lW.from(_this6.deviceGroupKey, 'utf8'), buffer/* Buffer */.lW.from(_this6.deviceKey, 'utf8'), buffer/* Buffer */.lW.from(challengeParameters.SECRET_BLOCK, 'base64'), buffer/* Buffer */.lW.from(dateNow, 'utf8')]);
+            var awsCryptoHash = new build.Sha256(hkdf);
+            awsCryptoHash.update(concatBuffer);
+            var resultFromAWSCrypto = awsCryptoHash.digestSync();
+            var signatureString = buffer/* Buffer */.lW.from(resultFromAWSCrypto).toString('base64');
+            var challengeResponses = {};
+            challengeResponses.USERNAME = _this6.username;
+            challengeResponses.PASSWORD_CLAIM_SECRET_BLOCK = challengeParameters.SECRET_BLOCK;
+            challengeResponses.TIMESTAMP = dateNow;
+            challengeResponses.PASSWORD_CLAIM_SIGNATURE = signatureString;
+            challengeResponses.DEVICE_KEY = _this6.deviceKey;
+            var jsonReqResp = {
+              ChallengeName: 'DEVICE_PASSWORD_VERIFIER',
+              ClientId: _this6.pool.getClientId(),
+              ChallengeResponses: challengeResponses,
+              Session: data.Session
+            };
+            if (_this6.getUserContextData()) {
+              jsonReqResp.UserContextData = _this6.getUserContextData();
+            }
+            _this6.client.request('RespondToAuthChallenge', jsonReqResp, function (errAuthenticate, dataAuthenticate) {
+              if (errAuthenticate) {
+                return callback.onFailure(errAuthenticate);
+              }
+              _this6.signInUserSession = _this6.getCognitoUserSession(dataAuthenticate.AuthenticationResult);
+              _this6.cacheTokens();
+              return callback.onSuccess(_this6.signInUserSession);
+            });
+            return undefined;
+            // getPasswordAuthenticationKey callback end
+          });
+
+          return undefined;
+        });
+        // getLargeAValue callback end
+      });
+    }
+
+    /**
+     * This is used for a certain user to confirm the registration by using a confirmation code
+     * @param {string} confirmationCode Code entered by user.
+     * @param {bool} forceAliasCreation Allow migrating from an existing email / phone number.
+     * @param {nodeCallback<string>} callback Called on success or error.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     */
+  }, {
+    key: "confirmRegistration",
+    value: function confirmRegistration(confirmationCode, forceAliasCreation, callback, clientMetadata) {
+      var jsonReq = {
+        ClientId: this.pool.getClientId(),
+        ConfirmationCode: confirmationCode,
+        Username: this.username,
+        ForceAliasCreation: forceAliasCreation,
+        ClientMetadata: clientMetadata
+      };
+      if (this.getUserContextData()) {
+        jsonReq.UserContextData = this.getUserContextData();
+      }
+      this.client.request('ConfirmSignUp', jsonReq, function (err) {
+        if (err) {
+          return callback(err, null);
+        }
+        return callback(null, 'SUCCESS');
+      });
+    }
+
+    /**
+     * This is used by the user once he has the responses to a custom challenge
+     * @param {string} answerChallenge The custom challenge answer.
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {customChallenge} callback.customChallenge
+     *    Custom challenge response required to continue.
+     * @param {authSuccess} callback.onSuccess Called on success with the new session.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     */
+  }, {
+    key: "sendCustomChallengeAnswer",
+    value: function sendCustomChallengeAnswer(answerChallenge, callback, clientMetadata) {
+      var _this7 = this;
+      var challengeResponses = {};
+      challengeResponses.USERNAME = this.username;
+      challengeResponses.ANSWER = answerChallenge;
+      var authenticationHelper = new AuthenticationHelper(this.pool.getUserPoolName());
+      this.getCachedDeviceKeyAndPassword();
+      if (this.deviceKey != null) {
+        challengeResponses.DEVICE_KEY = this.deviceKey;
+      }
+      var jsonReq = {
+        ChallengeName: 'CUSTOM_CHALLENGE',
+        ChallengeResponses: challengeResponses,
+        ClientId: this.pool.getClientId(),
+        Session: this.Session,
+        ClientMetadata: clientMetadata
+      };
+      if (this.getUserContextData()) {
+        jsonReq.UserContextData = this.getUserContextData();
+      }
+      this.client.request('RespondToAuthChallenge', jsonReq, function (err, data) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        return _this7.authenticateUserInternal(data, authenticationHelper, callback);
+      });
+    }
+
+    /**
+     * This is used by the user once he has an MFA code
+     * @param {string} confirmationCode The MFA code entered by the user.
+     * @param {object} callback Result callback map.
+     * @param {string} mfaType The mfa we are replying to.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {authSuccess} callback.onSuccess Called on success with the new session.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     */
+  }, {
+    key: "sendMFACode",
+    value: function sendMFACode(confirmationCode, callback, mfaType, clientMetadata) {
+      var _this8 = this;
+      var challengeResponses = {};
+      challengeResponses.USERNAME = this.username;
+      challengeResponses.SMS_MFA_CODE = confirmationCode;
+      var mfaTypeSelection = mfaType || 'SMS_MFA';
+      if (mfaTypeSelection === 'SOFTWARE_TOKEN_MFA') {
+        challengeResponses.SOFTWARE_TOKEN_MFA_CODE = confirmationCode;
+      }
+      if (this.deviceKey != null) {
+        challengeResponses.DEVICE_KEY = this.deviceKey;
+      }
+      var jsonReq = {
+        ChallengeName: mfaTypeSelection,
+        ChallengeResponses: challengeResponses,
+        ClientId: this.pool.getClientId(),
+        Session: this.Session,
+        ClientMetadata: clientMetadata
+      };
+      if (this.getUserContextData()) {
+        jsonReq.UserContextData = this.getUserContextData();
+      }
+      this.client.request('RespondToAuthChallenge', jsonReq, function (err, dataAuthenticate) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        var challengeName = dataAuthenticate.ChallengeName;
+        if (challengeName === 'DEVICE_SRP_AUTH') {
+          _this8.getDeviceResponse(callback);
+          return undefined;
+        }
+        _this8.signInUserSession = _this8.getCognitoUserSession(dataAuthenticate.AuthenticationResult);
+        _this8.cacheTokens();
+        if (dataAuthenticate.AuthenticationResult.NewDeviceMetadata == null) {
+          return callback.onSuccess(_this8.signInUserSession);
+        }
+        var authenticationHelper = new AuthenticationHelper(_this8.pool.getUserPoolName());
+        authenticationHelper.generateHashDevice(dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceGroupKey, dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceKey, function (errGenHash) {
+          if (errGenHash) {
+            return callback.onFailure(errGenHash);
+          }
+          var deviceSecretVerifierConfig = {
+            Salt: buffer/* Buffer */.lW.from(authenticationHelper.getSaltDevices(), 'hex').toString('base64'),
+            PasswordVerifier: buffer/* Buffer */.lW.from(authenticationHelper.getVerifierDevices(), 'hex').toString('base64')
+          };
+          _this8.verifierDevices = deviceSecretVerifierConfig.PasswordVerifier;
+          _this8.deviceGroupKey = dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceGroupKey;
+          _this8.randomPassword = authenticationHelper.getRandomPassword();
+          _this8.client.request('ConfirmDevice', {
+            DeviceKey: dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceKey,
+            AccessToken: _this8.signInUserSession.getAccessToken().getJwtToken(),
+            DeviceSecretVerifierConfig: deviceSecretVerifierConfig,
+            DeviceName: userAgent
+          }, function (errConfirm, dataConfirm) {
+            if (errConfirm) {
+              return callback.onFailure(errConfirm);
+            }
+            _this8.deviceKey = dataAuthenticate.AuthenticationResult.NewDeviceMetadata.DeviceKey;
+            _this8.cacheDeviceKeyAndPassword();
+            if (dataConfirm.UserConfirmationNecessary === true) {
+              return callback.onSuccess(_this8.signInUserSession, dataConfirm.UserConfirmationNecessary);
+            }
+            return callback.onSuccess(_this8.signInUserSession);
+          });
+          return undefined;
+        });
+        return undefined;
+      });
+    }
+
+    /**
+     * This is used by an authenticated user to change the current password
+     * @param {string} oldUserPassword The current password.
+     * @param {string} newUserPassword The requested new password.
+     * @param {nodeCallback<string>} callback Called on success or error.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     */
+  }, {
+    key: "changePassword",
+    value: function changePassword(oldUserPassword, newUserPassword, callback, clientMetadata) {
+      if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
+        return callback(new Error('User is not authenticated'), null);
+      }
+      this.client.request('ChangePassword', {
+        PreviousPassword: oldUserPassword,
+        ProposedPassword: newUserPassword,
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
+        ClientMetadata: clientMetadata
+      }, function (err) {
+        if (err) {
+          return callback(err, null);
+        }
+        return callback(null, 'SUCCESS');
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used by an authenticated user to enable MFA for itself
+     * @deprecated
+     * @param {nodeCallback<string>} callback Called on success or error.
+     * @returns {void}
+     */
+  }, {
+    key: "enableMFA",
+    value: function enableMFA(callback) {
+      if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
+        return callback(new Error('User is not authenticated'), null);
+      }
+      var mfaOptions = [];
+      var mfaEnabled = {
+        DeliveryMedium: 'SMS',
+        AttributeName: 'phone_number'
+      };
+      mfaOptions.push(mfaEnabled);
+      this.client.request('SetUserSettings', {
+        MFAOptions: mfaOptions,
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
+      }, function (err) {
+        if (err) {
+          return callback(err, null);
+        }
+        return callback(null, 'SUCCESS');
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used by an authenticated user to enable MFA for itself
+     * @param {IMfaSettings} smsMfaSettings the sms mfa settings
+     * @param {IMFASettings} softwareTokenMfaSettings the software token mfa settings
+     * @param {nodeCallback<string>} callback Called on success or error.
+     * @returns {void}
+     */
+  }, {
+    key: "setUserMfaPreference",
+    value: function setUserMfaPreference(smsMfaSettings, softwareTokenMfaSettings, callback) {
+      if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
+        return callback(new Error('User is not authenticated'), null);
+      }
+      this.client.request('SetUserMFAPreference', {
+        SMSMfaSettings: smsMfaSettings,
+        SoftwareTokenMfaSettings: softwareTokenMfaSettings,
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
+      }, function (err) {
+        if (err) {
+          return callback(err, null);
+        }
+        return callback(null, 'SUCCESS');
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used by an authenticated user to disable MFA for itself
+     * @deprecated
+     * @param {nodeCallback<string>} callback Called on success or error.
+     * @returns {void}
+     */
+  }, {
+    key: "disableMFA",
+    value: function disableMFA(callback) {
+      if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
+        return callback(new Error('User is not authenticated'), null);
+      }
+      var mfaOptions = [];
+      this.client.request('SetUserSettings', {
+        MFAOptions: mfaOptions,
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
+      }, function (err) {
+        if (err) {
+          return callback(err, null);
+        }
+        return callback(null, 'SUCCESS');
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used by an authenticated user to delete itself
+     * @param {nodeCallback<string>} callback Called on success or error.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     */
+  }, {
+    key: "deleteUser",
+    value: function deleteUser(callback, clientMetadata) {
+      var _this9 = this;
+      if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
+        return callback(new Error('User is not authenticated'), null);
+      }
+      this.client.request('DeleteUser', {
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
+        ClientMetadata: clientMetadata
+      }, function (err) {
+        if (err) {
+          return callback(err, null);
+        }
+        _this9.clearCachedUser();
+        return callback(null, 'SUCCESS');
+      });
+      return undefined;
+    }
+
+    /**
+     * @typedef {CognitoUserAttribute | { Name:string, Value:string }} AttributeArg
+     */
+    /**
+     * This is used by an authenticated user to change a list of attributes
+     * @param {AttributeArg[]} attributes A list of the new user attributes.
+     * @param {nodeCallback<string>} callback Called on success or error.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     */
+  }, {
+    key: "updateAttributes",
+    value: function updateAttributes(attributes, callback, clientMetadata) {
+      var _this10 = this;
+      if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
+        return callback(new Error('User is not authenticated'), null);
+      }
+      this.client.request('UpdateUserAttributes', {
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
+        UserAttributes: attributes,
+        ClientMetadata: clientMetadata
+      }, function (err, result) {
+        if (err) {
+          return callback(err, null);
+        }
+
+        // update cached user
+        return _this10.getUserData(function () {
+          return callback(null, 'SUCCESS', result);
+        }, {
+          bypassCache: true
+        });
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used by an authenticated user to get a list of attributes
+     * @param {nodeCallback<CognitoUserAttribute[]>} callback Called on success or error.
+     * @returns {void}
+     */
+  }, {
+    key: "getUserAttributes",
+    value: function getUserAttributes(callback) {
+      if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
+        return callback(new Error('User is not authenticated'), null);
+      }
+      this.client.request('GetUser', {
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
+      }, function (err, userData) {
+        if (err) {
+          return callback(err, null);
+        }
+        var attributeList = [];
+        for (var i = 0; i < userData.UserAttributes.length; i++) {
+          var attribute = {
+            Name: userData.UserAttributes[i].Name,
+            Value: userData.UserAttributes[i].Value
+          };
+          var userAttribute = new CognitoUserAttribute(attribute);
+          attributeList.push(userAttribute);
+        }
+        return callback(null, attributeList);
+      });
+      return undefined;
+    }
+
+    /**
+     * This was previously used by an authenticated user to get MFAOptions,
+     * but no longer returns a meaningful response. Refer to the documentation for
+     * how to setup and use MFA: https://docs.amplify.aws/lib/auth/mfa/q/platform/js
+     * @deprecated
+     * @param {nodeCallback<MFAOptions>} callback Called on success or error.
+     * @returns {void}
+     */
+  }, {
+    key: "getMFAOptions",
+    value: function getMFAOptions(callback) {
+      if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
+        return callback(new Error('User is not authenticated'), null);
+      }
+      this.client.request('GetUser', {
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
+      }, function (err, userData) {
+        if (err) {
+          return callback(err, null);
+        }
+        return callback(null, userData.MFAOptions);
+      });
+      return undefined;
+    }
+
+    /**
+     * PRIVATE ONLY: This is an internal only method and should not
+     * be directly called by the consumers.
+     */
+  }, {
+    key: "createGetUserRequest",
+    value: function createGetUserRequest() {
+      return this.client.promisifyRequest('GetUser', {
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
+      });
+    }
+
+    /**
+     * PRIVATE ONLY: This is an internal only method and should not
+     * be directly called by the consumers.
+     */
+  }, {
+    key: "refreshSessionIfPossible",
+    value: function refreshSessionIfPossible() {
+      var _this11 = this;
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      // best effort, if not possible
+      return new Promise(function (resolve) {
+        var refresh = _this11.signInUserSession.getRefreshToken();
+        if (refresh && refresh.getToken()) {
+          _this11.refreshSession(refresh, resolve, options.clientMetadata);
+        } else {
+          resolve();
+        }
+      });
+    }
+
+    /**
+     * @typedef {Object} GetUserDataOptions
+     * @property {boolean} bypassCache - force getting data from Cognito service
+     * @property {Record<string, string>} clientMetadata - clientMetadata for getSession
+     */
+
+    /**
+     * This is used by an authenticated users to get the userData
+     * @param {nodeCallback<UserData>} callback Called on success or error.
+     * @param {GetUserDataOptions} params
+     * @returns {void}
+     */
+  }, {
+    key: "getUserData",
+    value: function getUserData(callback, params) {
+      var _this12 = this;
+      if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
+        this.clearCachedUserData();
+        return callback(new Error('User is not authenticated'), null);
+      }
+      var userData = this.getUserDataFromCache();
+      if (!userData) {
+        this.fetchUserData().then(function (data) {
+          callback(null, data);
+        })["catch"](callback);
+        return;
+      }
+      if (this.isFetchUserDataAndTokenRequired(params)) {
+        this.fetchUserData().then(function (data) {
+          return _this12.refreshSessionIfPossible(params).then(function () {
+            return data;
+          });
+        }).then(function (data) {
+          return callback(null, data);
+        })["catch"](callback);
+        return;
+      }
+      try {
+        callback(null, JSON.parse(userData));
+        return;
+      } catch (err) {
+        this.clearCachedUserData();
+        callback(err, null);
+        return;
+      }
+    }
+
+    /**
+     *
+     * PRIVATE ONLY: This is an internal only method and should not
+     * be directly called by the consumers.
+     */
+  }, {
+    key: "getUserDataFromCache",
+    value: function getUserDataFromCache() {
+      var userData = this.storage.getItem(this.userDataKey);
+      return userData;
+    }
+
+    /**
+     *
+     * PRIVATE ONLY: This is an internal only method and should not
+     * be directly called by the consumers.
+     */
+  }, {
+    key: "isFetchUserDataAndTokenRequired",
+    value: function isFetchUserDataAndTokenRequired(params) {
+      var _ref = params || {},
+        _ref$bypassCache = _ref.bypassCache,
+        bypassCache = _ref$bypassCache === void 0 ? false : _ref$bypassCache;
+      return bypassCache;
+    }
+    /**
+     *
+     * PRIVATE ONLY: This is an internal only method and should not
+     * be directly called by the consumers.
+     */
+  }, {
+    key: "fetchUserData",
+    value: function fetchUserData() {
+      var _this13 = this;
+      return this.createGetUserRequest().then(function (data) {
+        _this13.cacheUserData(data);
+        return data;
+      });
+    }
+
+    /**
+     * This is used by an authenticated user to delete a list of attributes
+     * @param {string[]} attributeList Names of the attributes to delete.
+     * @param {nodeCallback<string>} callback Called on success or error.
+     * @returns {void}
+     */
+  }, {
+    key: "deleteAttributes",
+    value: function deleteAttributes(attributeList, callback) {
+      var _this14 = this;
+      if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
+        return callback(new Error('User is not authenticated'), null);
+      }
+      this.client.request('DeleteUserAttributes', {
+        UserAttributeNames: attributeList,
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
+      }, function (err) {
+        if (err) {
+          return callback(err, null);
+        }
+
+        // update cached user
+        return _this14.getUserData(function () {
+          return callback(null, 'SUCCESS');
+        }, {
+          bypassCache: true
+        });
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used by a user to resend a confirmation code
+     * @param {nodeCallback<string>} callback Called on success or error.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     */
+  }, {
+    key: "resendConfirmationCode",
+    value: function resendConfirmationCode(callback, clientMetadata) {
+      var jsonReq = {
+        ClientId: this.pool.getClientId(),
+        Username: this.username,
+        ClientMetadata: clientMetadata
+      };
+      this.client.request('ResendConfirmationCode', jsonReq, function (err, result) {
+        if (err) {
+          return callback(err, null);
+        }
+        return callback(null, result);
+      });
+    }
+
+    /**
+     * @typedef {Object} GetSessionOptions
+     * @property {Record<string, string>} clientMetadata - clientMetadata for getSession
+     */
+
+    /**
+     * This is used to get a session, either from the session object
+     * or from  the local storage, or by using a refresh token
+     *
+     * @param {nodeCallback<CognitoUserSession>} callback Called on success or error.
+     * @param {GetSessionOptions} options
+     * @returns {void}
+     */
+  }, {
+    key: "getSession",
+    value: function getSession(callback) {
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      if (this.username == null) {
+        return callback(new Error('Username is null. Cannot retrieve a new session'), null);
+      }
+      if (this.signInUserSession != null && this.signInUserSession.isValid()) {
+        return callback(null, this.signInUserSession);
+      }
+      var keyPrefix = "CognitoIdentityServiceProvider.".concat(this.pool.getClientId(), ".").concat(this.username);
+      var idTokenKey = "".concat(keyPrefix, ".idToken");
+      var accessTokenKey = "".concat(keyPrefix, ".accessToken");
+      var refreshTokenKey = "".concat(keyPrefix, ".refreshToken");
+      var clockDriftKey = "".concat(keyPrefix, ".clockDrift");
+      if (this.storage.getItem(idTokenKey)) {
+        var idToken = new CognitoIdToken({
+          IdToken: this.storage.getItem(idTokenKey)
+        });
+        var accessToken = new CognitoAccessToken({
+          AccessToken: this.storage.getItem(accessTokenKey)
+        });
+        var refreshToken = new CognitoRefreshToken({
+          RefreshToken: this.storage.getItem(refreshTokenKey)
+        });
+        var clockDrift = parseInt(this.storage.getItem(clockDriftKey), 0) || 0;
+        var sessionData = {
+          IdToken: idToken,
+          AccessToken: accessToken,
+          RefreshToken: refreshToken,
+          ClockDrift: clockDrift
+        };
+        var cachedSession = new CognitoUserSession(sessionData);
+        if (cachedSession.isValid()) {
+          this.signInUserSession = cachedSession;
+          return callback(null, this.signInUserSession);
+        }
+        if (!refreshToken.getToken()) {
+          return callback(new Error('Cannot retrieve a new session. Please authenticate.'), null);
+        }
+        this.refreshSession(refreshToken, callback, options.clientMetadata);
+      } else {
+        callback(new Error('Local storage is missing an ID Token, Please authenticate'), null);
+      }
+      return undefined;
+    }
+
+    /**
+     * This uses the refreshToken to retrieve a new session
+     * @param {CognitoRefreshToken} refreshToken A previous session's refresh token.
+     * @param {nodeCallback<CognitoUserSession>} callback Called on success or error.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     */
+  }, {
+    key: "refreshSession",
+    value: function refreshSession(refreshToken, callback, clientMetadata) {
+      var _this15 = this;
+      var wrappedCallback = this.pool.wrapRefreshSessionCallback ? this.pool.wrapRefreshSessionCallback(callback) : callback;
+      var authParameters = {};
+      authParameters.REFRESH_TOKEN = refreshToken.getToken();
+      var keyPrefix = "CognitoIdentityServiceProvider.".concat(this.pool.getClientId());
+      var lastUserKey = "".concat(keyPrefix, ".LastAuthUser");
+      if (this.storage.getItem(lastUserKey)) {
+        this.username = this.storage.getItem(lastUserKey);
+        var deviceKeyKey = "".concat(keyPrefix, ".").concat(this.username, ".deviceKey");
+        this.deviceKey = this.storage.getItem(deviceKeyKey);
+        authParameters.DEVICE_KEY = this.deviceKey;
+      }
+      var jsonReq = {
+        ClientId: this.pool.getClientId(),
+        AuthFlow: 'REFRESH_TOKEN_AUTH',
+        AuthParameters: authParameters,
+        ClientMetadata: clientMetadata
+      };
+      if (this.getUserContextData()) {
+        jsonReq.UserContextData = this.getUserContextData();
+      }
+      this.client.request('InitiateAuth', jsonReq, function (err, authResult) {
+        if (err) {
+          if (err.code === 'NotAuthorizedException') {
+            _this15.clearCachedUser();
+          }
+          return wrappedCallback(err, null);
+        }
+        if (authResult) {
+          var authenticationResult = authResult.AuthenticationResult;
+          if (!Object.prototype.hasOwnProperty.call(authenticationResult, 'RefreshToken')) {
+            authenticationResult.RefreshToken = refreshToken.getToken();
+          }
+          _this15.signInUserSession = _this15.getCognitoUserSession(authenticationResult);
+          _this15.cacheTokens();
+          return wrappedCallback(null, _this15.signInUserSession);
+        }
+        return undefined;
+      });
+    }
+
+    /**
+     * This is used to save the session tokens to local storage
+     * @returns {void}
+     */
+  }, {
+    key: "cacheTokens",
+    value: function cacheTokens() {
+      var keyPrefix = "CognitoIdentityServiceProvider.".concat(this.pool.getClientId());
+      var idTokenKey = "".concat(keyPrefix, ".").concat(this.username, ".idToken");
+      var accessTokenKey = "".concat(keyPrefix, ".").concat(this.username, ".accessToken");
+      var refreshTokenKey = "".concat(keyPrefix, ".").concat(this.username, ".refreshToken");
+      var clockDriftKey = "".concat(keyPrefix, ".").concat(this.username, ".clockDrift");
+      var lastUserKey = "".concat(keyPrefix, ".LastAuthUser");
+      this.storage.setItem(idTokenKey, this.signInUserSession.getIdToken().getJwtToken());
+      this.storage.setItem(accessTokenKey, this.signInUserSession.getAccessToken().getJwtToken());
+      this.storage.setItem(refreshTokenKey, this.signInUserSession.getRefreshToken().getToken());
+      this.storage.setItem(clockDriftKey, "".concat(this.signInUserSession.getClockDrift()));
+      this.storage.setItem(lastUserKey, this.username);
+    }
+
+    /**
+     * This is to cache user data
+     */
+  }, {
+    key: "cacheUserData",
+    value: function cacheUserData(userData) {
+      this.storage.setItem(this.userDataKey, JSON.stringify(userData));
+    }
+
+    /**
+     * This is to remove cached user data
+     */
+  }, {
+    key: "clearCachedUserData",
+    value: function clearCachedUserData() {
+      this.storage.removeItem(this.userDataKey);
+    }
+  }, {
+    key: "clearCachedUser",
+    value: function clearCachedUser() {
+      this.clearCachedTokens();
+      this.clearCachedUserData();
+    }
+
+    /**
+     * This is used to cache the device key and device group and device password
+     * @returns {void}
+     */
+  }, {
+    key: "cacheDeviceKeyAndPassword",
+    value: function cacheDeviceKeyAndPassword() {
+      var keyPrefix = "CognitoIdentityServiceProvider.".concat(this.pool.getClientId(), ".").concat(this.username);
+      var deviceKeyKey = "".concat(keyPrefix, ".deviceKey");
+      var randomPasswordKey = "".concat(keyPrefix, ".randomPasswordKey");
+      var deviceGroupKeyKey = "".concat(keyPrefix, ".deviceGroupKey");
+      this.storage.setItem(deviceKeyKey, this.deviceKey);
+      this.storage.setItem(randomPasswordKey, this.randomPassword);
+      this.storage.setItem(deviceGroupKeyKey, this.deviceGroupKey);
+    }
+
+    /**
+     * This is used to get current device key and device group and device password
+     * @returns {void}
+     */
+  }, {
+    key: "getCachedDeviceKeyAndPassword",
+    value: function getCachedDeviceKeyAndPassword() {
+      var keyPrefix = "CognitoIdentityServiceProvider.".concat(this.pool.getClientId(), ".").concat(this.username);
+      var deviceKeyKey = "".concat(keyPrefix, ".deviceKey");
+      var randomPasswordKey = "".concat(keyPrefix, ".randomPasswordKey");
+      var deviceGroupKeyKey = "".concat(keyPrefix, ".deviceGroupKey");
+      if (this.storage.getItem(deviceKeyKey)) {
+        this.deviceKey = this.storage.getItem(deviceKeyKey);
+        this.randomPassword = this.storage.getItem(randomPasswordKey);
+        this.deviceGroupKey = this.storage.getItem(deviceGroupKeyKey);
+      }
+    }
+
+    /**
+     * This is used to clear the device key info from local storage
+     * @returns {void}
+     */
+  }, {
+    key: "clearCachedDeviceKeyAndPassword",
+    value: function clearCachedDeviceKeyAndPassword() {
+      var keyPrefix = "CognitoIdentityServiceProvider.".concat(this.pool.getClientId(), ".").concat(this.username);
+      var deviceKeyKey = "".concat(keyPrefix, ".deviceKey");
+      var randomPasswordKey = "".concat(keyPrefix, ".randomPasswordKey");
+      var deviceGroupKeyKey = "".concat(keyPrefix, ".deviceGroupKey");
+      this.storage.removeItem(deviceKeyKey);
+      this.storage.removeItem(randomPasswordKey);
+      this.storage.removeItem(deviceGroupKeyKey);
+    }
+
+    /**
+     * This is used to clear the session tokens from local storage
+     * @returns {void}
+     */
+  }, {
+    key: "clearCachedTokens",
+    value: function clearCachedTokens() {
+      var keyPrefix = "CognitoIdentityServiceProvider.".concat(this.pool.getClientId());
+      var idTokenKey = "".concat(keyPrefix, ".").concat(this.username, ".idToken");
+      var accessTokenKey = "".concat(keyPrefix, ".").concat(this.username, ".accessToken");
+      var refreshTokenKey = "".concat(keyPrefix, ".").concat(this.username, ".refreshToken");
+      var lastUserKey = "".concat(keyPrefix, ".LastAuthUser");
+      var clockDriftKey = "".concat(keyPrefix, ".").concat(this.username, ".clockDrift");
+      this.storage.removeItem(idTokenKey);
+      this.storage.removeItem(accessTokenKey);
+      this.storage.removeItem(refreshTokenKey);
+      this.storage.removeItem(lastUserKey);
+      this.storage.removeItem(clockDriftKey);
+    }
+
+    /**
+     * This is used to build a user session from tokens retrieved in the authentication result
+     * @param {object} authResult Successful auth response from server.
+     * @returns {CognitoUserSession} The new user session.
+     * @private
+     */
+  }, {
+    key: "getCognitoUserSession",
+    value: function getCognitoUserSession(authResult) {
+      var idToken = new CognitoIdToken(authResult);
+      var accessToken = new CognitoAccessToken(authResult);
+      var refreshToken = new CognitoRefreshToken(authResult);
+      var sessionData = {
+        IdToken: idToken,
+        AccessToken: accessToken,
+        RefreshToken: refreshToken
+      };
+      return new CognitoUserSession(sessionData);
+    }
+
+    /**
+     * This is used to initiate a forgot password request
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {inputVerificationCode?} callback.inputVerificationCode
+     *    Optional callback raised instead of onSuccess with response data.
+     * @param {onSuccess} callback.onSuccess Called on success.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     */
+  }, {
+    key: "forgotPassword",
+    value: function forgotPassword(callback, clientMetadata) {
+      var jsonReq = {
+        ClientId: this.pool.getClientId(),
+        Username: this.username,
+        ClientMetadata: clientMetadata
+      };
+      if (this.getUserContextData()) {
+        jsonReq.UserContextData = this.getUserContextData();
+      }
+      this.client.request('ForgotPassword', jsonReq, function (err, data) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        if (typeof callback.inputVerificationCode === 'function') {
+          return callback.inputVerificationCode(data);
+        }
+        return callback.onSuccess(data);
+      });
+    }
+
+    /**
+     * This is used to confirm a new password using a confirmationCode
+     * @param {string} confirmationCode Code entered by user.
+     * @param {string} newPassword Confirm new password.
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {onSuccess<void>} callback.onSuccess Called on success.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     */
+  }, {
+    key: "confirmPassword",
+    value: function confirmPassword(confirmationCode, newPassword, callback, clientMetadata) {
+      var jsonReq = {
+        ClientId: this.pool.getClientId(),
+        Username: this.username,
+        ConfirmationCode: confirmationCode,
+        Password: newPassword,
+        ClientMetadata: clientMetadata
+      };
+      if (this.getUserContextData()) {
+        jsonReq.UserContextData = this.getUserContextData();
+      }
+      this.client.request('ConfirmForgotPassword', jsonReq, function (err) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        return callback.onSuccess('SUCCESS');
+      });
+    }
+
+    /**
+     * This is used to initiate an attribute confirmation request
+     * @param {string} attributeName User attribute that needs confirmation.
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {inputVerificationCode} callback.inputVerificationCode Called on success.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     */
+  }, {
+    key: "getAttributeVerificationCode",
+    value: function getAttributeVerificationCode(attributeName, callback, clientMetadata) {
+      if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
+        return callback.onFailure(new Error('User is not authenticated'));
+      }
+      this.client.request('GetUserAttributeVerificationCode', {
+        AttributeName: attributeName,
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
+        ClientMetadata: clientMetadata
+      }, function (err, data) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        if (typeof callback.inputVerificationCode === 'function') {
+          return callback.inputVerificationCode(data);
+        }
+        return callback.onSuccess('SUCCESS');
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used to confirm an attribute using a confirmation code
+     * @param {string} attributeName Attribute being confirmed.
+     * @param {string} confirmationCode Code entered by user.
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {onSuccess<string>} callback.onSuccess Called on success.
+     * @returns {void}
+     */
+  }, {
+    key: "verifyAttribute",
+    value: function verifyAttribute(attributeName, confirmationCode, callback) {
+      if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
+        return callback.onFailure(new Error('User is not authenticated'));
+      }
+      this.client.request('VerifyUserAttribute', {
+        AttributeName: attributeName,
+        Code: confirmationCode,
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
+      }, function (err) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        return callback.onSuccess('SUCCESS');
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used to get the device information using the current device key
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {onSuccess<*>} callback.onSuccess Called on success with device data.
+     * @returns {void}
+     */
+  }, {
+    key: "getDevice",
+    value: function getDevice(callback) {
+      if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
+        return callback.onFailure(new Error('User is not authenticated'));
+      }
+      this.client.request('GetDevice', {
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
+        DeviceKey: this.deviceKey
+      }, function (err, data) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        return callback.onSuccess(data);
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used to forget a specific device
+     * @param {string} deviceKey Device key.
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {onSuccess<string>} callback.onSuccess Called on success.
+     * @returns {void}
+     */
+  }, {
+    key: "forgetSpecificDevice",
+    value: function forgetSpecificDevice(deviceKey, callback) {
+      if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
+        return callback.onFailure(new Error('User is not authenticated'));
+      }
+      this.client.request('ForgetDevice', {
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
+        DeviceKey: deviceKey
+      }, function (err) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        return callback.onSuccess('SUCCESS');
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used to forget the current device
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {onSuccess<string>} callback.onSuccess Called on success.
+     * @returns {void}
+     */
+  }, {
+    key: "forgetDevice",
+    value: function forgetDevice(callback) {
+      var _this16 = this;
+      this.forgetSpecificDevice(this.deviceKey, {
+        onFailure: callback.onFailure,
+        onSuccess: function onSuccess(result) {
+          _this16.deviceKey = null;
+          _this16.deviceGroupKey = null;
+          _this16.randomPassword = null;
+          _this16.clearCachedDeviceKeyAndPassword();
+          return callback.onSuccess(result);
+        }
+      });
+    }
+
+    /**
+     * This is used to set the device status as remembered
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {onSuccess<string>} callback.onSuccess Called on success.
+     * @returns {void}
+     */
+  }, {
+    key: "setDeviceStatusRemembered",
+    value: function setDeviceStatusRemembered(callback) {
+      if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
+        return callback.onFailure(new Error('User is not authenticated'));
+      }
+      this.client.request('UpdateDeviceStatus', {
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
+        DeviceKey: this.deviceKey,
+        DeviceRememberedStatus: 'remembered'
+      }, function (err) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        return callback.onSuccess('SUCCESS');
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used to set the device status as not remembered
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {onSuccess<string>} callback.onSuccess Called on success.
+     * @returns {void}
+     */
+  }, {
+    key: "setDeviceStatusNotRemembered",
+    value: function setDeviceStatusNotRemembered(callback) {
+      if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
+        return callback.onFailure(new Error('User is not authenticated'));
+      }
+      this.client.request('UpdateDeviceStatus', {
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
+        DeviceKey: this.deviceKey,
+        DeviceRememberedStatus: 'not_remembered'
+      }, function (err) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        return callback.onSuccess('SUCCESS');
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used to list all devices for a user
+     *
+     * @param {int} limit the number of devices returned in a call
+     * @param {string | null} paginationToken the pagination token in case any was returned before
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {onSuccess<*>} callback.onSuccess Called on success with device list.
+     * @returns {void}
+     */
+  }, {
+    key: "listDevices",
+    value: function listDevices(limit, paginationToken, callback) {
+      if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
+        return callback.onFailure(new Error('User is not authenticated'));
+      }
+      var requestParams = {
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
+        Limit: limit
+      };
+      if (paginationToken) {
+        requestParams.PaginationToken = paginationToken;
+      }
+      this.client.request('ListDevices', requestParams, function (err, data) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        return callback.onSuccess(data);
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used to globally revoke all tokens issued to a user
+     * @param {object} callback Result callback map.
+     * @param {onFailure} callback.onFailure Called on any error.
+     * @param {onSuccess<string>} callback.onSuccess Called on success.
+     * @returns {void}
+     */
+  }, {
+    key: "globalSignOut",
+    value: function globalSignOut(callback) {
+      var _this17 = this;
+      if (this.signInUserSession == null || !this.signInUserSession.isValid()) {
+        return callback.onFailure(new Error('User is not authenticated'));
+      }
+      this.client.request('GlobalSignOut', {
+        AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
+      }, function (err) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        _this17.clearCachedUser();
+        return callback.onSuccess('SUCCESS');
+      });
+      return undefined;
+    }
+
+    /**
+     * This is used for the user to signOut of the application and clear the cached tokens.
+     * @returns {void}
+     */
+  }, {
+    key: "signOut",
+    value: function signOut(revokeTokenCallback) {
+      var _this18 = this;
+      // If tokens won't be revoked, we just clean the client data.
+      if (!revokeTokenCallback || typeof revokeTokenCallback !== 'function') {
+        this.cleanClientData();
+        return;
+      }
+      this.getSession(function (error, _session) {
+        if (error) {
+          return revokeTokenCallback(error);
+        }
+        _this18.revokeTokens(function (err) {
+          _this18.cleanClientData();
+          revokeTokenCallback(err);
+        });
+      });
+    }
+  }, {
+    key: "revokeTokens",
+    value: function revokeTokens() {
+      var revokeTokenCallback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
+      if (typeof revokeTokenCallback !== 'function') {
+        throw new Error('Invalid revokeTokenCallback. It should be a function.');
+      }
+      var tokensToBeRevoked = [];
+      if (!this.signInUserSession) {
+        var error = new Error('User is not authenticated');
+        return revokeTokenCallback(error);
+      }
+      if (!this.signInUserSession.getAccessToken()) {
+        var _error = new Error('No Access token available');
+        return revokeTokenCallback(_error);
+      }
+      var refreshToken = this.signInUserSession.getRefreshToken().getToken();
+      var accessToken = this.signInUserSession.getAccessToken();
+      if (this.isSessionRevocable(accessToken)) {
+        if (refreshToken) {
+          return this.revokeToken({
+            token: refreshToken,
+            callback: revokeTokenCallback
+          });
+        }
+      }
+      revokeTokenCallback();
+    }
+  }, {
+    key: "isSessionRevocable",
+    value: function isSessionRevocable(token) {
+      if (token && typeof token.decodePayload === 'function') {
+        try {
+          var _token$decodePayload = token.decodePayload(),
+            origin_jti = _token$decodePayload.origin_jti;
+          return !!origin_jti;
+        } catch (err) {
+          // Nothing to do, token doesnt have origin_jti claim
+        }
+      }
+      return false;
+    }
+  }, {
+    key: "cleanClientData",
+    value: function cleanClientData() {
+      this.signInUserSession = null;
+      this.clearCachedUser();
+    }
+  }, {
+    key: "revokeToken",
+    value: function revokeToken(_ref2) {
+      var token = _ref2.token,
+        callback = _ref2.callback;
+      this.client.requestWithRetry('RevokeToken', {
+        Token: token,
+        ClientId: this.pool.getClientId()
+      }, function (err) {
+        if (err) {
+          return callback(err);
+        }
+        callback();
+      });
+    }
+
+    /**
+     * This is used by a user trying to select a given MFA
+     * @param {string} answerChallenge the mfa the user wants
+     * @param {nodeCallback<string>} callback Called on success or error.
+     * @returns {void}
+     */
+  }, {
+    key: "sendMFASelectionAnswer",
+    value: function sendMFASelectionAnswer(answerChallenge, callback) {
+      var _this19 = this;
+      var challengeResponses = {};
+      challengeResponses.USERNAME = this.username;
+      challengeResponses.ANSWER = answerChallenge;
+      var jsonReq = {
+        ChallengeName: 'SELECT_MFA_TYPE',
+        ChallengeResponses: challengeResponses,
+        ClientId: this.pool.getClientId(),
+        Session: this.Session
+      };
+      if (this.getUserContextData()) {
+        jsonReq.UserContextData = this.getUserContextData();
+      }
+      this.client.request('RespondToAuthChallenge', jsonReq, function (err, data) {
+        if (err) {
+          return callback.onFailure(err);
+        }
+        _this19.Session = data.Session;
+        if (answerChallenge === 'SMS_MFA') {
+          return callback.mfaRequired(data.ChallengeName, data.ChallengeParameters);
+        }
+        if (answerChallenge === 'SOFTWARE_TOKEN_MFA') {
+          return callback.totpRequired(data.ChallengeName, data.ChallengeParameters);
+        }
+        return undefined;
+      });
+    }
+
+    /**
+     * This returns the user context data for advanced security feature.
+     * @returns {string} the user context data from CognitoUserPool
+     */
+  }, {
+    key: "getUserContextData",
+    value: function getUserContextData() {
+      var pool = this.pool;
+      return pool.getUserContextData(this.username);
+    }
+
+    /**
+     * This is used by an authenticated or a user trying to authenticate to associate a TOTP MFA
+     * @param {nodeCallback<string>} callback Called on success or error.
+     * @returns {void}
+     */
+  }, {
+    key: "associateSoftwareToken",
+    value: function associateSoftwareToken(callback) {
+      var _this20 = this;
+      if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
+        this.client.request('AssociateSoftwareToken', {
+          Session: this.Session
+        }, function (err, data) {
+          if (err) {
+            return callback.onFailure(err);
+          }
+          _this20.Session = data.Session;
+          return callback.associateSecretCode(data.SecretCode);
+        });
+      } else {
+        this.client.request('AssociateSoftwareToken', {
+          AccessToken: this.signInUserSession.getAccessToken().getJwtToken()
+        }, function (err, data) {
+          if (err) {
+            return callback.onFailure(err);
+          }
+          return callback.associateSecretCode(data.SecretCode);
+        });
+      }
+    }
+
+    /**
+     * This is used by an authenticated or a user trying to authenticate to verify a TOTP MFA
+     * @param {string} totpCode The MFA code entered by the user.
+     * @param {string} friendlyDeviceName The device name we are assigning to the device.
+     * @param {nodeCallback<string>} callback Called on success or error.
+     * @returns {void}
+     */
+  }, {
+    key: "verifySoftwareToken",
+    value: function verifySoftwareToken(totpCode, friendlyDeviceName, callback) {
+      var _this21 = this;
+      if (!(this.signInUserSession != null && this.signInUserSession.isValid())) {
+        this.client.request('VerifySoftwareToken', {
+          Session: this.Session,
+          UserCode: totpCode,
+          FriendlyDeviceName: friendlyDeviceName
+        }, function (err, data) {
+          if (err) {
+            return callback.onFailure(err);
+          }
+          _this21.Session = data.Session;
+          var challengeResponses = {};
+          challengeResponses.USERNAME = _this21.username;
+          var jsonReq = {
+            ChallengeName: 'MFA_SETUP',
+            ClientId: _this21.pool.getClientId(),
+            ChallengeResponses: challengeResponses,
+            Session: _this21.Session
+          };
+          if (_this21.getUserContextData()) {
+            jsonReq.UserContextData = _this21.getUserContextData();
+          }
+          _this21.client.request('RespondToAuthChallenge', jsonReq, function (errRespond, dataRespond) {
+            if (errRespond) {
+              return callback.onFailure(errRespond);
+            }
+            _this21.signInUserSession = _this21.getCognitoUserSession(dataRespond.AuthenticationResult);
+            _this21.cacheTokens();
+            return callback.onSuccess(_this21.signInUserSession);
+          });
+          return undefined;
+        });
+      } else {
+        this.client.request('VerifySoftwareToken', {
+          AccessToken: this.signInUserSession.getAccessToken().getJwtToken(),
+          UserCode: totpCode,
+          FriendlyDeviceName: friendlyDeviceName
+        }, function (err, data) {
+          if (err) {
+            return callback.onFailure(err);
+          }
+          return callback.onSuccess(data);
+        });
+      }
+    }
+  }]);
+  return CognitoUser;
+}();
+
+// EXTERNAL MODULE: ../../node_modules/isomorphic-unfetch/browser.js
+var browser = __webpack_require__(405);
+;// CONCATENATED MODULE: ./src/Platform/constants.js
+var FRAMEWORK = {
+  None: '0',
+  ReactNative: '1'
+};
+var constants_AUTH_CATEGORY = 'auth';
+;// CONCATENATED MODULE: ./src/UserAgent.js
+
+
+
+// constructor
+function UserAgent() {}
+// public
+UserAgent.prototype.userAgent = getUserAgent();
+var appendToCognitoUserAgent = function appendToCognitoUserAgent(content) {
+  if (!content) {
+    return;
+  }
+  if (UserAgent.prototype.userAgent && !UserAgent.prototype.userAgent.includes(content)) {
+    UserAgent.prototype.userAgent = UserAgent.prototype.userAgent.concat(' ', content);
+  }
+  if (!UserAgent.prototype.userAgent || UserAgent.prototype.userAgent === '') {
+    UserAgent.prototype.userAgent = content;
+  }
+};
+var addAuthCategoryToCognitoUserAgent = function addAuthCategoryToCognitoUserAgent() {
+  UserAgent.category = AUTH_CATEGORY;
+};
+var addFrameworkToCognitoUserAgent = function addFrameworkToCognitoUserAgent(framework) {
+  UserAgent.framework = framework;
+};
+var getAmplifyUserAgent = function getAmplifyUserAgent(action) {
+  var uaCategoryAction = UserAgent.category ? " ".concat(UserAgent.category) : '';
+  var uaFramework = UserAgent.framework ? " framework/".concat(UserAgent.framework) : '';
+  var userAgent = "".concat(UserAgent.prototype.userAgent).concat(uaCategoryAction).concat(uaFramework);
+  return userAgent;
+};
+
+// class for defining the amzn user-agent
+/* harmony default export */ const src_UserAgent = ((/* unused pure expression or super */ null && (UserAgent)));
+;// CONCATENATED MODULE: ./src/Client.js
+function Client_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return Client_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, Client_typeof(obj);
+}
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+}
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
+}
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+}
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+  return arr2;
+}
+function Client_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, Client_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function Client_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) Client_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) Client_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function Client_toPropertyKey(arg) {
+  var key = Client_toPrimitive(arg, "string");
+  return Client_typeof(key) === "symbol" ? key : String(key);
+}
+function Client_toPrimitive(input, hint) {
+  if (Client_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (Client_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+function Client_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function Client_inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  Object.defineProperty(subClass, "prototype", {
+    writable: false
+  });
+  if (superClass) Client_setPrototypeOf(subClass, superClass);
+}
+function Client_createSuper(Derived) {
+  var hasNativeReflectConstruct = Client_isNativeReflectConstruct();
+  return function _createSuperInternal() {
+    var Super = Client_getPrototypeOf(Derived),
+      result;
+    if (hasNativeReflectConstruct) {
+      var NewTarget = Client_getPrototypeOf(this).constructor;
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+    return Client_possibleConstructorReturn(this, result);
+  };
+}
+function Client_possibleConstructorReturn(self, call) {
+  if (call && (Client_typeof(call) === "object" || typeof call === "function")) {
+    return call;
+  } else if (call !== void 0) {
+    throw new TypeError("Derived constructors may only return object or undefined");
+  }
+  return Client_assertThisInitialized(self);
+}
+function Client_assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+  return self;
+}
+function _wrapNativeSuper(Class) {
+  var _cache = typeof Map === "function" ? new Map() : undefined;
+  _wrapNativeSuper = function _wrapNativeSuper(Class) {
+    if (Class === null || !_isNativeFunction(Class)) return Class;
+    if (typeof Class !== "function") {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+    if (typeof _cache !== "undefined") {
+      if (_cache.has(Class)) return _cache.get(Class);
+      _cache.set(Class, Wrapper);
+    }
+    function Wrapper() {
+      return _construct(Class, arguments, Client_getPrototypeOf(this).constructor);
+    }
+    Wrapper.prototype = Object.create(Class.prototype, {
+      constructor: {
+        value: Wrapper,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    return Client_setPrototypeOf(Wrapper, Class);
+  };
+  return _wrapNativeSuper(Class);
+}
+function _construct(Parent, args, Class) {
+  if (Client_isNativeReflectConstruct()) {
+    _construct = Reflect.construct.bind();
+  } else {
+    _construct = function _construct(Parent, args, Class) {
+      var a = [null];
+      a.push.apply(a, args);
+      var Constructor = Function.bind.apply(Parent, a);
+      var instance = new Constructor();
+      if (Class) Client_setPrototypeOf(instance, Class.prototype);
+      return instance;
+    };
+  }
+  return _construct.apply(null, arguments);
+}
+function Client_isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+  try {
+    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+function _isNativeFunction(fn) {
+  return Function.toString.call(fn).indexOf("[native code]") !== -1;
+}
+function Client_setPrototypeOf(o, p) {
+  Client_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+  return Client_setPrototypeOf(o, p);
+}
+function Client_getPrototypeOf(o) {
+  Client_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return Client_getPrototypeOf(o);
+}
+
+
+var CognitoError = /*#__PURE__*/function (_Error) {
+  Client_inherits(CognitoError, _Error);
+  var _super = Client_createSuper(CognitoError);
+  function CognitoError(message, code, name, statusCode) {
+    var _this;
+    Client_classCallCheck(this, CognitoError);
+    _this = _super.call(this, message);
+    _this.code = code;
+    _this.name = name;
+    _this.statusCode = statusCode;
+    return _this;
+  }
+  return Client_createClass(CognitoError);
+}( /*#__PURE__*/_wrapNativeSuper(Error));
+/** @class */
+var Client = /*#__PURE__*/function () {
+  /**
+   * Constructs a new AWS Cognito Identity Provider client object
+   * @param {string} region AWS region
+   * @param {string} endpoint endpoint
+   * @param {object} fetchOptions options for fetch API (only credentials is supported)
+   */
+  function Client(region, endpoint, fetchOptions) {
+    Client_classCallCheck(this, Client);
+    this.endpoint = endpoint || "https://cognito-idp.".concat(region, ".amazonaws.com/");
+    var _ref = fetchOptions || {},
+      credentials = _ref.credentials;
+    this.fetchOptions = credentials ? {
+      credentials: credentials
+    } : {};
+  }
+
+  /**
+   * Makes an unauthenticated request on AWS Cognito Identity Provider API
+   * using fetch
+   * @param {string} operation API operation
+   * @param {object} params Input parameters
+   * @returns Promise<object>
+   */
+  Client_createClass(Client, [{
+    key: "promisifyRequest",
+    value: function promisifyRequest(operation, params) {
+      var _this2 = this;
+      return new Promise(function (resolve, reject) {
+        _this2.request(operation, params, function (err, data) {
+          if (err) {
+            reject(new CognitoError(err.message, err.code, err.name, err.statusCode));
+          } else {
+            resolve(data);
+          }
+        });
+      });
+    }
+  }, {
+    key: "requestWithRetry",
+    value: function requestWithRetry(operation, params, callback) {
+      var _this3 = this;
+      var MAX_DELAY_IN_MILLIS = 5 * 1000;
+      jitteredExponentialRetry(function (p) {
+        return new Promise(function (res, rej) {
+          _this3.request(operation, p, function (error, result) {
+            if (error) {
+              rej(error);
+            } else {
+              res(result);
+            }
+          });
+        });
+      }, [params], MAX_DELAY_IN_MILLIS).then(function (result) {
+        return callback(null, result);
+      })["catch"](function (error) {
+        return callback(error);
+      });
+    }
+
+    /**
+     * Makes an unauthenticated request on AWS Cognito Identity Provider API
+     * using fetch
+     * @param {string} operation API operation
+     * @param {object} params Input parameters
+     * @param {function} callback Callback called when a response is returned
+     * @returns {void}
+     */
+  }, {
+    key: "request",
+    value: function request(operation, params, callback) {
+      var headers = {
+        'Content-Type': 'application/x-amz-json-1.1',
+        'X-Amz-Target': "AWSCognitoIdentityProviderService.".concat(operation),
+        'X-Amz-User-Agent': getAmplifyUserAgent(),
+        'Cache-Control': 'no-store'
+      };
+      var options = Object.assign({}, this.fetchOptions, {
+        headers: headers,
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify(params)
+      });
+      var response;
+      var responseJsonData;
+      fetch(this.endpoint, options).then(function (resp) {
+        response = resp;
+        return resp;
+      }, function (err) {
+        // If error happens here, the request failed
+        // if it is TypeError throw network error
+        if (err instanceof TypeError) {
+          throw new Error('Network error');
+        }
+        throw err;
+      }).then(function (resp) {
+        return resp.json()["catch"](function () {
+          return {};
+        });
+      }).then(function (data) {
+        // return parsed body stream
+        if (response.ok) return callback(null, data);
+        responseJsonData = data;
+
+        // Taken from aws-sdk-js/lib/protocol/json.js
+        // eslint-disable-next-line no-underscore-dangle
+        var code = (data.__type || data.code).split('#').pop();
+        var error = new Error(data.message || data.Message || null);
+        error.name = code;
+        error.code = code;
+        return callback(error);
+      })["catch"](function (err) {
+        // first check if we have a service error
+        if (response && response.headers && response.headers.get('x-amzn-errortype')) {
+          try {
+            var code = response.headers.get('x-amzn-errortype').split(':')[0];
+            var error = new Error(response.status ? response.status.toString() : null);
+            error.code = code;
+            error.name = code;
+            error.statusCode = response.status;
+            return callback(error);
+          } catch (ex) {
+            return callback(err);
+          }
+          // otherwise check if error is Network error
+        } else if (err instanceof Error && err.message === 'Network error') {
+          err.code = 'NetworkError';
+        }
+        return callback(err);
+      });
+    }
+  }]);
+  return Client;
+}();
+
+var logger = {
+  debug: function debug() {
+    // Intentionally blank. This package doesn't have logging
+  }
+};
+
+/**
+ * For now, all errors are retryable.
+ */
+var NonRetryableError = /*#__PURE__*/(/* unused pure expression or super */ null && (function (_Error2) {
+  Client_inherits(NonRetryableError, _Error2);
+  var _super2 = Client_createSuper(NonRetryableError);
+  function NonRetryableError(message) {
+    var _this4;
+    Client_classCallCheck(this, NonRetryableError);
+    _this4 = _super2.call(this, message);
+    _this4.nonRetryable = true;
+    return _this4;
+  }
+  return Client_createClass(NonRetryableError);
+}( /*#__PURE__*/_wrapNativeSuper(Error))));
+var isNonRetryableError = function isNonRetryableError(obj) {
+  var key = 'nonRetryable';
+  return obj && obj[key];
+};
+function retry(functionToRetry, args, delayFn) {
+  var attempt = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
+  if (typeof functionToRetry !== 'function') {
+    throw Error('functionToRetry must be a function');
+  }
+  logger.debug("".concat(functionToRetry.name, " attempt #").concat(attempt, " with args: ").concat(JSON.stringify(args)));
+  return functionToRetry.apply(void 0, _toConsumableArray(args))["catch"](function (err) {
+    logger.debug("error on ".concat(functionToRetry.name), err);
+    if (isNonRetryableError(err)) {
+      logger.debug("".concat(functionToRetry.name, " non retryable error"), err);
+      throw err;
+    }
+    var retryIn = delayFn(attempt, args, err);
+    logger.debug("".concat(functionToRetry.name, " retrying in ").concat(retryIn, " ms"));
+    if (retryIn !== false) {
+      return new Promise(function (res) {
+        return setTimeout(res, retryIn);
+      }).then(function () {
+        return retry(functionToRetry, args, delayFn, attempt + 1);
+      });
+    } else {
+      throw err;
+    }
+  });
+}
+function jitteredBackoff(maxDelayMs) {
+  var BASE_TIME_MS = 100;
+  var JITTER_FACTOR = 100;
+  return function (attempt) {
+    var delay = Math.pow(2, attempt) * BASE_TIME_MS + JITTER_FACTOR * Math.random();
+    return delay > maxDelayMs ? false : delay;
+  };
+}
+var MAX_DELAY_MS = 5 * 60 * 1000;
+function jitteredExponentialRetry(functionToRetry, args) {
+  var maxDelayMs = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : MAX_DELAY_MS;
+  return retry(functionToRetry, args, jitteredBackoff(maxDelayMs));
+}
+;// CONCATENATED MODULE: ./src/CognitoUserPool.js
+function CognitoUserPool_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return CognitoUserPool_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, CognitoUserPool_typeof(obj);
+}
+function CognitoUserPool_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function CognitoUserPool_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, CognitoUserPool_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function CognitoUserPool_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) CognitoUserPool_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) CognitoUserPool_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function CognitoUserPool_toPropertyKey(arg) {
+  var key = CognitoUserPool_toPrimitive(arg, "string");
+  return CognitoUserPool_typeof(key) === "symbol" ? key : String(key);
+}
+function CognitoUserPool_toPrimitive(input, hint) {
+  if (CognitoUserPool_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (CognitoUserPool_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+
+
+
+var USER_POOL_ID_MAX_LENGTH = 55;
+
+/** @class */
+var CognitoUserPool = /*#__PURE__*/function () {
+  /**
+   * Constructs a new CognitoUserPool object
+   * @param {object} data Creation options.
+   * @param {string} data.UserPoolId Cognito user pool id.
+   * @param {string} data.ClientId User pool application client id.
+   * @param {string} data.endpoint Optional custom service endpoint.
+   * @param {object} data.fetchOptions Optional options for fetch API.
+   *        (only credentials option is supported)
+   * @param {object} data.Storage Optional storage object.
+   * @param {boolean} data.AdvancedSecurityDataCollectionFlag Optional:
+   *        boolean flag indicating if the data collection is enabled
+   *        to support cognito advanced security features. By default, this
+   *        flag is set to true.
+   */
+  function CognitoUserPool(data, wrapRefreshSessionCallback) {
+    CognitoUserPool_classCallCheck(this, CognitoUserPool);
+    var _ref = data || {},
+      UserPoolId = _ref.UserPoolId,
+      ClientId = _ref.ClientId,
+      endpoint = _ref.endpoint,
+      fetchOptions = _ref.fetchOptions,
+      AdvancedSecurityDataCollectionFlag = _ref.AdvancedSecurityDataCollectionFlag;
+    if (!UserPoolId || !ClientId) {
+      throw new Error('Both UserPoolId and ClientId are required.');
+    }
+    if (UserPoolId.length > USER_POOL_ID_MAX_LENGTH || !/^[\w-]+_[0-9a-zA-Z]+$/.test(UserPoolId)) {
+      throw new Error('Invalid UserPoolId format.');
+    }
+    var region = UserPoolId.split('_')[0];
+    this.userPoolId = UserPoolId;
+    this.clientId = ClientId;
+    this.client = new Client(region, endpoint, fetchOptions);
+
+    /**
+     * By default, AdvancedSecurityDataCollectionFlag is set to true,
+     * if no input value is provided.
+     */
+    this.advancedSecurityDataCollectionFlag = AdvancedSecurityDataCollectionFlag !== false;
+    this.storage = data.Storage || new StorageHelper().getStorage();
+    if (wrapRefreshSessionCallback) {
+      this.wrapRefreshSessionCallback = wrapRefreshSessionCallback;
+    }
+  }
+
+  /**
+   * @returns {string} the user pool id
+   */
+  CognitoUserPool_createClass(CognitoUserPool, [{
+    key: "getUserPoolId",
+    value: function getUserPoolId() {
+      return this.userPoolId;
+    }
+
+    /**
+     * @returns {string} the user pool name
+     */
+  }, {
+    key: "getUserPoolName",
+    value: function getUserPoolName() {
+      return this.getUserPoolId().split('_')[1];
+    }
+
+    /**
+     * @returns {string} the client id
+     */
+  }, {
+    key: "getClientId",
+    value: function getClientId() {
+      return this.clientId;
+    }
+
+    /**
+     * @typedef {object} SignUpResult
+     * @property {CognitoUser} user New user.
+     * @property {bool} userConfirmed If the user is already confirmed.
+     */
+    /**
+     * method for signing up a user
+     * @param {string} username User's username.
+     * @param {string} password Plain-text initial password entered by user.
+     * @param {(AttributeArg[])=} userAttributes New user attributes.
+     * @param {(AttributeArg[])=} validationData Application metadata.
+     * @param {(AttributeArg[])=} clientMetadata Client metadata.
+     * @param {nodeCallback<SignUpResult>} callback Called on error or with the new user.
+     * @param {ClientMetadata} clientMetadata object which is passed from client to Cognito Lambda trigger
+     * @returns {void}
+     */
+  }, {
+    key: "signUp",
+    value: function signUp(username, password, userAttributes, validationData, callback, clientMetadata) {
+      var _this = this;
+      var jsonReq = {
+        ClientId: this.clientId,
+        Username: username,
+        Password: password,
+        UserAttributes: userAttributes,
+        ValidationData: validationData,
+        ClientMetadata: clientMetadata
+      };
+      if (this.getUserContextData(username)) {
+        jsonReq.UserContextData = this.getUserContextData(username);
+      }
+      this.client.request('SignUp', jsonReq, function (err, data) {
+        if (err) {
+          return callback(err, null);
+        }
+        var cognitoUser = {
+          Username: username,
+          Pool: _this,
+          Storage: _this.storage
+        };
+        var returnData = {
+          user: new CognitoUser(cognitoUser),
+          userConfirmed: data.UserConfirmed,
+          userSub: data.UserSub,
+          codeDeliveryDetails: data.CodeDeliveryDetails
+        };
+        return callback(null, returnData);
+      });
+    }
+
+    /**
+     * method for getting the current user of the application from the local storage
+     *
+     * @returns {CognitoUser} the user retrieved from storage
+     */
+  }, {
+    key: "getCurrentUser",
+    value: function getCurrentUser() {
+      var lastUserKey = "CognitoIdentityServiceProvider.".concat(this.clientId, ".LastAuthUser");
+      var lastAuthUser = this.storage.getItem(lastUserKey);
+      if (lastAuthUser) {
+        var cognitoUser = {
+          Username: lastAuthUser,
+          Pool: this,
+          Storage: this.storage
+        };
+        return new CognitoUser(cognitoUser);
+      }
+      return null;
+    }
+
+    /**
+     * This method returns the encoded data string used for cognito advanced security feature.
+     * This would be generated only when developer has included the JS used for collecting the
+     * data on their client. Please refer to documentation to know more about using AdvancedSecurity
+     * features
+     * @param {string} username the username for the context data
+     * @returns {string} the user context data
+     **/
+  }, {
+    key: "getUserContextData",
+    value: function getUserContextData(username) {
+      if (typeof AmazonCognitoAdvancedSecurityData === 'undefined') {
+        return undefined;
+      }
+      /* eslint-disable */
+      var amazonCognitoAdvancedSecurityDataConst = AmazonCognitoAdvancedSecurityData;
+      /* eslint-enable */
+
+      if (this.advancedSecurityDataCollectionFlag) {
+        var advancedSecurityData = amazonCognitoAdvancedSecurityDataConst.getData(username, this.userPoolId, this.clientId);
+        if (advancedSecurityData) {
+          var userContextData = {
+            EncodedData: advancedSecurityData
+          };
+          return userContextData;
+        }
+      }
+      return {};
+    }
+  }]);
+  return CognitoUserPool;
+}();
+
+// EXTERNAL MODULE: ../../node_modules/js-cookie/src/js.cookie.js
+var js_cookie = __webpack_require__(34);
+;// CONCATENATED MODULE: ./src/CookieStorage.js
+function CookieStorage_typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return CookieStorage_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, CookieStorage_typeof(obj);
+}
+function CookieStorage_classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function CookieStorage_defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, CookieStorage_toPropertyKey(descriptor.key), descriptor);
+  }
+}
+function CookieStorage_createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) CookieStorage_defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) CookieStorage_defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+function CookieStorage_toPropertyKey(arg) {
+  var key = CookieStorage_toPrimitive(arg, "string");
+  return CookieStorage_typeof(key) === "symbol" ? key : String(key);
+}
+function CookieStorage_toPrimitive(input, hint) {
+  if (CookieStorage_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (CookieStorage_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+
+
+/** @class */
+var CookieStorage = /*#__PURE__*/function () {
+  /**
+   * Constructs a new CookieStorage object
+   * @param {object} data Creation options.
+   * @param {string} data.domain Cookies domain (default: domain of the page
+   * 				where the cookie was created, excluding subdomains)
+   * @param {string} data.path Cookies path (default: '/')
+   * @param {integer} data.expires Cookie expiration (in days, default: 365)
+   * @param {boolean} data.secure Cookie secure flag (default: true)
+   * @param {string} data.sameSite Cookie request behavior (default: null)
+   */
+  function CookieStorage() {
+    var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    CookieStorage_classCallCheck(this, CookieStorage);
+    if (data.domain) {
+      this.domain = data.domain;
+    }
+    if (data.path) {
+      this.path = data.path;
+    } else {
+      this.path = '/';
+    }
+    if (Object.prototype.hasOwnProperty.call(data, 'expires')) {
+      this.expires = data.expires;
+    } else {
+      this.expires = 365;
+    }
+    if (Object.prototype.hasOwnProperty.call(data, 'secure')) {
+      this.secure = data.secure;
+    } else {
+      this.secure = true;
+    }
+    if (Object.prototype.hasOwnProperty.call(data, 'sameSite')) {
+      if (!['strict', 'lax', 'none'].includes(data.sameSite)) {
+        throw new Error('The sameSite value of cookieStorage must be "lax", "strict" or "none".');
+      }
+      if (data.sameSite === 'none' && !this.secure) {
+        throw new Error('sameSite = None requires the Secure attribute in latest browser versions.');
+      }
+      this.sameSite = data.sameSite;
+    } else {
+      this.sameSite = null;
+    }
+  }
+
+  /**
+   * This is used to set a specific item in storage
+   * @param {string} key - the key for the item
+   * @param {object} value - the value
+   * @returns {string} value that was set
+   */
+  CookieStorage_createClass(CookieStorage, [{
+    key: "setItem",
+    value: function setItem(key, value) {
+      var options = {
+        path: this.path,
+        expires: this.expires,
+        domain: this.domain,
+        secure: this.secure
+      };
+      if (this.sameSite) {
+        options.sameSite = this.sameSite;
+      }
+      js_cookie.set(key, value, options);
+      return js_cookie.get(key);
+    }
+
+    /**
+     * This is used to get a specific key from storage
+     * @param {string} key - the key for the item
+     * This is used to clear the storage
+     * @returns {string} the data item
+     */
+  }, {
+    key: "getItem",
+    value: function getItem(key) {
+      return js_cookie.get(key);
+    }
+
+    /**
+     * This is used to remove an item from storage
+     * @param {string} key - the key being set
+     * @returns {string} value - value that was deleted
+     */
+  }, {
+    key: "removeItem",
+    value: function removeItem(key) {
+      var options = {
+        path: this.path,
+        expires: this.expires,
+        domain: this.domain,
+        secure: this.secure
+      };
+      if (this.sameSite) {
+        options.sameSite = this.sameSite;
+      }
+      return js_cookie.remove(key, options);
+    }
+
+    /**
+     * This is used to clear the storage of optional
+     * items that were previously set
+     * @returns {} an empty object
+     */
+  }, {
+    key: "clear",
+    value: function clear() {
+      var cookies = js_cookie.get();
+      var numKeys = Object.keys(cookies).length;
+      for (var index = 0; index < numKeys; ++index) {
+        this.removeItem(Object.keys(cookies)[index]);
+      }
+      return {};
+    }
+  }]);
+  return CookieStorage;
+}();
+
+;// CONCATENATED MODULE: ./src/index.js
+/*!
+ * Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+})();
+
+/******/ 	return __webpack_exports__;
+/******/ })()
+;
 });
