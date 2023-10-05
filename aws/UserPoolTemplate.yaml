@@ -71,10 +71,7 @@ Resources:
             - logs:CreateLogGroup
             - logs:CreateLogStream
             - logs:PutLogEvents        
-            - xray:PutTraceSegments
-            - xray:PutTelemetryRecords
-            Resource:
-            - "*"
+            Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*:*
             
   DuoKeysSecret:
     Type: 'AWS::SecretsManager::Secret'
