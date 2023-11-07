@@ -7,7 +7,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "amazon-cognito-identity-js": "^6.3.6",
+    "amazon-cognito-identity-js": "^6.3.7",
     "express": "^4.18.2",
     "hbs": "^4.2.0"
   },
